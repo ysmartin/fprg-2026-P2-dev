@@ -22,14 +22,8 @@ TODO = '// TODO: desarrollar'
 
 # fichero -> lista de (inicio de la cabecera del método, líneas del cuerpo provisional)
 METODOS = {
-    'Lectura.java': [
-        ('int contarIndeterminadas()', [TODO, 'return 0;']),
-    ],
     'Sonda.java': [
         ('Sonda(String nombre, String patron)', [TODO]),
-        ('String getNombre()', [TODO, 'return null;']),
-        ('String getPatron()', [TODO, 'return null;']),
-        ('int getLongitud()', [TODO, 'return 0;']),
         ('static boolean encaja(char simbolo, char base)', [TODO, 'return false;']),
         ('boolean encajaEn(Lectura lectura, int inicio)',
          [TODO + ' (use try/catch: si el patrón se sale de la lectura, no encaja)', 'return false;']),
@@ -43,19 +37,10 @@ METODOS = {
         ('boolean[][] hibridar(Lectura lectura)', [TODO, 'return null;']),
         ('boolean[][] hibridar(Muestra muestra)', [TODO, 'return null;']),
     ],
-    'Analisis.java': [
-        ('Analisis(Muestra muestra, Microarray microarray)', [TODO]),
-        ('Muestra getMuestra()', [TODO, 'return null;']),
-        ('Microarray getMicroarray()', [TODO, 'return null;']),
-        ('LocalDate getFechaAnalisis()', [TODO, 'return null;']),
-        ('boolean[][] getIluminados()', [TODO, 'return null;']),
-        ('long getDiasDesdeCaptura()', [TODO, 'return 0;']),
-        ('int contarIluminados()', [TODO, 'return 0;']),
-    ],
 }
 
 # Clases cuyos atributos deja de ser final la plantilla (sus constructores están vacíos)
-SIN_FINAL = ['Sonda.java', 'Analisis.java']
+SIN_FINAL = ['Sonda.java']
 
 
 def sustituir_cuerpo(lineas, cabecera, cuerpo):

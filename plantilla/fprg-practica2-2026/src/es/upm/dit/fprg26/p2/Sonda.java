@@ -53,8 +53,7 @@ class Sonda {
      * @return nombre de la sonda
      */
     String getNombre() {
-        // TODO: desarrollar
-        return null;
+        return nombre;
     }
 
     /**
@@ -63,8 +62,7 @@ class Sonda {
      * @return patrón de la sonda
      */
     String getPatron() {
-        // TODO: desarrollar
-        return null;
+        return patron;
     }
 
     /**
@@ -73,8 +71,7 @@ class Sonda {
      * @return número de símbolos del patrón
      */
     int getLongitud() {
-        // TODO: desarrollar
-        return 0;
+        return patron.length();
     }
 
     /**

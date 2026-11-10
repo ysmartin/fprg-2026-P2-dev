@@ -13,9 +13,9 @@ Este documento **no es para el alumnado**. Recoge dos ampliaciones opcionales de
 
 | | LLOC | Total acumulado | Frente a 2025-26 (90) |
 |---|---:|---:|---:|
-| Versión base | 70 | 70 | −22 % |
-| A1 · Las dos hebras | +13 | 83 | −8 % |
-| A2 · Intensidades y sondas detectadas | +15 | 98 | +9 % |
+| Versión base | 45 | 45 | −50 % |
+| A1 · Las dos hebras | +13 | 58 | −36 % |
+| A2 · Intensidades y sondas detectadas | +15 | 73 | −19 % |
 
 ---
 
@@ -43,7 +43,7 @@ Una lectura puede proceder de cualquiera de las dos hebras del ADN de la muestra
 En un microarray real, el brillo de cada punto es más intenso cuantos más fragmentos de la muestra se unen a su sonda.
 
 1. En `Microarray`, el método `int[][] intensidades(Muestra muestra)`, que devuelve, para cada punto del chip, con cuántas lecturas de la muestra hibrida su sonda.
-2. En `Analisis`, el método `String[] sondasDetectadas() throws Exception`, que devuelve los nombres de las sondas de los puntos iluminados, recorriendo el chip por filas (de izquierda a derecha y de arriba abajo). El array debe tener exactamente tantas posiciones como puntos iluminados: cuéntelos primero (con `contarIluminados`) y rellénelo después.
+2. En `Analisis` (que se proporciona hecha), el método `String[] sondasDetectadas() throws Exception`, que devuelve los nombres de las sondas de los puntos iluminados, recorriendo el chip por filas (de izquierda a derecha y de arriba abajo). El array debe tener exactamente tantas posiciones como puntos iluminados: cuéntelos primero (con `contarIluminados`) y rellénelo después.
 
 ### Notas para el profesorado
 

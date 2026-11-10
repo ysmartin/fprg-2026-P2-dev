@@ -13,16 +13,16 @@ import module java.base;
 class Analisis {
 
     /** Muestra analizada. */
-    private Muestra muestra;
+    private final Muestra muestra;
 
     /** Microarray con el que se ha analizado la muestra. */
-    private Microarray microarray;
+    private final Microarray microarray;
 
     /** Fecha en que se hizo el análisis. */
-    private LocalDate fechaAnalisis;
+    private final LocalDate fechaAnalisis;
 
     /** Puntos del chip iluminados: {@code iluminados[fila][columna]}. */
-    private boolean[][] iluminados;
+    private final boolean[][] iluminados;
 
     /**
      * Analiza una muestra con un microarray en la fecha actual: hibrida todas las lecturas
@@ -38,7 +38,13 @@ class Analisis {
      * @throws Exception si la muestra o el microarray son nulos
      */
     Analisis(Muestra muestra, Microarray microarray) throws Exception {
-        // TODO: desarrollar
+        if (muestra == null || microarray == null) {
+            throw new Exception("La muestra y el microarray del análisis no pueden ser nulos");
+        }
+        this.muestra = muestra;
+        this.microarray = microarray;
+        this.fechaAnalisis = LocalDate.now();
+        this.iluminados = microarray.hibridar(muestra);
     }
 
     /**
@@ -47,8 +53,7 @@ class Analisis {
      * @return muestra analizada
      */
     Muestra getMuestra() {
-        // TODO: desarrollar
-        return null;
+        return muestra;
     }
 
     /**
@@ -57,8 +62,7 @@ class Analisis {
      * @return microarray del análisis
      */
     Microarray getMicroarray() {
-        // TODO: desarrollar
-        return null;
+        return microarray;
     }
 
     /**
@@ -67,8 +71,7 @@ class Analisis {
      * @return fecha del análisis
      */
     LocalDate getFechaAnalisis() {
-        // TODO: desarrollar
-        return null;
+        return fechaAnalisis;
     }
 
     /**
@@ -78,8 +81,7 @@ class Analisis {
      *         en los puntos iluminados
      */
     boolean[][] getIluminados() {
-        // TODO: desarrollar
-        return null;
+        return iluminados;
     }
 
     /**
@@ -93,8 +95,7 @@ class Analisis {
      * @return días entre la fecha de captura y la del análisis (0 si son el mismo día)
      */
     long getDiasDesdeCaptura() {
-        // TODO: desarrollar
-        return 0;
+        return ChronoUnit.DAYS.between(muestra.getFechaCaptura(), fechaAnalisis);
     }
 
     /**
@@ -103,8 +104,15 @@ class Analisis {
      * @return número de puntos iluminados
      */
     int contarIluminados() {
-        // TODO: desarrollar
-        return 0;
+        int iluminadosEnTotal = 0;
+        for (int fila = 0; fila < iluminados.length; fila++) {
+            for (int columna = 0; columna < iluminados[fila].length; columna++) {
+                if (iluminados[fila][columna]) {
+                    iluminadosEnTotal++;
+                }
+            }
+        }
+        return iluminadosEnTotal;
     }
 
     /**

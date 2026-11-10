@@ -23,11 +23,9 @@
   - [Actividades de la práctica](#actividades-de-la-práctica)
     - [Crear el proyecto en Eclipse](#crear-el-proyecto-en-eclipse)
     - [1. Explorar el proyecto](#1-explorar-el-proyecto)
-    - [2. Contar las bases indeterminadas de una lectura](#2-contar-las-bases-indeterminadas-de-una-lectura)
-    - [3. Completar la clase `Sonda`](#3-completar-la-clase-sonda)
-    - [4. Completar la clase `Microarray`](#4-completar-la-clase-microarray)
-    - [5. Completar la clase `Analisis`](#5-completar-la-clase-analisis)
-    - [6. Probar el sistema completo](#6-probar-el-sistema-completo)
+    - [2. Completar la clase `Sonda`](#2-completar-la-clase-sonda)
+    - [3. Completar la clase `Microarray`](#3-completar-la-clase-microarray)
+    - [4. Probar el sistema completo](#4-probar-el-sistema-completo)
     - [Exportar el proyecto](#exportar-el-proyecto)
   - [Evaluación](#evaluación)
 
@@ -105,8 +103,6 @@ getSecuencia() String
 getLongitud() int
 getBase(int) char
 toString() String
-……………A completar……………()
-contarIndeterminadas() int
 }
 
 class Muestra {
@@ -128,15 +124,15 @@ class Sonda {
 -patron: String
 ……………A completar……………()
 Sonda(String, String)
-getNombre() String
-getPatron() String
-getLongitud() int
 encaja(char, char) boolean$
 encajaEn(Lectura, int) boolean
 hibridaCon(Lectura) boolean
 ……………A modificar……………()
 encontrarEn(Lectura) int
 ……………Proporcionados……………()
+getNombre() String
+getPatron() String
+getLongitud() int
 toString() String
 }
 
@@ -160,7 +156,7 @@ class Analisis {
 -microarray: Microarray
 -fechaAnalisis: LocalDate
 -iluminados: boolean[][]
-……………A completar……………()
+……………Proporcionados……………()
 Analisis(Muestra, Microarray)
 getMuestra() Muestra
 getMicroarray() Microarray
@@ -168,7 +164,6 @@ getFechaAnalisis() LocalDate
 getIluminados() boolean[][]
 getDiasDesdeCaptura() long
 contarIluminados() int
-……………Proporcionados……………()
 toString() String
 }
 
@@ -189,9 +184,9 @@ A diferencia de la práctica 1, el código se organiza en **clases**, dentro del
 |---|---|---|
 | `BaseNitrogenada`, `AcidoNucleico` | Los enumerados de la práctica 1 | Nada: se usan desde `Iupac` |
 | `Iupac` | Métodos de utilidad (estáticos) sobre los símbolos de lecturas y patrones | Usarlos, leyendo su documentación |
-| `Lectura`, `Muestra` | Una lectura y una muestra con sus lecturas, ya programadas | Estudiarlas (son un buen modelo de clase) y completar `contarIndeterminadas` |
-| `Sonda`, `Microarray`, `Analisis` | Las clases del reconocimiento de patrones | Completar los métodos que se indican en cada apartado |
-| `PruebaLectura`, `PruebaSonda`, `PruebaMicroarray`, `PruebaAnalisis` | Pruebas de cada clase, con una muestra de casos | Ejecutarlas y añadir sus propios casos de prueba |
+| `Lectura`, `Muestra`, `Analisis` | Una lectura, una muestra con sus lecturas y el resultado de analizar una muestra con un microarray, ya programadas | Estudiarlas (son un buen modelo de clase) |
+| `Sonda`, `Microarray` | Las clases del reconocimiento de patrones | Completar los métodos que se indican en cada apartado |
+| `PruebaSonda`, `PruebaMicroarray` | Pruebas de cada clase, con una muestra de casos | Ejecutarlas y añadir sus propios casos de prueba |
 | `PruebaInteractiva` | Programa que abre la ventana del microarray virtual | Ejecutarlo al final, y añadir sus propios microarrays y muestras |
 | Carpeta `auxiliar` (en el mismo paquete) | Datos de ejemplo (`DatosEjemplo`), comprobaciones de las pruebas (`Comprobador`) y ventana gráfica | Usarlo (**no es necesario entender el código de la ventana, ni mucho menos modificarlo**) |
 | Carpeta `doc` | Documentación de todo el proyecto, en HTML (generada con Javadoc) | Consultarla con el navegador |
@@ -203,11 +198,11 @@ Para usar las clases de la biblioteca de Java, como `LocalDate`, las clases empi
 
 ## Objetivos
 
-- Construir clases: atributos, constructores que validan sus datos y lanzan excepciones, métodos de acceso y otros métodos.
+- Completar clases: constructores que validan sus datos y lanzan excepciones, y métodos que trabajan con sus atributos.
 - Recorrer cadenas de caracteres y arrays (de una y de dos dimensiones) con bucles, incluidos bucles anidados.
 - Aplicar un algoritmo de búsqueda de patrones con comodines (ventana deslizante).
 - Capturar excepciones con `try`/`catch`.
-- Usar clases de la biblioteca de Java para trabajar con fechas (`LocalDate`, `ChronoUnit`).
+- Comprender el uso de clases de la biblioteca de Java para trabajar con fechas (`LocalDate`, `ChronoUnit`).
 - Desarrollar código a partir de su especificación en Javadoc, y probarlo con sus propios casos de prueba.
 
 ## Requisitos previos
@@ -235,12 +230,13 @@ En Eclipse debe seguir los siguientes pasos:
 **Pasos:**
 
 1. Abra la documentación del proyecto en el navegador: pulse con el botón derecho sobre `doc/index.html` y elija _Open With ➤ Web Browser_. Lea la de la clase `Iupac`: le servirá en toda la práctica.
-2. Estudie las clases `Lectura` y `Muestra`, que se proporcionan ya programadas. Fíjese en cómo están construidas, porque las clases que completará usted siguen el mismo modelo:
+2. Estudie las clases `Lectura`, `Muestra` y `Analisis`, que se proporcionan ya programadas. Fíjese en cómo están construidas, porque las clases que completará usted siguen el mismo modelo:
    - sus **atributos** son privados;
    - el **constructor** comprueba que los datos son válidos y, si no lo son, lanza una excepción con un mensaje que explica el motivo. Por ejemplo, el de `Lectura` recorre la secuencia con un bucle para comprobar cada carácter;
    - los **métodos de acceso** (`getId`, `getSecuencia`…) devuelven los atributos o datos calculados a partir de ellos;
-   - `getBase` lanza una excepción si se le pide una posición que está fuera de la lectura.
-3. Fíjese en cómo se trabaja con fechas en `Muestra`: la fecha de captura es un `LocalDate`, y el constructor comprueba con `isAfter` que no es posterior a la fecha actual (`LocalDate.now()`). Puede consultar todos sus métodos en la [documentación de `LocalDate`](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/time/LocalDate.html).
+   - `getBase` lanza una excepción si se le pide una posición que está fuera de la lectura;
+   - el constructor de `Analisis` hace el análisis completo: obtiene los puntos iluminados con el método `hibridar(Muestra)` de `Microarray`, que programará usted.
+3. Fíjese en cómo se trabaja con fechas. En `Muestra`, la fecha de captura es un `LocalDate`, y el constructor comprueba con `isAfter` que no es posterior a la fecha actual (`LocalDate.now()`). En `Analisis`, la fecha del análisis es la actual, y `getDiasDesdeCaptura` calcula los días transcurridos con `ChronoUnit.DAYS.between`, que tiene en cuenta los meses de distinta duración y los años bisiestos. Puede consultar todos los métodos de `LocalDate` en su [documentación](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/time/LocalDate.html).
 4. Ejecute `PruebaInteractiva`. Se abrirá la ventana del microarray virtual, aunque todavía no funcionará: sus sondas aparecerán como `(null)` y no se iluminará ningún punto. Al terminar la práctica, funcionará por completo.
 
 > [!IMPORTANT]
@@ -250,27 +246,20 @@ En Eclipse debe seguir los siguientes pasos:
 > ```
 > Para comprobar que un constructor lanza una excepción, invóquelo dentro de un bloque `try`: si no la lanza, llame a `Comprobador.fallo(...)`; en el `catch`, a `Comprobador.acierto(...)` (vea `PruebaSonda`).
 
-### 2. Contar las bases indeterminadas de una lectura
-
-Empezaremos con un recorrido sencillo de una cadena de caracteres. En la clase `Lectura`, complete el método **`contarIndeterminadas`**, que devuelve cuántas posiciones de la lectura contienen la base indeterminada `N` (por ejemplo, la lectura `GANTACNA` tiene 2). Recorra la secuencia con un bucle y use la constante `Iupac.INDETERMINADA`.
-
-Ejecute `PruebaLectura` y corrija lo que sea necesario hasta que todas las comprobaciones aparezcan con `✓`. Después, añada sus propios casos de prueba.
-
-### 3. Completar la clase `Sonda`
+### 2. Completar la clase `Sonda`
 
 La clase `Sonda` representa una sonda del microarray: su nombre y el patrón de su diana, que puede contener comodines. Esta es la clase central de la práctica: contiene el algoritmo de reconocimiento de patrones. Se proporciona hecho el método `encontrarEn`, pero con una versión inicial que no tiene en cuenta los comodines: tendrá que modificarlo.
 
 **Pasos:**
 
 1. **Desarrolle el constructor**: compruebe que el nombre no es nulo ni está en blanco, y que el patrón no es nulo ni vacío y solo contiene símbolos de patrón (use `Iupac.esSimboloDePatron` con cada carácter). Si algún dato no es válido, lance una excepción con un mensaje que explique el motivo; si todos lo son, asigne los atributos. Tome como modelo el constructor de `Lectura`.
-2. **Desarrolle los métodos de acceso** `getNombre`, `getPatron` y `getLongitud` (la longitud del patrón).
-3. **Desarrolle `hibridaCon(Lectura lectura)`**: este método debe devolver si el patrón aparece en algún lugar de la lectura. Reutilice `encontrarEn`, que devuelve la primera posición de la lectura en la que encaja el patrón, o `-1` si no encaja en ninguna.
-4. **Pruebe la versión inicial de `encontrarEn`**. Se proporciona con una implementación muy sencilla, `lectura.getSecuencia().indexOf(patron)`: el método `indexOf` de `String` busca un texto dentro de otro, pero comparando los caracteres tal cual, así que no entiende los comodines. Ejecute `PruebaSonda`: las comprobaciones del grupo «encontrarEn, con patrones sin comodines» deberían aparecer con `✓`, y también las de `hibridaCon` con el Virus A; en cambio, fallarán casi todas las del grupo «encontrarEn, con patrones con comodines» (por ejemplo, no encuentra `CAGYT` en `GATTACAGTTTAGC`). Es normal: lo resolverá en los pasos siguientes.
-5. **Desarrolle `encaja(char simbolo, char base)`**: este método debe devolver si un símbolo del patrón encaja con una base de la lectura, según la tabla de los [patrones con comodines](#patrones-con-comodines). Primero, compruebe que el símbolo es un símbolo de patrón y la base, un símbolo de lectura (con `Iupac.esSimboloDePatron` e `Iupac.esSimboloDeLectura`); si alguno no lo es, lance una excepción. Después, use una sentencia `switch` con un caso para cada comodín y un caso `default` para las bases. Puede apoyarse en `Iupac.esPurina` e `Iupac.esPirimidina`. Es un método **estático**: no depende de ninguna sonda concreta, y se invoca con el nombre de la clase (`Sonda.encaja('R', 'G')`).
-6. **Desarrolle `encajaEn(Lectura lectura, int inicio)`**: este método debe devolver si el patrón encaja con la lectura colocando su primer símbolo en la posición `inicio` de la lectura. Recorra el patrón con un bucle: el símbolo `i` del patrón se compara (con `encaja`) con la base `inicio + i` de la lectura, que puede obtener con `lectura.getBase(...)`. En cuanto un símbolo no encaje, el patrón no encaja.
+2. **Desarrolle `hibridaCon(Lectura lectura)`**: este método debe devolver si el patrón aparece en algún lugar de la lectura. Reutilice `encontrarEn`, que devuelve la primera posición de la lectura en la que encaja el patrón, o `-1` si no encaja en ninguna.
+3. **Pruebe la versión inicial de `encontrarEn`**. Se proporciona con una implementación muy sencilla, `lectura.getSecuencia().indexOf(patron)`: el método `indexOf` de `String` busca un texto dentro de otro, pero comparando los caracteres tal cual, así que no entiende los comodines. Ejecute `PruebaSonda`: las comprobaciones del grupo «encontrarEn, con patrones sin comodines» deberían aparecer con `✓`, y también las de `hibridaCon` con el Virus A; en cambio, fallarán casi todas las del grupo «encontrarEn, con patrones con comodines» (por ejemplo, no encuentra `CAGYT` en `GATTACAGTTTAGC`). Es normal: lo resolverá en los pasos siguientes.
+4. **Desarrolle `encaja(char simbolo, char base)`**: este método debe devolver si un símbolo del patrón encaja con una base de la lectura, según la tabla de los [patrones con comodines](#patrones-con-comodines). Primero, compruebe que el símbolo es un símbolo de patrón y la base, un símbolo de lectura (con `Iupac.esSimboloDePatron` e `Iupac.esSimboloDeLectura`); si alguno no lo es, lance una excepción. Después, use una sentencia `switch` con un caso para cada comodín y un caso `default` para las bases. Puede apoyarse en `Iupac.esPurina` e `Iupac.esPirimidina`. Es un método **estático**: no depende de ninguna sonda concreta, y se invoca con el nombre de la clase (`Sonda.encaja('R', 'G')`).
+5. **Desarrolle `encajaEn(Lectura lectura, int inicio)`**: este método debe devolver si el patrón encaja con la lectura colocando su primer símbolo en la posición `inicio` de la lectura. Recorra el patrón con un bucle: el símbolo `i` del patrón se compara (con `encaja`) con la base `inicio + i` de la lectura, que puede obtener con `lectura.getBase(...)`. En cuanto un símbolo no encaje, el patrón no encaja.
 
    `getBase` lanza una excepción si la posición está fuera de la lectura, así que el patrón no cabe en ella a partir de esa posición. Capture esa excepción con un bloque `try`/`catch`: en ese caso, `encajaEn` debe devolver `false`. El mismo bloque captura también las excepciones de `encaja`.
-7. **Modifique `encontrarEn(Lectura lectura)`** para que tenga en cuenta los comodines: en lugar de `indexOf`, use el algoritmo de la **ventana deslizante**. Se coloca el patrón al principio de la lectura y se va desplazando una posición cada vez, comprobando en cada una si encaja (con `encajaEn`); el método devuelve la primera posición en la que encaja, o `-1` si no encaja en ninguna. Por ejemplo, para buscar el patrón `TRC` en la lectura `GATACATGCA`:
+6. **Modifique `encontrarEn(Lectura lectura)`** para que tenga en cuenta los comodines: en lugar de `indexOf`, use el algoritmo de la **ventana deslizante**. Se coloca el patrón al principio de la lectura y se va desplazando una posición cada vez, comprobando en cada una si encaja (con `encajaEn`); el método devuelve la primera posición en la que encaja, o `-1` si no encaja en ninguna. Por ejemplo, para buscar el patrón `TRC` en la lectura `GATACATGCA`:
 
    ```
    GATACATGCA
@@ -280,12 +269,12 @@ La clase `Sonda` representa una sonda del microarray: su nombre y el patrón de 
    ```
 
    ¿Cuál es la última posición en la que tiene sentido colocar el patrón? Piense en un patrón de 3 símbolos y una lectura de 10 bases.
-8. Ejecute `PruebaSonda` y corrija lo que sea necesario hasta que todas las comprobaciones aparezcan con `✓`. Después, añada sus propios casos de prueba: por ejemplo, patrones al principio y al final de la lectura, patrones que aparecen varias veces, lecturas con `N` y patrones más largos que la lectura.
+7. Ejecute `PruebaSonda` y corrija lo que sea necesario hasta que todas las comprobaciones aparezcan con `✓`. Después, añada sus propios casos de prueba: por ejemplo, patrones al principio y al final de la lectura, patrones que aparecen varias veces, lecturas con `N` y patrones más largos que la lectura.
 
 > [!TIP]
 > Antes de modificar `encontrarEn`, dibuje a mano una lectura y un patrón, y vaya desplazando el patrón posición a posición. Le ayudará a encontrar el límite del bucle, que es donde suelen estar los errores.
 
-### 4. Completar la clase `Microarray`
+### 3. Completar la clase `Microarray`
 
 La clase `Microarray` representa un chip con sondas en una cuadrícula: una matriz `Sonda[][]`, en la que `sondas[fila][columna]` es la sonda de cada punto. El constructor y los métodos de acceso se proporcionan hechos (fíjese en cómo el constructor recorre la matriz con dos bucles anidados para validarla).
 
@@ -295,19 +284,7 @@ La clase `Microarray` representa un chip con sondas en una cuadrícula: una matr
 2. **Desarrolle `hibridar(Muestra muestra)`**: este método debe hacer lo mismo con todas las lecturas de la muestra. Un punto se ilumina si su sonda hibrida con **alguna** de las lecturas. Puede recorrer las lecturas con un bucle `for` mejorado (`for (Lectura lectura : muestra.getLecturas())`) y reutilizar el método anterior. Cuidado: un punto que ya se ha iluminado con una lectura no debe apagarse porque no hibride con la siguiente.
 3. Ejecute `PruebaMicroarray` y corrija lo que sea necesario. Las matrices se escriben con `#` para los puntos iluminados y `.` para los apagados, una fila entre corchetes. Fíjese en la prueba con el chip de 2x4: si confunde filas y columnas, fallará. La última prueba usa un chip de 20x20 sondas: si su código es correcto, los puntos iluminados forman una palabra.
 
-### 5. Completar la clase `Analisis`
-
-La clase `Analisis` representa el resultado de analizar una muestra con un microarray en la fecha actual.
-
-**Pasos:**
-
-1. **Desarrolle el constructor**: compruebe que ningún parámetro es nulo; si alguno lo es, lance una excepción. Después, asigne los atributos: la fecha del análisis es la fecha actual, que se obtiene con `LocalDate.now()`, y los puntos iluminados se calculan con `hibridar(Muestra)`.
-2. **Desarrolle los métodos de acceso** `getMuestra`, `getMicroarray`, `getFechaAnalisis` y `getIluminados`.
-3. **Desarrolle `getDiasDesdeCaptura`**: este método debe devolver cuántos días han pasado entre la captura de la muestra y el análisis. Use `ChronoUnit.DAYS.between(fechaInicial, fechaFinal)`, que tiene en cuenta los meses de distinta duración y los años bisiestos.
-4. **Desarrolle `contarIluminados`**: este método debe devolver cuántos puntos del chip se han iluminado.
-5. Ejecute `PruebaAnalisis` y corrija lo que sea necesario. Después, añada sus propios casos de prueba.
-
-### 6. Probar el sistema completo
+### 4. Probar el sistema completo
 
 Ejecute de nuevo `PruebaInteractiva`. Elija un microarray y una muestra (o escriba sus propias lecturas, separadas por espacios) y pulse _Analizar_: los puntos del chip cuyas sondas hibridan con alguna lectura se iluminarán, y debajo verá, para cada lectura, en qué posición encaja cada sonda (según su método `encontrarEn`).
 

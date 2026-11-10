@@ -222,7 +222,8 @@ class VentanaMicroarray {
                 .append(" de ").append(microarray.getFilas() * microarray.getColumnas()).append("\n\n");
         texto.append("Dónde encaja cada sonda en cada lectura (según encontrarEn):\n");
         for (Lectura lectura : muestra.getLecturas()) {
-            int indeterminadas = lectura.contarIndeterminadas();
+            String secuencia = lectura.getSecuencia();
+            int indeterminadas = secuencia.length() - secuencia.replace("N", "").length();
             texto.append("\n@").append(lectura.getId()).append("   (").append(indeterminadas)
                     .append(indeterminadas == 1 ? " base indeterminada)\n" : " bases indeterminadas)\n");
             texto.append(lectura.getSecuencia()).append('\n');

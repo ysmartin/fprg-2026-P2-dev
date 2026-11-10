@@ -88,24 +88,6 @@ class Lectura {
     }
 
     /**
-     * Cuenta cuántas bases indeterminadas ({@code N}) tiene la lectura.
-     * <p>
-     * Por ejemplo, la lectura {@code "GANTACNA"} tiene 2 bases indeterminadas.
-     * </p>
-     *
-     * @return número de posiciones de la lectura que contienen {@code N}
-     */
-    int contarIndeterminadas() {
-        int indeterminadas = 0;
-        for (int i = 0; i < secuencia.length(); i++) {
-            if (secuencia.charAt(i) == Iupac.INDETERMINADA) {
-                indeterminadas++;
-            }
-        }
-        return indeterminadas;
-    }
-
-    /**
      * <em>(Ampliación A1)</em> Devuelve la complementaria inversa de la lectura: la secuencia
      * de la otra hebra del fragmento de ADN, leída en el mismo sentido que la lectura.
      * <p>

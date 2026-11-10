@@ -25,7 +25,7 @@ if [ "${version:-0}" -lt 25 ]; then
 fi
 
 fallos=0
-PRUEBAS="PruebaLectura PruebaSonda PruebaMicroarray PruebaAnalisis"
+PRUEBAS="PruebaSonda PruebaMicroarray"
 
 echo "== plantilla derivada de la solución"
 cp -r "$RAIZ/scripts" "$RAIZ/solucion" "$TMP/"
