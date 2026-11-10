@@ -6,7 +6,7 @@ Este documento **no es para el alumnado**. Recoge las decisiones de diseño de l
 
 | Ruta | Contenido | Destino |
 |------|-----------|---------|
-| `README.md`, `logos/`, `img/` | Enunciado de la P2 y sus imágenes (`img/ventana.png`: captura de la interfaz gráfica) | Repositorio del alumnado |
+| `README.md`, `logos/`, `img/` | Enunciado de la P2 y sus imágenes (`img/ventana.png` e `img/ventana-grande.png`: capturas de la interfaz gráfica) | Repositorio del alumnado |
 | `plantilla/fprg-practica2-2026/` | Proyecto Eclipse (JavaSE-25, paquete `es.upm.dit.fprg26.p2`) que reciben los alumnos, con la documentación HTML ya generada (`doc/`) | Repositorio del alumnado |
 | `solucion/fprg-practica2-2026/` | Mismo proyecto, con la solución de referencia | Repositorio de la solución |
 | `docs/NOTAS_PROFESORADO.md` | Este documento | Solo desarrollo |
@@ -32,13 +32,15 @@ Para publicar, basta con copiar `README.md`, `logos/`, `img/` y `plantilla/fprg-
 | **Proteínas, para la P3** | El algoritmo sería el mismo con otro alfabeto: en la P2 solo añadiría código duplicado. Su valor didáctico propio (aplicar el mismo reconocedor a distintas extensiones de una clase) encaja en la P3. |
 | **Clases proporcionadas como modelo** (`Lectura`, `Muestra`, el constructor de `Microarray`) y clases que se completan (`Sonda`, `Microarray.hibridar`, `Analisis`) | El punto de partida es más rico que en la P1: el alumnado estudia clases completas antes de escribir la suya. Los atributos de las clases que se completan vienen declarados (como en 2025-26). |
 | **Enumerados de la P1** (`BaseNitrogenada`, `AcidoNucleico`) y utilidades `Iupac` | `Iupac.complementario` reutiliza `BaseNitrogenada.fromChar`, `complementaria` y `toChar` de la P1. `Iupac` reúne las constantes y los métodos de utilidad (`esSimboloDeLectura`, `esSimboloDePatron`, `esPurina`, `esPirimidina`, `complementario`) para que el alumnado se centre en las clases y los bucles. |
-| **`try`/`catch`** en `encajaEn` | `Lectura.getBase` lanza una excepción comprobada si la posición está fuera de la lectura; `encajaEn` la captura y devuelve `false` (el patrón no cabe a partir de esa posición), igual que `coincideEn` en 2025-26. `buscarEn` solo prueba las posiciones en las que cabe el patrón, así que la captura protege, sobre todo, las invocaciones directas a `encajaEn` con posiciones no válidas (las pruebas lo comprueban). |
-| **Procedencia con `LocalDate`**: fecha de captura (en `Muestra`) y de análisis (en `Analisis`) | Uso de una biblioteca de Java distinta de `java.lang`: `LocalDate.of`, `now`, `isAfter`, `isBefore` y `ChronoUnit.DAYS.between`. Las fechas de los datos de ejemplo son de 2026 (de abril a junio), anteriores a cualquier fecha de uso, porque `Muestra` rechaza las fechas futuras. |
+| **`try`/`catch`** en `encajaEn` | `Lectura.getBase` lanza una excepción comprobada si la posición está fuera de la lectura; `encajaEn` la captura y devuelve `false` (el patrón no cabe a partir de esa posición), igual que `coincideEn` en 2025-26. `buscarEn` solo prueba las posiciones en las que cabe el patrón, así que la captura protege, sobre todo, las invocaciones directas a `encajaEn` con posiciones no válidas (las pruebas lo comprueban). El mismo `try` captura las excepciones de `encaja` (ver la fila siguiente). |
+| **Excepción en `encaja` con caracteres no válidos** | Todo carácter que no sea un símbolo válido se rechaza con una excepción: en los constructores de `Lectura` (proporcionado) y `Sonda`, y también en `encaja`, que es estático y público, así que puede invocarse con cualquier `char`. Con objetos ya validados no se produce nunca, pero obliga a declarar `throws Exception` en `encaja` y a capturarla en `encajaEn` (que no la declara): refuerza la diferencia entre lanzar y capturar. Las pruebas comprueban `encaja('X', 'A')`, `encaja('a', 'A')`, `encaja('A', 'R')` (la `R` no es una base de lectura) y `encaja('A', 'U')`. |
+| **Procedencia con `LocalDate`**: fecha de captura (en `Muestra`) y de análisis (en `Analisis`), que es **la fecha actual** | Como en un laboratorio, el análisis se registra cuando se hace: el constructor de `Analisis` asigna `LocalDate.now()` y no recibe la fecha. Así desaparece la validación «análisis no anterior a la captura», que ya garantiza `Muestra` al rechazar las fechas futuras (con `isAfter`). Las fechas de captura de los datos de ejemplo son relativas a la actual (`DatosEjemplo.hace(n)`, de 1 a 6 días antes), y las pruebas de `getDiasDesdeCaptura` usan muestras capturadas hace 0, 2, 40 (siempre hay cambio de mes) y 400 días (cambio de año). Se usan `now`, `isAfter`, `minusDays` y `ChronoUnit.DAYS.between`. Las pruebas comparan con `LocalDate.now()`, así que solo fallarían si se ejecutasen justo al cambiar de día. |
+| **Salida binaria de cada punto** | En un microarray real, cada punto da una **intensidad** de fluorescencia continua, aproximadamente proporcional a la cantidad de diana marcada que se ha unido a la sonda (es decir, al número de fragmentos que la contienen, no al número de veces que aparece en un mismo fragmento), hasta que el punto se satura; la presencia o ausencia se decide después con un umbral, y los desajustes dan señales más débiles. La versión base usa una salida binaria (el umbral implícito es «al menos una lectura»), que basta para los objetivos de la P2; la ampliación A2 añade las intensidades como número de lecturas que hibridan con cada sonda. |
 | **`import module java.base;`** (y `java.desktop` en la interfaz) | Importaciones de módulo (Java 25). En la interfaz se combinan `java.base` y `java.desktop`; no se usa `List`, que sería ambiguo (`java.util.List` y `java.awt.List`). Probado con javac 25 y ECJ 3.44. |
 | **`switch` con flechas, como sentencia** (en `encaja` e `Iupac.complementario`) | Igual que en la P1. Las constantes de `Iupac` (`INDETERMINADA`, `PURINA`, `PIRIMIDINA`) sirven como etiquetas de `case`. |
-| **Datos de ejemplo** (`DatosEjemplo`) | Un chip de prueba de 1x3 (`GATTACA`, `GANTACA`, `GAYTRCA`) con lecturas que distinguen las reglas de los comodines; un panel de patógenos de 3x3 con secuencias **sintéticas** (inventadas, y así se indica), con sondas de control positivo y negativo; y un chip de 2x4 con las secuencias **reales** de ocho enzimas de restricción (EcoRI, BamHI, HindIII, NotI y, degeneradas, HincII `GTYRAC`, AvaI `CYCGRG`, BanI `GGYRCC` y Hpy188I `TCNGA`, según el catálogo de NEB). Las lecturas se generaron con un script que comprueba que cada sonda se ilumina solo donde debe, también en la otra hebra (para que A1 no cambie los resultados). |
-| **Interfaz gráfica opaca** (`VentanaMicroarray`, `PanelMicroarray`) | Dibuja el chip con los puntos iluminados (con el mismo estilo que la figura de la P1) y, para cada lectura, marca con `^` dónde encaja cada sonda según `buscarEn`. Permite escribir lecturas a mano. Tolera el código incompleto: con la plantilla muestra `(null)` y un aviso en lugar de fallar. |
-| **Pruebas legibles** (`Comprobador` y `Prueba*`) | El alumnado ya conoce las clases y `try`/`catch`, así que las pruebas ya no son opacas como en la P1: `Comprobador.comprobar(descripción, esperado, obtenido)` escribe `✓`/`✗` (también con matrices), y las excepciones se comprueban con `try`/`catch`. Cada clase de prueba tiene un método `pruebasPropias` para las del alumnado. |
+| **Datos de ejemplo** (`DatosEjemplo`) | Un chip de prueba de 1x3 (`GATTACA`, `GANTACA`, `GAYTRCA`) con lecturas que distinguen las reglas de los comodines; un panel de patógenos de 3x3 con secuencias **sintéticas** (inventadas, y así se indica), con sondas de control positivo y negativo; un chip de 2x4 con las secuencias **reales** de ocho enzimas de restricción (EcoRI, BamHI, HindIII, NotI y, degeneradas, HincII `GTYRAC`, AvaI `CYCGRG`, BanI `GGYRCC` y Hpy188I `TCNGA`, según el catálogo de NEB); y un **chip de expresión de 20x20** con 400 sondas sintéticas de 14 bases (`G001` a `G400`, generadas con semilla fija; un tercio, degeneradas), con una muestra M5 de 27 lecturas (dos dianas por lectura) que ilumina 53 puntos que forman la palabra «ADN» (`FORMA_MUESTRA_DE_EXPRESION`; no es simétrica, así que se nota si se trasponen filas y columnas). Las lecturas de los chips pequeños se generaron con un script que comprueba que cada sonda se ilumina solo donde debe, también en la otra hebra (para que A1 no cambie los resultados); en el chip de expresión lo comprueban `PruebaMicroarray` y `PruebaAmpliaciones`. |
+| **Interfaz gráfica opaca** (`VentanaMicroarray`, `PanelMicroarray`) | Dibuja el chip con los puntos iluminados (con el mismo estilo que la figura de la P1) y, para cada lectura, marca con `^` dónde encaja cada sonda según `buscarEn`. Los chips de hasta 6x6 se dibujan con el nombre y el patrón de cada sonda; los mayores, solo con los puntos sobre fondo oscuro, como la imagen de un escáner, y con los índices de filas y columnas: el nombre, el patrón, la posición y el estado de cada sonda aparecen en un *tooltip* al dejar el ratón encima (también en los chips pequeños). La fecha del análisis se muestra (es la de hoy), pero ya no se escribe. Permite escribir lecturas a mano. Tolera el código incompleto: con la plantilla muestra `(null)` y un aviso en lugar de fallar. |
+| **Pruebas legibles** (`Comprobador` y `Prueba*`) | El alumnado ya conoce las clases y `try`/`catch`, así que las pruebas ya no son opacas como en la P1: `Comprobador.comprobar(descripción, esperado, obtenido)` escribe `✓`/`✗` (también con matrices; las de más de 4 filas, una fila por línea y, si fallan, la esperada y la obtenida en paralelo, con `≠` en las filas distintas), y las excepciones se comprueban con `try`/`catch`. Cada clase de prueba tiene un método `pruebasPropias` para las del alumnado. |
 | **Plantilla derivada por script** | `scripts/derivar-plantilla.py` vacía los métodos que completa el alumnado (con `TODO` y un valor provisional) y quita `final` de los atributos de `Sonda` y `Analisis`, para que la plantilla compile. `verificar.sh` comprueba que la plantilla está al día. |
 
 ## 3. Carga de trabajo comparada con la P2 de 2025-26
@@ -50,12 +52,12 @@ Se usa la misma convención que en la P1 (líneas lógicas de código, LLOC, en 
 
 | | P2 2025-26 | P2 2026-27 |
 |---|---:|---:|
-| LLOC triviales | 11 | 12 |
-| LLOC normales | 64 | 50 |
+| LLOC triviales | 11 | 11 |
+| LLOC normales | 64 | 51 |
 | LLOC complejas | 15 | 8 |
 | **Total de LLOC de código** | **90** | **70 (−22 %)** |
-| Unidades ponderadas (trivial = 0,5) | ≈ 100 | ≈ 72 (−28 %) |
-| Unidades ponderadas (trivial = 0,25) | ≈ 97 | ≈ 69 (−29 %) |
+| Unidades ponderadas (trivial = 0,5) | ≈ 100 | ≈ 72,5 (−28 %) |
+| Unidades ponderadas (trivial = 0,25) | ≈ 97 | ≈ 70 (−28 %) |
 
 Detalle de 2025-26: `Muestra` 26 LLOC, `Patogeno` 30 y `Reconocedor` 34 (diferencia entre su plantilla y su solución).
 
@@ -66,13 +68,13 @@ Detalle de 2026-27 (LLOC que escribe el alumnado):
 | `Lectura` | `contarIndeterminadas` | 5 | Primer recorrido de una cadena |
 | `Sonda` | constructor | 9 | Validación con condiciones compuestas y recorrido del patrón; excepciones |
 | | `getNombre`, `getPatron`, `getLongitud` | 3 | Métodos de acceso (triviales) |
-| | `encaja` | 9 | `switch` con flechas sobre los comodines (reutiliza `Iupac.esPurina`/`esPirimidina`) |
+| | `encaja` | 11 | Validación de los dos caracteres (`throw`) y `switch` con flechas sobre los comodines (reutiliza `Iupac.esPurina`/`esPirimidina`) |
 | | `encajaEn` | 7 | Bucle con salida anticipada; `try`/`catch` |
 | | `buscarEn` | 4 | Ventana deslizante (límite del bucle) |
 | | `hibridaCon` | 1 | Reutilización |
 | `Microarray` | `hibridar(Lectura)` | 5 | Recorrido de una matriz con bucles anidados |
 | | `hibridar(Muestra)` | 8 | `for` mejorado sobre un array y combinación (O lógico) de matrices |
-| `Analisis` | constructor | 8 | Validación con `LocalDate.isBefore`; cálculo en el constructor |
+| `Analisis` | constructor | 6 | Validación de nulos; fecha actual con `LocalDate.now()`; cálculo en el constructor |
 | | métodos de acceso | 4 | Triviales |
 | | `getDiasDesdeCaptura` | 1 | `ChronoUnit.DAYS.between` |
 | | `contarIluminados` | 6 | Recorrido de una matriz con contador |
@@ -89,8 +91,9 @@ Detalle de 2026-27 (LLOC que escribe el alumnado):
 - **`encajaEn` sin salida anticipada**: devolver el resultado de la última comparación en vez de `false` en cuanto una falla.
 - **`try`/`catch` mal colocado**: dentro del bucle, sin `return false` en el `catch`, el método sigue comparando y puede devolver `true`.
 - **`hibridar(Muestra)` que sobrescribe** el resultado de cada lectura (`iluminados[f][c] = conLectura[f][c]`) en lugar de acumularlo: solo cuenta la última lectura. La prueba con M1 lo detecta (el Virus A está en la primera lectura y la última no tiene ninguna diana).
-- **Filas y columnas cambiadas**: `new boolean[getColumnas()][getFilas()]`; la prueba con el chip de 2x4 lo detecta.
-- **Fechas**: usar `isAfter` en lugar de `isBefore` (o al revés), o invertir los argumentos de `ChronoUnit.DAYS.between` (días negativos). Las pruebas con el mismo día (0) y con cambio de mes (9) lo detectan.
+- **Filas y columnas cambiadas**: `new boolean[getColumnas()][getFilas()]`; la prueba con el chip de 2x4 lo detecta (con `iluminados[columna][fila]`, el chip de 1x3 lanza `ArrayIndexOutOfBoundsException`, que la prueba muestra). En el chip de 20x20, que es cuadrado, el dibujo saldría traspuesto.
+- **`encaja` sin validar los caracteres**, o validando solo el símbolo del patrón: las pruebas con caracteres no válidos lo detectan (4 y 2 `✗`, respectivamente).
+- **Fechas**: invertir los argumentos de `ChronoUnit.DAYS.between` (días negativos), o restar los días del mes (`getDayOfMonth`) o del año (`getDayOfYear`) de las dos fechas. Las pruebas con 2, 40 y 400 días lo detectan (comprobado con versiones de la solución con esos errores).
 - **Atributos sin asignar en el constructor de `Analisis`** (o asignados después de llamar a métodos que los usan): `getIluminados()` devuelve `null`; la interfaz lo avisa.
 
 ## 5. Ideas para la prueba escrita
@@ -106,7 +109,7 @@ Detalle de 2026-27 (LLOC que escribe el alumnado):
 
 ## 6. Verificación técnica realizada
 
-- **JDK 25** (Temurin 25.0.5): la solución, la plantilla y la solución con ampliaciones compilan sin avisos con `javac -Xlint:all -Werror`, y también con **ECJ 3.44** (Eclipse 2025-12) y la configuración de `.settings`. Las pruebas de la solución superan todas sus comprobaciones (4, 34, 7 y 13), y las de las ampliaciones, las suyas (11). La plantilla se ejecuta sin excepciones, con las comprobaciones pendientes marcadas con `✗`. `javadoc -Xdoclint:all` no da avisos (en la plantilla, sin el grupo `missing`). Todo esto lo repite `scripts/verificar.sh`.
-- **Interfaz gráfica**: probada con la solución y con la plantilla en un servidor X virtual (Xvfb), con muestras de ejemplo y con lecturas escritas a mano (`img/ventana.png` es una de esas capturas).
-- **Errores típicos**: con versiones de la solución que contienen los errores de la sección 4 (límite de `buscarEn`, `N` de la lectura como comodín, `hibridar(Muestra)` que sobrescribe, `isAfter` por `isBefore` y argumentos de `ChronoUnit` invertidos), las pruebas proporcionadas señalan cada uno de ellos.
+- **JDK 25** (Temurin 25.0.5): la solución, la plantilla y la solución con ampliaciones compilan sin avisos con `javac -Xlint:all -Werror`, y también con **ECJ 3.44** (Eclipse 2025-12) y la configuración de `.settings`. Las pruebas de la solución superan todas sus comprobaciones (4, 38, 8 y 14), y las de las ampliaciones, las suyas (12). La plantilla se ejecuta sin excepciones, con las comprobaciones pendientes marcadas con `✗`. `javadoc -Xdoclint:all` no da avisos (en la plantilla, sin el grupo `missing`). Todo esto lo repite `scripts/verificar.sh`.
+- **Interfaz gráfica**: probada con la solución y con la plantilla en un servidor X virtual (Xvfb) de 1366x900, con muestras de ejemplo, con lecturas escritas a mano y con el ratón sobre los puntos (*tooltips*) de los chips pequeños y del grande (`img/ventana.png` e `img/ventana-grande.png` son dos de esas capturas). La ventana se dimensiona para el chip más grande (unos 960x820 píxeles), sin pasar del tamaño de la pantalla, y la división entre el chip y el texto se ajusta al chip elegido.
+- **Errores típicos**: con versiones de la solución que contienen los errores de la sección 4 (límite de `buscarEn`, `N` de la lectura como comodín, `encaja` sin validar, `hibridar(Muestra)` que sobrescribe, filas y columnas cambiadas, argumentos de `ChronoUnit` invertidos y restas de `getDayOfMonth` o `getDayOfYear`), las pruebas proporcionadas señalan cada uno de ellos.
 - **Pendiente de comprobar en la imagen de los laboratorios**: la ejecución desde la interfaz de Eclipse (_Run As ➤ Java Application_), y la apertura de `doc/index.html` con _Open With ➤ Web Browser_.

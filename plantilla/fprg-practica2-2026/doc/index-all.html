@@ -70,12 +70,13 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="es/upm/dit/fprg26/p2/Analisis.html" class="type-name-link" title="class in es.upm.dit.fprg26.p2">Analisis</a> - Class in <a href="es/upm/dit/fprg26/p2/package-summary.html">es.upm.dit.fprg26.p2</a></dt>
 <dd>
-<div class="block">El resultado de analizar una muestra con un microarray en una fecha determinada.</div>
+<div class="block">El resultado de analizar una muestra con un microarray.</div>
 </dd>
-<dt><a href="es/upm/dit/fprg26/p2/Analisis.html#%3Cinit%3E(es.upm.dit.fprg26.p2.Muestra,es.upm.dit.fprg26.p2.Microarray,java.time.LocalDate)" class="member-name-link">Analisis(Muestra, Microarray, LocalDate)</a> - Constructor for class es.upm.dit.fprg26.p2.<a href="es/upm/dit/fprg26/p2/Analisis.html" title="class in es.upm.dit.fprg26.p2">Analisis</a></dt>
+<dt><a href="es/upm/dit/fprg26/p2/Analisis.html#%3Cinit%3E(es.upm.dit.fprg26.p2.Muestra,es.upm.dit.fprg26.p2.Microarray)" class="member-name-link">Analisis(Muestra, Microarray)</a> - Constructor for class es.upm.dit.fprg26.p2.<a href="es/upm/dit/fprg26/p2/Analisis.html" title="class in es.upm.dit.fprg26.p2">Analisis</a></dt>
 <dd>
-<div class="block">Analiza una muestra con un microarray: hibrida todas las lecturas de la muestra
-con el chip (ver <a href="es/upm/dit/fprg26/p2/Microarray.html#hibridar(es.upm.dit.fprg26.p2.Muestra)"><code>Microarray.hibridar(Muestra)</code></a>) y guarda el resultado.</div>
+<div class="block">Analiza una muestra con un microarray en la fecha actual: hibrida todas las lecturas
+de la muestra con el chip (ver <a href="es/upm/dit/fprg26/p2/Microarray.html#hibridar(es.upm.dit.fprg26.p2.Muestra)"><code>Microarray.hibridar(Muestra)</code></a>) y guarda el
+resultado.</div>
 </dd>
 <dt><a href="es/upm/dit/fprg26/p2/AcidoNucleico.html#ARN" class="member-name-link">ARN</a> - Enum constant in enum class es.upm.dit.fprg26.p2.<a href="es/upm/dit/fprg26/p2/AcidoNucleico.html" title="enum class in es.upm.dit.fprg26.p2">AcidoNucleico</a></dt>
 <dd>
@@ -100,6 +101,11 @@ la sonda.</div>
 <dd>
 <div class="block">Devuelve un chip de 2x4 con las secuencias que reconocen ocho enzimas de restricción
 reales.</div>
+</dd>
+<dt><a href="es/upm/dit/fprg26/p2/auxiliar/DatosEjemplo.html#chipDeExpresion()" class="member-name-link">chipDeExpresion()</a> - Static method in class es.upm.dit.fprg26.p2.auxiliar.<a href="es/upm/dit/fprg26/p2/auxiliar/DatosEjemplo.html" title="class in es.upm.dit.fprg26.p2.auxiliar">DatosEjemplo</a></dt>
+<dd>
+<div class="block">Devuelve un chip de expresión de 20x20 con 400 sondas sintéticas (<code>G001</code> a
+<code>G400</code>), como los que miden qué genes están activos en un tejido.</div>
 </dd>
 <dt><a href="es/upm/dit/fprg26/p2/auxiliar/DatosEjemplo.html#chipDePrueba()" class="member-name-link">chipDePrueba()</a> - Static method in class es.upm.dit.fprg26.p2.auxiliar.<a href="es/upm/dit/fprg26/p2/auxiliar/DatosEjemplo.html" title="class in es.upm.dit.fprg26.p2.auxiliar">DatosEjemplo</a></dt>
 <dd>
@@ -167,6 +173,10 @@ la posición correspondiente de la lectura.</div>
 <dd>&nbsp;</dd>
 <dt><a href="es/upm/dit/fprg26/p2/auxiliar/package-summary.html">es.upm.dit.fprg26.p2.auxiliar</a> - package es.upm.dit.fprg26.p2.auxiliar</dt>
 <dd>&nbsp;</dd>
+<dt><a href="es/upm/dit/fprg26/p2/auxiliar/PanelMicroarray.html#esCompacto()" class="member-name-link">esCompacto()</a> - Method in class es.upm.dit.fprg26.p2.auxiliar.<a href="es/upm/dit/fprg26/p2/auxiliar/PanelMicroarray.html" title="class in es.upm.dit.fprg26.p2.auxiliar">PanelMicroarray</a></dt>
+<dd>
+<div class="block">Indica si el chip que se muestra es grande y se dibuja solo con sus puntos.</div>
+</dd>
 <dt><a href="es/upm/dit/fprg26/p2/Iupac.html#esPirimidina(char)" class="member-name-link">esPirimidina(char)</a> - Static method in class es.upm.dit.fprg26.p2.<a href="es/upm/dit/fprg26/p2/Iupac.html" title="class in es.upm.dit.fprg26.p2">Iupac</a></dt>
 <dd>
 <div class="block">Indica si una base es una pirimidina.</div>
@@ -190,6 +200,11 @@ la posición correspondiente de la lectura.</div>
 <dd>
 <div class="block">Registra una comprobación incorrecta.</div>
 </dd>
+<dt><a href="es/upm/dit/fprg26/p2/auxiliar/DatosEjemplo.html#FORMA_MUESTRA_DE_EXPRESION" class="member-name-link">FORMA_MUESTRA_DE_EXPRESION</a> - Static variable in class es.upm.dit.fprg26.p2.auxiliar.<a href="es/upm/dit/fprg26/p2/auxiliar/DatosEjemplo.html" title="class in es.upm.dit.fprg26.p2.auxiliar">DatosEjemplo</a></dt>
+<dd>
+<div class="block">Puntos del chip de expresión que debe iluminar la muestra de expresión (<code>#</code>):
+forman la palabra «ADN».</div>
+</dd>
 <dt><a href="es/upm/dit/fprg26/p2/BaseNitrogenada.html#fromChar(char)" class="member-name-link">fromChar(char)</a> - Static method in enum class es.upm.dit.fprg26.p2.<a href="es/upm/dit/fprg26/p2/BaseNitrogenada.html" title="enum class in es.upm.dit.fprg26.p2">BaseNitrogenada</a></dt>
 <dd>
 <div class="block">Devuelve la base nitrogenada que representa un carácter.</div>
@@ -211,7 +226,7 @@ la posición correspondiente de la lectura.</div>
 </dd>
 <dt><a href="es/upm/dit/fprg26/p2/Analisis.html#getFechaAnalisis()" class="member-name-link">getFechaAnalisis()</a> - Method in class es.upm.dit.fprg26.p2.<a href="es/upm/dit/fprg26/p2/Analisis.html" title="class in es.upm.dit.fprg26.p2">Analisis</a></dt>
 <dd>
-<div class="block">Devuelve la fecha del análisis.</div>
+<div class="block">Devuelve la fecha del análisis (la del día en que se creó este objeto).</div>
 </dd>
 <dt><a href="es/upm/dit/fprg26/p2/Muestra.html#getFechaCaptura()" class="member-name-link">getFechaCaptura()</a> - Method in class es.upm.dit.fprg26.p2.<a href="es/upm/dit/fprg26/p2/Muestra.html" title="class in es.upm.dit.fprg26.p2">Muestra</a></dt>
 <dd>
@@ -284,6 +299,8 @@ bucle <code>for</code> mejorado: <code>for (Lectura lectura : muestra.getLectura
 <dd>
 <div class="block">Devuelve la sonda que ocupa un punto de la cuadrícula.</div>
 </dd>
+<dt><a href="es/upm/dit/fprg26/p2/auxiliar/PanelMicroarray.html#getToolTipText(java.awt.event.MouseEvent)" class="member-name-link">getToolTipText(MouseEvent)</a> - Method in class es.upm.dit.fprg26.p2.auxiliar.<a href="es/upm/dit/fprg26/p2/auxiliar/PanelMicroarray.html" title="class in es.upm.dit.fprg26.p2.auxiliar">PanelMicroarray</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="es/upm/dit/fprg26/p2/BaseNitrogenada.html#GUANINA" class="member-name-link">GUANINA</a> - Enum constant in enum class es.upm.dit.fprg26.p2.<a href="es/upm/dit/fprg26/p2/BaseNitrogenada.html" title="enum class in es.upm.dit.fprg26.p2">BaseNitrogenada</a></dt>
 <dd>
 <div class="block">Guanina (G): purina; se empareja con la citosina.</div>
@@ -291,6 +308,10 @@ bucle <code>for</code> mejorado: <code>for (Lectura lectura : muestra.getLectura
 </dl>
 <h2 class="title" id="I:H">H</h2>
 <dl class="index">
+<dt><a href="es/upm/dit/fprg26/p2/auxiliar/DatosEjemplo.html#hace(int)" class="member-name-link">hace(int)</a> - Static method in class es.upm.dit.fprg26.p2.auxiliar.<a href="es/upm/dit/fprg26/p2/auxiliar/DatosEjemplo.html" title="class in es.upm.dit.fprg26.p2.auxiliar">DatosEjemplo</a></dt>
+<dd>
+<div class="block">Devuelve la fecha de hace un número de días.</div>
+</dd>
 <dt><a href="es/upm/dit/fprg26/p2/Sonda.html#hibridaCon(es.upm.dit.fprg26.p2.Lectura)" class="member-name-link">hibridaCon(Lectura)</a> - Method in class es.upm.dit.fprg26.p2.<a href="es/upm/dit/fprg26/p2/Sonda.html" title="class in es.upm.dit.fprg26.p2">Sonda</a></dt>
 <dd>
 <div class="block">Indica si la sonda hibrida con una lectura, es decir, si su patrón encaja con la
@@ -320,6 +341,10 @@ del código de ambigüedad de la IUPAC (Unión Internacional de Química Pura y 
 </dl>
 <h2 class="title" id="I:L">L</h2>
 <dl class="index">
+<dt><a href="es/upm/dit/fprg26/p2/auxiliar/DatosEjemplo.html#LADO_CHIP_DE_EXPRESION" class="member-name-link">LADO_CHIP_DE_EXPRESION</a> - Static variable in class es.upm.dit.fprg26.p2.auxiliar.<a href="es/upm/dit/fprg26/p2/auxiliar/DatosEjemplo.html" title="class in es.upm.dit.fprg26.p2.auxiliar">DatosEjemplo</a></dt>
+<dd>
+<div class="block">Número de filas y de columnas del chip de expresión.</div>
+</dd>
 <dt><a href="es/upm/dit/fprg26/p2/Lectura.html" class="type-name-link" title="class in es.upm.dit.fprg26.p2">Lectura</a> - Class in <a href="es/upm/dit/fprg26/p2/package-summary.html">es.upm.dit.fprg26.p2</a></dt>
 <dd>
 <div class="block">Una lectura: un fragmento de ADN de una muestra, tal como lo ha leído el secuenciador
@@ -381,6 +406,11 @@ del código de ambigüedad de la IUPAC (Unión Internacional de Química Pura y 
 <dt><a href="es/upm/dit/fprg26/p2/Muestra.html#%3Cinit%3E(java.lang.String,java.time.LocalDate,es.upm.dit.fprg26.p2.Lectura%5B%5D)" class="member-name-link">Muestra(String, LocalDate, Lectura[])</a> - Constructor for class es.upm.dit.fprg26.p2.<a href="es/upm/dit/fprg26/p2/Muestra.html" title="class in es.upm.dit.fprg26.p2">Muestra</a></dt>
 <dd>
 <div class="block">Crea una muestra.</div>
+</dd>
+<dt><a href="es/upm/dit/fprg26/p2/auxiliar/DatosEjemplo.html#muestraDeExpresion()" class="member-name-link">muestraDeExpresion()</a> - Static method in class es.upm.dit.fprg26.p2.auxiliar.<a href="es/upm/dit/fprg26/p2/auxiliar/DatosEjemplo.html" title="class in es.upm.dit.fprg26.p2.auxiliar">DatosEjemplo</a></dt>
+<dd>
+<div class="block">Devuelve una muestra para el chip de expresión, cuyas lecturas contienen las dianas de
+los puntos marcados en <a href="es/upm/dit/fprg26/p2/auxiliar/DatosEjemplo.html#FORMA_MUESTRA_DE_EXPRESION"><code>DatosEjemplo.FORMA_MUESTRA_DE_EXPRESION</code></a> (dos dianas por lectura).</div>
 </dd>
 <dt><a href="es/upm/dit/fprg26/p2/auxiliar/DatosEjemplo.html#muestraDePrueba()" class="member-name-link">muestraDePrueba()</a> - Static method in class es.upm.dit.fprg26.p2.auxiliar.<a href="es/upm/dit/fprg26/p2/auxiliar/DatosEjemplo.html" title="class in es.upm.dit.fprg26.p2.auxiliar">DatosEjemplo</a></dt>
 <dd>

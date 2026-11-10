@@ -3,12 +3,11 @@ package es.upm.dit.fprg26.p2;
 import module java.base;
 
 /**
- * El resultado de analizar una muestra con un microarray en una fecha determinada.
+ * El resultado de analizar una muestra con un microarray.
  * <p>
  * Al crear el análisis se hibridan todas las lecturas de la muestra con el microarray
- * y se guarda qué puntos del chip se han iluminado. Además, se registran los datos de
- * procedencia: la fecha del análisis, que no puede ser anterior a la de captura de la
- * muestra.
+ * y se guarda qué puntos del chip se han iluminado. Además, se registra un dato de
+ * procedencia: la fecha del análisis, que es la del día en que se hace (la fecha actual).
  * </p>
  */
 public class Analisis {
@@ -26,26 +25,25 @@ public class Analisis {
     private final boolean[][] iluminados;
 
     /**
-     * Analiza una muestra con un microarray: hibrida todas las lecturas de la muestra
-     * con el chip (ver {@link Microarray#hibridar(Muestra)}) y guarda el resultado.
+     * Analiza una muestra con un microarray en la fecha actual: hibrida todas las lecturas
+     * de la muestra con el chip (ver {@link Microarray#hibridar(Muestra)}) y guarda el
+     * resultado.
+     * <p>
+     * La fecha del análisis es la fecha actual, {@code LocalDate.now()}. No puede ser anterior
+     * a la de captura de la muestra, porque {@link Muestra} no admite fechas de captura futuras.
+     * </p>
      *
      * @param muestra muestra que se analiza; no puede ser nula
      * @param microarray microarray con el que se analiza; no puede ser nulo
-     * @param fechaAnalisis fecha del análisis; no puede ser nula ni anterior a la fecha
-     *                      de captura de la muestra
-     * @throws Exception si alguno de los datos no es válido
+     * @throws Exception si la muestra o el microarray son nulos
      */
-    public Analisis(Muestra muestra, Microarray microarray, LocalDate fechaAnalisis) throws Exception {
-        if (muestra == null || microarray == null || fechaAnalisis == null) {
-            throw new Exception("La muestra, el microarray y la fecha del análisis no pueden ser nulos");
-        }
-        if (fechaAnalisis.isBefore(muestra.getFechaCaptura())) {
-            throw new Exception("La fecha del análisis (" + fechaAnalisis + ") no puede ser anterior "
-                    + "a la de captura de la muestra (" + muestra.getFechaCaptura() + ")");
+    public Analisis(Muestra muestra, Microarray microarray) throws Exception {
+        if (muestra == null || microarray == null) {
+            throw new Exception("La muestra y el microarray del análisis no pueden ser nulos");
         }
         this.muestra = muestra;
         this.microarray = microarray;
-        this.fechaAnalisis = fechaAnalisis;
+        this.fechaAnalisis = LocalDate.now();
         this.iluminados = microarray.hibridar(muestra);
     }
 
@@ -68,7 +66,7 @@ public class Analisis {
     }
 
     /**
-     * Devuelve la fecha del análisis.
+     * Devuelve la fecha del análisis (la del día en que se creó este objeto).
      *
      * @return fecha del análisis
      */
@@ -89,7 +87,7 @@ public class Analisis {
     /**
      * Devuelve el número de días transcurridos entre la captura de la muestra y el análisis.
      * <p>
-     * Por ejemplo, si la muestra se capturó el 2026-10-30 y se analizó el 2026-11-02,
+     * Por ejemplo, si la muestra se capturó el 2026-10-30 y se analiza el 2026-11-02,
      * devuelve 3. Puede calcularse con
      * {@code ChronoUnit.DAYS.between(fechaInicial, fechaFinal)}.
      * </p>
@@ -148,8 +146,8 @@ public class Analisis {
     @Override
     public String toString() {
         String texto = "Análisis de " + muestra + " con " + microarray + "\n"
-                + "Fecha del análisis: " + fechaAnalisis + " (" + getDiasDesdeCaptura()
-                + " días después de la captura)\n"
+                + "Fecha del análisis: " + fechaAnalisis + " (días desde la captura: " + getDiasDesdeCaptura()
+                + ")\n"
                 + "Puntos iluminados: " + contarIluminados() + "\n";
         if (iluminados == null) {
             return texto + "(no hay matriz de puntos iluminados)\n";

@@ -10,10 +10,14 @@ import es.upm.dit.fprg26.p2.Sonda;
 /**
  * Microarrays y muestras de ejemplo para las pruebas y para la interfaz gráfica.
  * <p>
- * Las secuencias del panel de patógenos son <strong>sintéticas</strong>: se han inventado
- * para la práctica y no corresponden a ningún organismo real. Las del chip de dianas de
- * restricción sí son reales: son las secuencias que reconocen esas enzimas, varias de ellas
- * con comodines del código IUPAC.
+ * Las secuencias del panel de patógenos y del chip de expresión son <strong>sintéticas</strong>:
+ * se han inventado para la práctica y no corresponden a ningún organismo real. Las del chip
+ * de dianas de restricción sí son reales: son las secuencias que reconocen esas enzimas,
+ * varias de ellas con comodines del código IUPAC.
+ * </p>
+ * <p>
+ * Las fechas de captura de las muestras son relativas a la fecha actual (de 1 a 6 días antes),
+ * porque los análisis se hacen siempre en la fecha actual.
  * </p>
  * <p>
  * No es necesario entender el código de esta clase para hacer la práctica; basta con
@@ -79,14 +83,94 @@ public final class DatosEjemplo {
         });
     }
 
+    /** Número de filas y de columnas del chip de expresión. */
+    public static final int LADO_CHIP_DE_EXPRESION = 20;
+
+    /**
+     * Puntos del chip de expresión que debe iluminar la muestra de expresión ({@code #}):
+     * forman la palabra «ADN». Como no es simétrica, si se confunden las filas con las
+     * columnas, el dibujo sale traspuesto.
+     */
+    public static final String[] FORMA_MUESTRA_DE_EXPRESION = {
+        "....................",
+        "....................",
+        "....................",
+        "....................",
+        "....................",
+        "....................",
+        "..###..####..#...#..",
+        ".#...#.#...#.##..#..",
+        ".#...#.#...#.#.#.#..",
+        ".#####.#...#.#..##..",
+        ".#...#.#...#.#...#..",
+        ".#...#.#...#.#...#..",
+        ".#...#.####..#...#..",
+        "....................",
+        "....................",
+        "....................",
+        "....................",
+        "....................",
+        "....................",
+        "...................."
+    };
+
+    /**
+     * Devuelve un chip de expresión de 20x20 con 400 sondas sintéticas ({@code G001} a
+     * {@code G400}), como los que miden qué genes están activos en un tejido. Algunas
+     * sondas son degeneradas. En la interfaz gráfica, sus nombres y patrones no se escriben
+     * en el chip: se muestran al pasar el ratón por encima de cada punto.
+     *
+     * @return chip de expresión
+     * @throws Exception si alguno de los objetos no se puede crear
+     */
+    public static Microarray chipDeExpresion() throws Exception {
+        String[][] patrones = patronesDelChipDeExpresion();
+        Sonda[][] sondas = new Sonda[LADO_CHIP_DE_EXPRESION][LADO_CHIP_DE_EXPRESION];
+        for (int fila = 0; fila < LADO_CHIP_DE_EXPRESION; fila++) {
+            for (int columna = 0; columna < LADO_CHIP_DE_EXPRESION; columna++) {
+                String nombre = String.format("G%03d", fila * LADO_CHIP_DE_EXPRESION + columna + 1);
+                sondas[fila][columna] = new Sonda(nombre, patrones[fila][columna]);
+            }
+        }
+        return new Microarray("Chip de expresión (sintético)", sondas);
+    }
+
+    /**
+     * Devuelve una muestra para el chip de expresión, cuyas lecturas contienen las dianas de
+     * los puntos marcados en {@link #FORMA_MUESTRA_DE_EXPRESION} (dos dianas por lectura).
+     *
+     * @return muestra para el chip de expresión
+     * @throws Exception si alguno de los objetos no se puede crear
+     */
+    public static Muestra muestraDeExpresion() throws Exception {
+        String[][] patrones = patronesDelChipDeExpresion();
+        Random azar = new Random(7);
+        String[] dianas = new String[0];
+        for (int fila = 0; fila < LADO_CHIP_DE_EXPRESION; fila++) {
+            for (int columna = 0; columna < LADO_CHIP_DE_EXPRESION; columna++) {
+                if (FORMA_MUESTRA_DE_EXPRESION[fila].charAt(columna) == '#') {
+                    dianas = Arrays.copyOf(dianas, dianas.length + 1);
+                    dianas[dianas.length - 1] = concretar(patrones[fila][columna], azar);
+                }
+            }
+        }
+        Lectura[] lecturas = new Lectura[(dianas.length + 1) / 2];
+        for (int i = 0; i < lecturas.length; i++) {
+            String segunda = 2 * i + 1 < dianas.length ? dianas[2 * i + 1] : "";
+            String secuencia = relleno(azar, 6) + dianas[2 * i] + relleno(azar, 5) + segunda + relleno(azar, 6);
+            lecturas[i] = new Lectura(String.format("M5-L%02d", i + 1), secuencia);
+        }
+        return new Muestra("M5 (tejido)", hace(1), lecturas);
+    }
+
     /**
      * Devuelve todos los microarrays de ejemplo.
      *
-     * @return chip de prueba, panel de patógenos y chip de dianas de restricción
+     * @return chip de prueba, panel de patógenos, chip de dianas de restricción y chip de expresión
      * @throws Exception si alguno de los objetos no se puede crear
      */
     public static Microarray[] microarrays() throws Exception {
-        return new Microarray[] { chipDePrueba(), panelDePatogenos(), chipDeDianasDeRestriccion() };
+        return new Microarray[] { chipDePrueba(), panelDePatogenos(), chipDeDianasDeRestriccion(), chipDeExpresion() };
     }
 
     /**
@@ -98,7 +182,7 @@ public final class DatosEjemplo {
      * @throws Exception si alguno de los objetos no se puede crear
      */
     public static Muestra muestraDePrueba() throws Exception {
-        return new Muestra("P1 (prueba)", LocalDate.of(2026, 4, 27), new Lectura[] {
+        return new Muestra("P1 (prueba)", hace(1), new Lectura[] {
             new Lectura("P1-L1", "GATTACA"),
             new Lectura("P1-L2", "GANTACA"),
             new Lectura("P1-L3", "TTGACTGCATT")
@@ -116,6 +200,7 @@ public final class DatosEjemplo {
      *       del comodín y sí se detecta. También Parásito G y control positivo.</li>
      *   <li>M4: sin patógenos; solo el control positivo.</li>
      *   <li>R1: fragmento con dianas de EcoRI, HincII, AvaI, BanI y Hpy188I.</li>
+     *   <li>M5: muestra para el chip de expresión (ver {@link #muestraDeExpresion()}).</li>
      * </ul>
      *
      * @return muestras de ejemplo
@@ -124,30 +209,79 @@ public final class DatosEjemplo {
     public static Muestra[] muestras() throws Exception {
         return new Muestra[] {
             muestraDePrueba(),
-            new Muestra("M1 (paciente 1)", LocalDate.of(2026, 5, 4), new Lectura[] {
+            new Muestra("M1 (paciente 1)", hace(2), new Lectura[] {
                 new Lectura("M1-L1", "AGACTTTCACCGTTAGCTGAGGTAGAGGTCGAGGTTATTATTTGTTAC"),
                 new Lectura("M1-L2", "AATTCTCATTGTGTTTCGGAACTTGCCTGACCTGAGTCTCTTAGTGAC"),
                 new Lectura("M1-L3", "CTAAATACCAAGGCAGTCCTCGATCCGTTCCTAATAAGGAATGGTGAT")
             }),
-            new Muestra("M2 (paciente 2)", LocalDate.of(2026, 5, 11), new Lectura[] {
+            new Muestra("M2 (paciente 2)", hace(3), new Lectura[] {
                 new Lectura("M2-L1", "TCCCTGTCATACCATTGACATCCAGTTTATGCGCGTTTGTCGTTAGAC"),
                 new Lectura("M2-L2", "AACGATTTGGCATCCAGTGGGGCTCATTGCACTGACCTGAGTCCCCAG"),
                 new Lectura("M2-L3", "ATGGAGTTAAGTTCGGATACGGTGGTTGCCTCGGTTCCTCTGGAGGTG")
             }),
-            new Muestra("M3 (paciente 3)", LocalDate.of(2026, 5, 18), new Lectura[] {
+            new Muestra("M3 (paciente 3)", hace(4), new Lectura[] {
                 new Lectura("M3-L1", "GCGCAGGTTTAGTGATCTGGAACCGTTANCTGAACAGGACTGGACAAC"),
                 new Lectura("M3-L2", "CTCCGATCAAGTACCTGGGGTCATTGGCANTTCCGGTGCATAGTAGTG"),
                 new Lectura("M3-L3", "GTATTGGTCGTACCGTAGTCACTGACCTGAGTCTACGCAATACGAAAA")
             }),
-            new Muestra("M4 (paciente 4)", LocalDate.of(2026, 5, 25), new Lectura[] {
+            new Muestra("M4 (paciente 4)", hace(5), new Lectura[] {
                 new Lectura("M4-L1", "GTCGTCTCGTATCTGACCTGAGTCATCGCGGTAGCAGCACTTAATTAC"),
                 new Lectura("M4-L2", "AGCGGAGCACATAGTACTAGACAGCAGATGACCTAGCTTACAATTATC"),
                 new Lectura("M4-L3", "CCCCGTGCTAAGACCTCGCTACATATTGGAAGCATCGCGAAGCTACTC")
             }),
-            new Muestra("R1 (fragmento de ADN)", LocalDate.of(2026, 6, 1), new Lectura[] {
+            new Muestra("R1 (fragmento de ADN)", hace(6), new Lectura[] {
                 new Lectura("R1-L1", "TTGTGAATTCGTTAACAGCGCCCGAGGTACTAGTAAAAAA"),
                 new Lectura("R1-L2", "GGCGCCTACTCAGAGTACAGTTATTAAGTCGAAACACCAA")
-            })
+            }),
+            muestraDeExpresion()
         };
+    }
+
+    /**
+     * Devuelve la fecha de hace un número de días.
+     *
+     * @param dias número de días antes de la fecha actual
+     * @return fecha correspondiente
+     */
+    public static LocalDate hace(int dias) {
+        return LocalDate.now().minusDays(dias);
+    }
+
+    private static String[][] patronesDelChipDeExpresion() {
+        Random azar = new Random(2026);
+        String[][] patrones = new String[LADO_CHIP_DE_EXPRESION][LADO_CHIP_DE_EXPRESION];
+        for (int fila = 0; fila < LADO_CHIP_DE_EXPRESION; fila++) {
+            for (int columna = 0; columna < LADO_CHIP_DE_EXPRESION; columna++) {
+                char[] patron = relleno(azar, 14).toCharArray();
+                if (azar.nextInt(3) == 0) {
+                    patron[1 + azar.nextInt(12)] = "NRY".charAt(azar.nextInt(3));
+                }
+                patrones[fila][columna] = new String(patron);
+            }
+        }
+        return patrones;
+    }
+
+    private static String relleno(Random azar, int longitud) {
+        String bases = "";
+        for (int i = 0; i < longitud; i++) {
+            bases += "ACGT".charAt(azar.nextInt(4));
+        }
+        return bases;
+    }
+
+    /** Sustituye cada comodín de un patrón por una base concreta que encaja con él. */
+    private static String concretar(String patron, Random azar) {
+        String diana = "";
+        for (int i = 0; i < patron.length(); i++) {
+            char simbolo = patron.charAt(i);
+            switch (simbolo) {
+                case 'N' -> diana += "ACGT".charAt(azar.nextInt(4));
+                case 'R' -> diana += "AG".charAt(azar.nextInt(2));
+                case 'Y' -> diana += "CT".charAt(azar.nextInt(2));
+                default -> diana += simbolo;
+            }
+        }
+        return diana;
     }
 }

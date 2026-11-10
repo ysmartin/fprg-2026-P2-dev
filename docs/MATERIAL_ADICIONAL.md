@@ -7,7 +7,7 @@ Este documento **no es para el alumnado**. Recoge dos ampliaciones opcionales de
 | `docs/material-adicional/solucion/` | `Lectura`, `Sonda`, `Microarray` y `Analisis` con las ampliaciones resueltas (sustituyen a las de `solucion/`) |
 | `docs/material-adicional/PruebaAmpliaciones.java` | Pruebas de las dos ampliaciones (se añade al paquete `es.upm.dit.fprg26.p2`) |
 
-`scripts/verificar.sh` compila la solución con las ampliaciones y ejecuta sus pruebas junto con las de la versión base, que siguen pasando: los datos de ejemplo se generaron de modo que buscar en las dos hebras no cambia ningún resultado.
+`scripts/verificar.sh` compila la solución con las ampliaciones y ejecuta sus pruebas junto con las de la versión base, que siguen pasando: los datos de ejemplo se generaron de modo que buscar en las dos hebras no cambia ningún resultado (tampoco en el chip de expresión de 20x20, que sigue dibujando «ADN»: `PruebaAmpliaciones` lo comprueba).
 
 **Carga de trabajo** (LLOC, con la convención de `NOTAS_PROFESORADO.md`):
 
@@ -48,4 +48,5 @@ En un microarray real, el brillo de cada punto es más intenso cuantos más frag
 ### Notas para el profesorado
 
 - `intensidades` es un triple bucle (lecturas, filas y columnas) con un contador por posición de una matriz de `int`; `sondasDetectadas` ejercita el patrón «contar y después rellenar» un array, que se retomará en la P3 con colecciones.
+- Es la forma realista de leer un microarray: cada punto da una intensidad, aproximadamente proporcional al número de fragmentos marcados que se unen a su sonda, y la presencia se decide con un umbral. La versión base equivale a un umbral de una lectura.
 - La interfaz gráfica no muestra las intensidades (para eso tendría que invocar un método que no existe en la versión base). Si se quisiera, `PanelMicroarray` podría graduar el brillo de cada punto.

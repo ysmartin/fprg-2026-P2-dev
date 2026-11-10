@@ -41,7 +41,7 @@ Cuando se analiza una muestra, el secuenciador obtiene miles de fragmentos corto
 
 Un **microarray** es un chip con miles de **sondas** ordenadas en una cuadrícula. Cada sonda reconoce los fragmentos de la muestra que contienen su *diana*, una secuencia corta característica de un patógeno o de un gen. Cuando un fragmento contiene la diana de una sonda, se une a ella (*hibrida*) y ese punto del chip se ilumina. En nuestro microarray virtual, cada sonda guarda directamente el **patrón** de su diana, tal como aparece en las lecturas, y lo busca en cada lectura de la muestra comparando base a base.
 
-Además, cada análisis registra sus **datos de procedencia**: la fecha en que se capturó la muestra y la fecha en que se analizó, que no puede ser anterior.
+Además, cada análisis registra sus **datos de procedencia**: la fecha en que se capturó la muestra y la fecha en que se analizó, que es siempre la del día en que se hace el análisis (la fecha actual).
 
 ### Patrones con comodines
 
@@ -55,6 +55,8 @@ Las sondas pueden ser **degeneradas**: su patrón puede contener comodines que e
 | `Y` (pirimidina) | Con `C` o con `T` |
 
 Una `N` de la **lectura** es una base desconocida: no se puede asegurar que coincida con ninguna base concreta del patrón, así que solo encaja con el comodín `N`. Por ejemplo, el patrón `GAYTRCA` encaja con las lecturas `GATTACA` y `GACTGCA`, pero no con `GATNACA`.
+
+Las lecturas solo pueden contener `A`, `C`, `G`, `T` y `N`, y los patrones, además, `R` e `Y`. Cualquier otro carácter (una letra minúscula, una `U`, un espacio…) no es válido: las clases de la práctica lo rechazan lanzando una excepción.
 
 > [!NOTE]
 > Estos comodines se usan en la práctica real: por ejemplo, la enzima de restricción HincII corta el ADN allí donde encuentra la secuencia `GTYRAC`. Uno de los microarrays de ejemplo de la práctica contiene las secuencias que reconocen ocho de estas enzimas.
@@ -141,7 +143,7 @@ class Analisis {
 -fechaAnalisis: LocalDate
 -iluminados: boolean[][]
 ……………A completar……………()
-+Analisis(Muestra, Microarray, LocalDate)
++Analisis(Muestra, Microarray)
 +getMuestra() Muestra
 +getMicroarray() Microarray
 +getFechaAnalisis() LocalDate
@@ -244,10 +246,10 @@ La clase `Sonda` representa una sonda del microarray: su nombre y el patrón de 
 
 1. **Constructor**: compruebe que el nombre no es nulo ni está en blanco, y que el patrón no es nulo ni vacío y solo contiene símbolos de patrón (use `Iupac.esSimboloDePatron` con cada carácter). Si algún dato no es válido, lance una excepción con un mensaje que explique el motivo; si todos lo son, asigne los atributos. Tome como modelo el constructor de `Lectura`.
 2. **Métodos de acceso**: `getNombre`, `getPatron` y `getLongitud` (la longitud del patrón).
-3. **`encaja(char simbolo, char base)`**: indica si un símbolo del patrón encaja con una base de la lectura, según la tabla de los [patrones con comodines](#patrones-con-comodines). Use una sentencia `switch` con un caso para cada comodín y un caso `default` para las bases. Puede apoyarse en `Iupac.esPurina` e `Iupac.esPirimidina`. Es un método **estático**: no depende de ninguna sonda concreta, y se invoca con el nombre de la clase (`Sonda.encaja('R', 'G')`).
+3. **`encaja(char simbolo, char base)`**: indica si un símbolo del patrón encaja con una base de la lectura, según la tabla de los [patrones con comodines](#patrones-con-comodines). Primero, compruebe que el símbolo es un símbolo de patrón y la base, un símbolo de lectura (con `Iupac.esSimboloDePatron` e `Iupac.esSimboloDeLectura`); si alguno no lo es, lance una excepción. Después, use una sentencia `switch` con un caso para cada comodín y un caso `default` para las bases. Puede apoyarse en `Iupac.esPurina` e `Iupac.esPirimidina`. Es un método **estático**: no depende de ninguna sonda concreta, y se invoca con el nombre de la clase (`Sonda.encaja('R', 'G')`).
 4. **`encajaEn(Lectura lectura, int inicio)`**: indica si el patrón encaja con la lectura colocando su primer símbolo en la posición `inicio` de la lectura. Recorra el patrón con un bucle: el símbolo `i` del patrón se compara con la base `inicio + i` de la lectura, que puede obtener con `lectura.getBase(...)`. En cuanto un símbolo no encaje, el patrón no encaja.
 
-   `getBase` lanza una excepción si la posición está fuera de la lectura, así que el patrón no cabe en ella a partir de esa posición. Capture esa excepción con un bloque `try`/`catch`: en ese caso, `encajaEn` debe devolver `false`.
+   `getBase` lanza una excepción si la posición está fuera de la lectura, así que el patrón no cabe en ella a partir de esa posición. Capture esa excepción con un bloque `try`/`catch`: en ese caso, `encajaEn` debe devolver `false`. El mismo bloque captura también las excepciones de `encaja`, que no deberían producirse, porque los constructores de `Sonda` y de `Lectura` ya comprueban sus caracteres.
 5. **`buscarEn(Lectura lectura)`**: devuelve la primera posición de la lectura a partir de la cual encaja el patrón, o `-1` si no encaja en ninguna. Es el algoritmo de la **ventana deslizante**: se coloca el patrón al principio de la lectura y se va desplazando una posición cada vez, comprobando en cada una si encaja (con `encajaEn`). Por ejemplo, para buscar el patrón `TRC` en la lectura `GATACATGCA`:
 
    ```
@@ -272,17 +274,17 @@ La clase `Microarray` representa un chip con sondas en una cuadrícula: una matr
 
 1. **`hibridar(Lectura lectura)`**: devuelve una matriz de `boolean` del mismo tamaño que la cuadrícula, con `true` en los puntos cuya sonda hibrida con la lectura. Cree la matriz con `new boolean[filas][columnas]` y recórrala con dos bucles anidados.
 2. **`hibridar(Muestra muestra)`**: hace lo mismo con todas las lecturas de la muestra. Un punto se ilumina si su sonda hibrida con **alguna** de las lecturas. Puede recorrer las lecturas con un bucle `for` mejorado (`for (Lectura lectura : muestra.getLecturas())`) y reutilizar el método anterior. Cuidado: un punto que ya se ha iluminado con una lectura no debe apagarse porque no hibride con la siguiente.
-3. Ejecute `PruebaMicroarray` y corrija lo que sea necesario. Las matrices se escriben con `#` para los puntos iluminados y `.` para los apagados, una fila entre corchetes. Fíjese en la prueba con el chip de 2x4: si confunde filas y columnas, fallará.
+3. Ejecute `PruebaMicroarray` y corrija lo que sea necesario. Las matrices se escriben con `#` para los puntos iluminados y `.` para los apagados, una fila entre corchetes (las grandes, una fila en cada línea). Fíjese en la prueba con el chip de 2x4: si confunde filas y columnas, fallará. La última prueba usa un chip de 20x20 sondas: si su código es correcto, los puntos iluminados forman una palabra.
 
 ### 5. Completar la clase `Analisis`
 
-La clase `Analisis` representa el resultado de analizar una muestra con un microarray en una fecha determinada.
+La clase `Analisis` representa el resultado de analizar una muestra con un microarray. Como en un laboratorio, el análisis se registra en el momento en que se hace: su fecha es la fecha actual.
 
 **Pasos:**
 
-1. **Constructor**: compruebe que ningún parámetro es nulo y que la fecha del análisis no es anterior a la de captura de la muestra (consulte el método `isBefore` de `LocalDate`). Si algún dato no es válido, lance una excepción. Después, asigne los atributos y calcule los puntos iluminados con `hibridar(Muestra)`.
+1. **Constructor**: compruebe que ningún parámetro es nulo; si alguno lo es, lance una excepción. Después, asigne los atributos: la fecha del análisis es la fecha actual, que se obtiene con `LocalDate.now()`, y los puntos iluminados se calculan con `hibridar(Muestra)`. No hace falta comprobar que la fecha del análisis no es anterior a la de captura: `Muestra` no admite fechas de captura futuras.
 2. **Métodos de acceso**: `getMuestra`, `getMicroarray`, `getFechaAnalisis` y `getIluminados`.
-3. **`getDiasDesdeCaptura`**: devuelve cuántos días han pasado entre la captura de la muestra y el análisis. Use `ChronoUnit.DAYS.between(fechaInicial, fechaFinal)`, que tiene en cuenta los meses de distinta duración y los años bisiestos.
+3. **`getDiasDesdeCaptura`**: devuelve cuántos días han pasado entre la captura de la muestra y el análisis. Use `ChronoUnit.DAYS.between(fechaInicial, fechaFinal)`, que tiene en cuenta los meses de distinta duración y los años bisiestos. Como el análisis siempre es de hoy, las fechas de captura de las muestras de ejemplo son relativas a la fecha actual (de 1 a 6 días antes), y las pruebas crean muestras capturadas hace 0, 40 y 400 días.
 4. **`contarIluminados`**: devuelve cuántos puntos del chip se han iluminado.
 5. Ejecute `PruebaAnalisis` y corrija lo que sea necesario. Después, añada sus propios casos de prueba.
 
@@ -296,7 +298,11 @@ Ejecute de nuevo `PruebaInteractiva`. Elija un microarray y una muestra (o escri
 
 1. Analice cada muestra de ejemplo con el panel de patógenos y compruebe que el resultado es el esperado según la [tabla de los comodines](#patrones-con-comodines). Por ejemplo, en la muestra M3, la lectura M3-L1 contiene la diana del Virus A con una `N` en una posición sin comodín, así que esa sonda no se ilumina; en cambio, la diana de la Bacteria D tiene la `N` en la posición del comodín y sí se ilumina.
 2. Fíjese en las sondas de control: la de control positivo detecta una secuencia que está en todas las muestras de pacientes, y la de control negativo no debería iluminarse nunca. En un chip real sirven para comprobar que el análisis se ha hecho correctamente.
-3. Añada en el método `main` de `PruebaInteractiva` sus propios microarrays y muestras (encontrará un ejemplo), y compruebe que el resultado es el que espera.
+3. Elija el **chip de expresión**, de 20x20 sondas, y analice con él la muestra M5. Es más parecido a un chip real: tiene tantas sondas que no se escriben sus nombres ni sus patrones; para ver los de una sonda, deje el ratón sobre su punto. ¿Qué palabra forman los puntos iluminados?
+
+   ![Ventana del microarray virtual con el chip de expresión, mostrando los datos de una sonda al dejar el ratón sobre su punto](img/ventana-grande.png)
+
+4. Añada en el método `main` de `PruebaInteractiva` sus propios microarrays y muestras (encontrará un ejemplo), y compruebe que el resultado es el que espera.
 
 ### Exportar el proyecto
 

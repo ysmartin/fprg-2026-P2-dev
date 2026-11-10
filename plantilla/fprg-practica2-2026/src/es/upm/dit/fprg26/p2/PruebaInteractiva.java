@@ -28,12 +28,12 @@ public class PruebaInteractiva {
         Microarray miChip = new Microarray("Mi chip", new Sonda[][] {
             { new Sonda("Sonda 1", "GATTACA"), new Sonda("Sonda 2", "CANNTG") }
         });
-        Muestra miMuestra = new Muestra("Mi muestra", LocalDate.of(2026, 1, 15), new Lectura[] {
+        Muestra miMuestra = new Muestra("Mi muestra", LocalDate.now().minusDays(3), new Lectura[] {
             new Lectura("L1", "TTGATTACATT"),
             new Lectura("L2", "ACACGTGCA")
         });
 
-        Microarray[] microarrays = { ejemplos[0], ejemplos[1], ejemplos[2], miChip };
+        Microarray[] microarrays = { ejemplos[0], ejemplos[1], ejemplos[2], ejemplos[3], miChip };
         Muestra[] muestras = DatosEjemplo.muestras();
         Muestra[] todas = Arrays.copyOf(muestras, muestras.length + 1);
         todas[muestras.length] = miMuestra;

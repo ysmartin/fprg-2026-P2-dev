@@ -63,16 +63,39 @@ public class PruebaSonda {
 
     private static void probarEncaja() {
         Comprobador.titulo("encaja");
-        Comprobador.comprobar("encaja('A', 'A')", true, Sonda.encaja('A', 'A'));
-        Comprobador.comprobar("encaja('A', 'C')", false, Sonda.encaja('A', 'C'));
-        Comprobador.comprobar("encaja('N', 'G')", true, Sonda.encaja('N', 'G'));
-        Comprobador.comprobar("encaja('N', 'N')", true, Sonda.encaja('N', 'N'));
-        Comprobador.comprobar("encaja('A', 'N')", false, Sonda.encaja('A', 'N'));
-        Comprobador.comprobar("encaja('R', 'G')", true, Sonda.encaja('R', 'G'));
-        Comprobador.comprobar("encaja('R', 'C')", false, Sonda.encaja('R', 'C'));
-        Comprobador.comprobar("encaja('R', 'N')", false, Sonda.encaja('R', 'N'));
-        Comprobador.comprobar("encaja('Y', 'T')", true, Sonda.encaja('Y', 'T'));
-        Comprobador.comprobar("encaja('Y', 'A')", false, Sonda.encaja('Y', 'A'));
+        probarEncaja('A', 'A', true);
+        probarEncaja('A', 'C', false);
+        probarEncaja('N', 'G', true);
+        probarEncaja('N', 'N', true);
+        probarEncaja('A', 'N', false);
+        probarEncaja('R', 'G', true);
+        probarEncaja('R', 'C', false);
+        probarEncaja('R', 'N', false);
+        probarEncaja('Y', 'T', true);
+        probarEncaja('Y', 'A', false);
+        probarEncajaNoValido('X', 'A');
+        probarEncajaNoValido('a', 'A');
+        probarEncajaNoValido('A', 'R');
+        probarEncajaNoValido('A', 'U');
+    }
+
+    private static void probarEncaja(char simbolo, char base, boolean esperado) {
+        String descripcion = "encaja('" + simbolo + "', '" + base + "')";
+        try {
+            Comprobador.comprobar(descripcion, esperado, Sonda.encaja(simbolo, base));
+        } catch (Exception e) {
+            Comprobador.fallo(descripcion + " no debería lanzar excepción: " + e.getMessage());
+        }
+    }
+
+    private static void probarEncajaNoValido(char simbolo, char base) {
+        String descripcion = "encaja('" + simbolo + "', '" + base + "')";
+        try {
+            Sonda.encaja(simbolo, base);
+            Comprobador.fallo(descripcion + " debería lanzar una excepción");
+        } catch (Exception e) {
+            Comprobador.acierto(descripcion + " lanza excepción: " + e.getMessage());
+        }
     }
 
     private static void probarEncajaEn() {

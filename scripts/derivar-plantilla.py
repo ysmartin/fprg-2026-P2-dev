@@ -40,7 +40,7 @@ METODOS = {
         ('public boolean[][] hibridar(Muestra muestra)', [TODO, 'return null;']),
     ],
     'Analisis.java': [
-        ('public Analisis(Muestra muestra, Microarray microarray, LocalDate fechaAnalisis)', [TODO]),
+        ('public Analisis(Muestra muestra, Microarray microarray)', [TODO]),
         ('public Muestra getMuestra()', [TODO, 'return null;']),
         ('public Microarray getMicroarray()', [TODO, 'return null;']),
         ('public LocalDate getFechaAnalisis()', [TODO, 'return null;']),

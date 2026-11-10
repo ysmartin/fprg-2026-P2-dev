@@ -99,8 +99,15 @@ public class Sonda {
      *                {@code N}, {@code R} o {@code Y})
      * @param base base de la lectura ({@code A}, {@code C}, {@code G}, {@code T} o {@code N})
      * @return {@code true} si el símbolo encaja con la base; {@code false} en otro caso
+     * @throws Exception si el símbolo no es un símbolo de patrón o la base no es un
+     *                   símbolo de lectura (ver {@link Iupac})
      */
-    public static boolean encaja(char simbolo, char base) {
+    public static boolean encaja(char simbolo, char base) throws Exception {
+        if (!Iupac.esSimboloDePatron(simbolo) || !Iupac.esSimboloDeLectura(base)) {
+            throw new Exception("No se puede comparar el símbolo '" + simbolo + "' con la base '" + base
+                    + "': los símbolos de patrón son " + Iupac.SIMBOLOS_DE_PATRON
+                    + " y los de lectura, " + Iupac.SIMBOLOS_DE_LECTURA);
+        }
         switch (simbolo) {
             case Iupac.INDETERMINADA -> { return true; }
             case Iupac.PURINA -> { return Iupac.esPurina(base); }
@@ -117,7 +124,8 @@ public class Sonda {
      * Por ejemplo, el patrón {@code "TRC"} encaja con la lectura {@code "GATACA"} a partir
      * de la posición 2 ({@code T} con {@code T}, {@code R} con {@code A}, {@code C} con
      * {@code C}), pero no a partir de la posición 0. Si el patrón no cabe en la lectura
-     * a partir de esa posición (o la posición es negativa), no encaja.
+     * a partir de esa posición (o la posición es negativa), no encaja. Para ello, captura
+     * las excepciones que lanzan {@link Lectura#getBase(int)} y {@link #encaja(char, char)}.
      * </p>
      *
      * @param lectura lectura en la que se busca el patrón
@@ -134,7 +142,7 @@ public class Sonda {
             }
             return true;
         } catch (Exception e) {
-            // El patrón se sale de la lectura: no puede encajar en esa posición
+            // El patrón se sale de la lectura (o algún símbolo no es válido): no encaja
             return false;
         }
     }

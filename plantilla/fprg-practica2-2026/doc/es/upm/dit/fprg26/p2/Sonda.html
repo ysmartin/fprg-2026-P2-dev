@@ -278,7 +278,8 @@ lectura en alguna posición.</div>
 <h3>encaja</h3>
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">encaja</span><wbr><span class="parameters">(char&nbsp;simbolo,
- char&nbsp;base)</span></div>
+ char&nbsp;base)</span>
+                      throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
 <div class="block">Indica si un símbolo de un patrón encaja con una base de una lectura, según las
 reglas descritas en la documentación de la clase.
 <p>
@@ -292,6 +293,9 @@ Por ejemplo, <code>encaja('R', 'G')</code> y <code>encaja('N', 'N')</code> devue
 <dd><code>base</code> - base de la lectura (<code>A</code>, <code>C</code>, <code>G</code>, <code>T</code> o <code>N</code>)</dd>
 <dt>Returns:</dt>
 <dd><code>true</code> si el símbolo encaja con la base; <code>false</code> en otro caso</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code> - si el símbolo no es un símbolo de patrón o la base no es un
+                  símbolo de lectura (ver <a href="Iupac.html" title="class in es.upm.dit.fprg26.p2"><code>Iupac</code></a>)</dd>
 </dl>
 </div>
 </section>
@@ -309,7 +313,8 @@ la posición correspondiente de la lectura.
 Por ejemplo, el patrón <code>"TRC"</code> encaja con la lectura <code>"GATACA"</code> a partir
 de la posición 2 (<code>T</code> con <code>T</code>, <code>R</code> con <code>A</code>, <code>C</code> con
 <code>C</code>), pero no a partir de la posición 0. Si el patrón no cabe en la lectura
-a partir de esa posición (o la posición es negativa), no encaja.
+a partir de esa posición (o la posición es negativa), no encaja. Para ello, captura
+las excepciones que lanzan <a href="Lectura.html#getBase(int)"><code>Lectura.getBase(int)</code></a> y <a href="#encaja(char,char)"><code>encaja(char, char)</code></a>.
 </p></div>
 <dl class="notes">
 <dt>Parameters:</dt>

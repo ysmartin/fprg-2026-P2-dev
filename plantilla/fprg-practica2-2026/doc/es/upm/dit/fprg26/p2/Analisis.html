@@ -57,7 +57,7 @@ loadScripts(document, 'script');</script>
 <li><a href="#method-summary" tabindex="0">Method Summary</a></li>
 <li><a href="#constructor-detail" tabindex="0">Constructor Details</a>
 <ol class="toc-list">
-<li><a href="#%3Cinit%3E(es.upm.dit.fprg26.p2.Muestra,es.upm.dit.fprg26.p2.Microarray,java.time.LocalDate)" tabindex="0">Analisis(Muestra, Microarray, LocalDate)</a></li>
+<li><a href="#%3Cinit%3E(es.upm.dit.fprg26.p2.Muestra,es.upm.dit.fprg26.p2.Microarray)" tabindex="0">Analisis(Muestra, Microarray)</a></li>
 </ol>
 </li>
 <li><a href="#method-detail" tabindex="0">Method Details</a>
@@ -86,12 +86,11 @@ loadScripts(document, 'script');</script>
 <div class="horizontal-scroll">
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">Analisis</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">El resultado de analizar una muestra con un microarray en una fecha determinada.
+<div class="block">El resultado de analizar una muestra con un microarray.
 <p>
 Al crear el análisis se hibridan todas las lecturas de la muestra con el microarray
-y se guarda qué puntos del chip se han iluminado. Además, se registran los datos de
-procedencia: la fecha del análisis, que no puede ser anterior a la de captura de la
-muestra.
+y se guarda qué puntos del chip se han iluminado. Además, se registra un dato de
+procedencia: la fecha del análisis, que es la del día en que se hace (la fecha actual).
 </p></div>
 </div>
 </section>
@@ -105,12 +104,12 @@ muestra.
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(es.upm.dit.fprg26.p2.Muestra,es.upm.dit.fprg26.p2.Microarray,java.time.LocalDate)" class="member-name-link">Analisis</a><wbr>(<a href="Muestra.html" title="class in es.upm.dit.fprg26.p2">Muestra</a>&nbsp;muestra,
- <a href="Microarray.html" title="class in es.upm.dit.fprg26.p2">Microarray</a>&nbsp;microarray,
- <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/time/LocalDate.html" title="class or interface in java.time" class="external-link">LocalDate</a>&nbsp;fechaAnalisis)</code></div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(es.upm.dit.fprg26.p2.Muestra,es.upm.dit.fprg26.p2.Microarray)" class="member-name-link">Analisis</a><wbr>(<a href="Muestra.html" title="class in es.upm.dit.fprg26.p2">Muestra</a>&nbsp;muestra,
+ <a href="Microarray.html" title="class in es.upm.dit.fprg26.p2">Microarray</a>&nbsp;microarray)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Analiza una muestra con un microarray: hibrida todas las lecturas de la muestra
-con el chip (ver <a href="Microarray.html#hibridar(es.upm.dit.fprg26.p2.Muestra)"><code>Microarray.hibridar(Muestra)</code></a>) y guarda el resultado.</div>
+<div class="block">Analiza una muestra con un microarray en la fecha actual: hibrida todas las lecturas
+de la muestra con el chip (ver <a href="Microarray.html#hibridar(es.upm.dit.fprg26.p2.Muestra)"><code>Microarray.hibridar(Muestra)</code></a>) y guarda el
+resultado.</div>
 </div>
 </div>
 </section>
@@ -139,7 +138,7 @@ con el chip (ver <a href="Microarray.html#hibridar(es.upm.dit.fprg26.p2.Muestra)
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/time/LocalDate.html" title="class or interface in java.time" class="external-link">LocalDate</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getFechaAnalisis()" class="member-name-link">getFechaAnalisis</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Devuelve la fecha del análisis.</div>
+<div class="block">Devuelve la fecha del análisis (la del día en que se creó este objeto).</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean[][]</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getIluminados()" class="member-name-link">getIluminados</a>()</code></div>
@@ -180,23 +179,25 @@ con <code>#</code> en los puntos iluminados y <code>.</code> en el resto.</div>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(es.upm.dit.fprg26.p2.Muestra,es.upm.dit.fprg26.p2.Microarray,java.time.LocalDate)">
+<section class="detail" id="&lt;init&gt;(es.upm.dit.fprg26.p2.Muestra,es.upm.dit.fprg26.p2.Microarray)">
 <h3>Analisis</h3>
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">Analisis</span><wbr><span class="parameters">(<a href="Muestra.html" title="class in es.upm.dit.fprg26.p2">Muestra</a>&nbsp;muestra,
- <a href="Microarray.html" title="class in es.upm.dit.fprg26.p2">Microarray</a>&nbsp;microarray,
- <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/time/LocalDate.html" title="class or interface in java.time" class="external-link">LocalDate</a>&nbsp;fechaAnalisis)</span>
+ <a href="Microarray.html" title="class in es.upm.dit.fprg26.p2">Microarray</a>&nbsp;microarray)</span>
          throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
-<div class="block">Analiza una muestra con un microarray: hibrida todas las lecturas de la muestra
-con el chip (ver <a href="Microarray.html#hibridar(es.upm.dit.fprg26.p2.Muestra)"><code>Microarray.hibridar(Muestra)</code></a>) y guarda el resultado.</div>
+<div class="block">Analiza una muestra con un microarray en la fecha actual: hibrida todas las lecturas
+de la muestra con el chip (ver <a href="Microarray.html#hibridar(es.upm.dit.fprg26.p2.Muestra)"><code>Microarray.hibridar(Muestra)</code></a>) y guarda el
+resultado.
+<p>
+La fecha del análisis es la fecha actual, <code>LocalDate.now()</code>. No puede ser anterior
+a la de captura de la muestra, porque <a href="Muestra.html" title="class in es.upm.dit.fprg26.p2"><code>Muestra</code></a> no admite fechas de captura futuras.
+</p></div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>muestra</code> - muestra que se analiza; no puede ser nula</dd>
 <dd><code>microarray</code> - microarray con el que se analiza; no puede ser nulo</dd>
-<dd><code>fechaAnalisis</code> - fecha del análisis; no puede ser nula ni anterior a la fecha
-                     de captura de la muestra</dd>
 <dt>Throws:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code> - si alguno de los datos no es válido</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code> - si la muestra o el microarray son nulos</dd>
 </dl>
 </div>
 </section>
@@ -240,7 +241,7 @@ con el chip (ver <a href="Microarray.html#hibridar(es.upm.dit.fprg26.p2.Muestra)
 <h3>getFechaAnalisis</h3>
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/time/LocalDate.html" title="class or interface in java.time" class="external-link">LocalDate</a></span>&nbsp;<span class="element-name">getFechaAnalisis</span>()</div>
-<div class="block">Devuelve la fecha del análisis.</div>
+<div class="block">Devuelve la fecha del análisis (la del día en que se creó este objeto).</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>fecha del análisis</dd>
@@ -269,7 +270,7 @@ con el chip (ver <a href="Microarray.html#hibridar(es.upm.dit.fprg26.p2.Muestra)
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name">getDiasDesdeCaptura</span>()</div>
 <div class="block">Devuelve el número de días transcurridos entre la captura de la muestra y el análisis.
 <p>
-Por ejemplo, si la muestra se capturó el 2026-10-30 y se analizó el 2026-11-02,
+Por ejemplo, si la muestra se capturó el 2026-10-30 y se analiza el 2026-11-02,
 devuelve 3. Puede calcularse con
 <code>ChronoUnit.DAYS.between(fechaInicial, fechaFinal)</code>.
 </p></div>

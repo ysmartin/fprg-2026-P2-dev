@@ -53,15 +53,25 @@ loadScripts(document, 'script');</script>
 <div class="toc-header">Contents&nbsp;<input type="text" class="filter-input" disabled placeholder="Filter contents (type .)" aria-label="Filter table of contents" autocomplete="off" spellcheck="false"><input type="reset" class="reset-filter" disabled tabindex="-1" value="Reset"></div>
 <ol class="toc-list" tabindex="-1">
 <li><a href="#" tabindex="0">Description</a></li>
+<li><a href="#field-summary" tabindex="0">Field Summary</a></li>
 <li><a href="#method-summary" tabindex="0">Method Summary</a></li>
+<li><a href="#field-detail" tabindex="0">Field Details</a>
+<ol class="toc-list">
+<li><a href="#LADO_CHIP_DE_EXPRESION" tabindex="0">LADO_CHIP_DE_EXPRESION</a></li>
+<li><a href="#FORMA_MUESTRA_DE_EXPRESION" tabindex="0">FORMA_MUESTRA_DE_EXPRESION</a></li>
+</ol>
+</li>
 <li><a href="#method-detail" tabindex="0">Method Details</a>
 <ol class="toc-list">
 <li><a href="#chipDePrueba()" tabindex="0">chipDePrueba()</a></li>
 <li><a href="#panelDePatogenos()" tabindex="0">panelDePatogenos()</a></li>
 <li><a href="#chipDeDianasDeRestriccion()" tabindex="0">chipDeDianasDeRestriccion()</a></li>
+<li><a href="#chipDeExpresion()" tabindex="0">chipDeExpresion()</a></li>
+<li><a href="#muestraDeExpresion()" tabindex="0">muestraDeExpresion()</a></li>
 <li><a href="#microarrays()" tabindex="0">microarrays()</a></li>
 <li><a href="#muestraDePrueba()" tabindex="0">muestraDePrueba()</a></li>
 <li><a href="#muestras()" tabindex="0">muestras()</a></li>
+<li><a href="#hace(int)" tabindex="0">hace(int)</a></li>
 </ol>
 </li>
 </ol>
@@ -81,10 +91,14 @@ loadScripts(document, 'script');</script>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Microarrays y muestras de ejemplo para las pruebas y para la interfaz gráfica.
 <p>
-Las secuencias del panel de patógenos son <strong>sintéticas</strong>: se han inventado
-para la práctica y no corresponden a ningún organismo real. Las del chip de dianas de
-restricción sí son reales: son las secuencias que reconocen esas enzimas, varias de ellas
-con comodines del código IUPAC.
+Las secuencias del panel de patógenos y del chip de expresión son <strong>sintéticas</strong>:
+se han inventado para la práctica y no corresponden a ningún organismo real. Las del chip
+de dianas de restricción sí son reales: son las secuencias que reconocen esas enzimas,
+varias de ellas con comodines del código IUPAC.
+</p>
+<p>
+Las fechas de captura de las muestras son relativas a la fecha actual (de 1 a 6 días antes),
+porque los análisis se hacen siempre en la fecha actual.
 </p>
 <p>
 No es necesario entender el código de esta clase para hacer la práctica; basta con
@@ -94,6 +108,29 @@ saber qué datos ofrece cada método.
 </section>
 <section class="summary">
 <ul class="summary-list">
+<!-- =========== FIELD SUMMARY =========== -->
+<li>
+<section class="field-summary" id="field-summary">
+<h2>Field Summary</h2>
+<div class="caption"><span>Fields</span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Field</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</code></div>
+<div class="col-second even-row-color"><code><a href="#FORMA_MUESTRA_DE_EXPRESION" class="member-name-link">FORMA_MUESTRA_DE_EXPRESION</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Puntos del chip de expresión que debe iluminar la muestra de expresión (<code>#</code>):
+forman la palabra «ADN».</div>
+</div>
+<div class="col-first odd-row-color"><code>static final int</code></div>
+<div class="col-second odd-row-color"><code><a href="#LADO_CHIP_DE_EXPRESION" class="member-name-link">LADO_CHIP_DE_EXPRESION</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">Número de filas y de columnas del chip de expresión.</div>
+</div>
+</div>
+</section>
+</li>
 <!-- ========== METHOD SUMMARY =========== -->
 <li>
 <section class="method-summary" id="method-summary">
@@ -112,11 +149,22 @@ saber qué datos ofrece cada método.
 reales.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../Microarray.html" title="class in es.upm.dit.fprg26.p2">Microarray</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#chipDePrueba()" class="member-name-link">chipDePrueba</a>()</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#chipDeExpresion()" class="member-name-link">chipDeExpresion</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Devuelve un chip de expresión de 20x20 con 400 sondas sintéticas (<code>G001</code> a
+<code>G400</code>), como los que miden qué genes están activos en un tejido.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../Microarray.html" title="class in es.upm.dit.fprg26.p2">Microarray</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#chipDePrueba()" class="member-name-link">chipDePrueba</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Devuelve un chip de prueba de 1x3 con tres sondas que se diferencian en sus comodines:
 <code>GATTACA</code> (exacta), <code>GANTACA</code> (con <code>N</code>) y <code>GAYTRCA</code>
 (con <code>Y</code> y <code>R</code>).</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/time/LocalDate.html" title="class or interface in java.time" class="external-link">LocalDate</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#hace(int)" class="member-name-link">hace</a><wbr>(int&nbsp;dias)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Devuelve la fecha de hace un número de días.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../Microarray.html" title="class in es.upm.dit.fprg26.p2">Microarray</a>[]</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#microarrays()" class="member-name-link">microarrays</a>()</code></div>
@@ -124,21 +172,27 @@ reales.</div>
 <div class="block">Devuelve todos los microarrays de ejemplo.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../Muestra.html" title="class in es.upm.dit.fprg26.p2">Muestra</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#muestraDePrueba()" class="member-name-link">muestraDePrueba</a>()</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#muestraDeExpresion()" class="member-name-link">muestraDeExpresion</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Devuelve una muestra para el chip de expresión, cuyas lecturas contienen las dianas de
+los puntos marcados en <a href="#FORMA_MUESTRA_DE_EXPRESION"><code>FORMA_MUESTRA_DE_EXPRESION</code></a> (dos dianas por lectura).</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../Muestra.html" title="class in es.upm.dit.fprg26.p2">Muestra</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#muestraDePrueba()" class="member-name-link">muestraDePrueba</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Devuelve la muestra de prueba para el chip de prueba, con tres lecturas:
 <code>GATTACA</code> (encaja con las tres sondas), <code>GANTACA</code> (su <code>N</code> solo encaja
 con la <code>N</code> de la sonda <code>GANTACA</code>) y una lectura que contiene <code>GACTGCA</code> (solo con <code>GAYTRCA</code>).</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../Muestra.html" title="class in es.upm.dit.fprg26.p2">Muestra</a>[]</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#muestras()" class="member-name-link">muestras</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../Muestra.html" title="class in es.upm.dit.fprg26.p2">Muestra</a>[]</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#muestras()" class="member-name-link">muestras</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Devuelve las muestras de ejemplo: la de prueba, cuatro muestras de pacientes para el
 panel de patógenos y una para el chip de dianas de restricción.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../Microarray.html" title="class in es.upm.dit.fprg26.p2">Microarray</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#panelDePatogenos()" class="member-name-link">panelDePatogenos</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../Microarray.html" title="class in es.upm.dit.fprg26.p2">Microarray</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#panelDePatogenos()" class="member-name-link">panelDePatogenos</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Devuelve un panel de 3x3 con siete sondas de patógenos (sintéticas) y dos sondas de control.</div>
 </div>
 </div>
@@ -153,6 +207,42 @@ panel de patógenos y una para el chip de dianas de restricción.</div>
 </section>
 <section class="details">
 <ul class="details-list">
+<!-- ============ FIELD DETAIL =========== -->
+<li>
+<section class="field-details" id="field-detail">
+<h2>Field Details</h2>
+<ul class="member-list">
+<li>
+<section class="detail" id="LADO_CHIP_DE_EXPRESION">
+<h3>LADO_CHIP_DE_EXPRESION</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">LADO_CHIP_DE_EXPRESION</span></div>
+<div class="block">Número de filas y de columnas del chip de expresión.</div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="tag-list">
+<li><a href="../../../../../../constant-values.html#es.upm.dit.fprg26.p2.auxiliar.DatosEjemplo.LADO_CHIP_DE_EXPRESION">Constant Field Values</a></li>
+</ul>
+</dd>
+</dl>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="FORMA_MUESTRA_DE_EXPRESION">
+<h3>FORMA_MUESTRA_DE_EXPRESION</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name">FORMA_MUESTRA_DE_EXPRESION</span></div>
+<div class="block">Puntos del chip de expresión que debe iluminar la muestra de expresión (<code>#</code>):
+forman la palabra «ADN». Como no es simétrica, si se confunden las filas con las
+columnas, el dibujo sale traspuesto.</div>
+</div>
+</section>
+</li>
+</ul>
+</section>
+</li>
 <!-- ============ METHOD DETAIL ========== -->
 <li>
 <section class="method-details" id="method-detail">
@@ -216,6 +306,42 @@ reales. Las de la segunda fila son degeneradas: por ejemplo, HincII reconoce
 </section>
 </li>
 <li>
+<section class="detail" id="chipDeExpresion()">
+<h3>chipDeExpresion</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../Microarray.html" title="class in es.upm.dit.fprg26.p2">Microarray</a></span>&nbsp;<span class="element-name">chipDeExpresion</span>()
+                                  throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
+<div class="block">Devuelve un chip de expresión de 20x20 con 400 sondas sintéticas (<code>G001</code> a
+<code>G400</code>), como los que miden qué genes están activos en un tejido. Algunas
+sondas son degeneradas. En la interfaz gráfica, sus nombres y patrones no se escriben
+en el chip: se muestran al pasar el ratón por encima de cada punto.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>chip de expresión</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code> - si alguno de los objetos no se puede crear</dd>
+</dl>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="muestraDeExpresion()">
+<h3>muestraDeExpresion</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../Muestra.html" title="class in es.upm.dit.fprg26.p2">Muestra</a></span>&nbsp;<span class="element-name">muestraDeExpresion</span>()
+                                  throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
+<div class="block">Devuelve una muestra para el chip de expresión, cuyas lecturas contienen las dianas de
+los puntos marcados en <a href="#FORMA_MUESTRA_DE_EXPRESION"><code>FORMA_MUESTRA_DE_EXPRESION</code></a> (dos dianas por lectura).</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>muestra para el chip de expresión</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code> - si alguno de los objetos no se puede crear</dd>
+</dl>
+</div>
+</section>
+</li>
+<li>
 <section class="detail" id="microarrays()">
 <h3>microarrays</h3>
 <div class="horizontal-scroll">
@@ -224,7 +350,7 @@ reales. Las de la segunda fila son degeneradas: por ejemplo, HincII reconoce
 <div class="block">Devuelve todos los microarrays de ejemplo.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>chip de prueba, panel de patógenos y chip de dianas de restricción</dd>
+<dd>chip de prueba, panel de patógenos, chip de dianas de restricción y chip de expresión</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code> - si alguno de los objetos no se puede crear</dd>
 </dl>
@@ -265,12 +391,28 @@ panel de patógenos y una para el chip de dianas de restricción.
       del comodín y sí se detecta. También Parásito G y control positivo.</li>
   <li>M4: sin patógenos; solo el control positivo.</li>
   <li>R1: fragmento con dianas de EcoRI, HincII, AvaI, BanI y Hpy188I.</li>
+  <li>M5: muestra para el chip de expresión (ver <a href="#muestraDeExpresion()"><code>muestraDeExpresion()</code></a>).</li>
 </ul></div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>muestras de ejemplo</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code> - si alguno de los objetos no se puede crear</dd>
+</dl>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="hace(int)">
+<h3>hace</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/time/LocalDate.html" title="class or interface in java.time" class="external-link">LocalDate</a></span>&nbsp;<span class="element-name">hace</span><wbr><span class="parameters">(int&nbsp;dias)</span></div>
+<div class="block">Devuelve la fecha de hace un número de días.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>dias</code> - número de días antes de la fecha actual</dd>
+<dt>Returns:</dt>
+<dd>fecha correspondiente</dd>
 </dl>
 </div>
 </section>

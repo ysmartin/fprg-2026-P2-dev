@@ -51,6 +51,10 @@ public final class Comprobador {
     public static void comprobar(String descripcion, Object esperado, Object obtenido) {
         if (Objects.deepEquals(esperado, obtenido)) {
             acierto(descripcion + " = " + formatear(obtenido));
+        } else if (esperado instanceof boolean[][] matrizEsperada && obtenido instanceof boolean[][] matrizObtenida
+                && esGrande(matrizEsperada)) {
+            fallo(descripcion + " -> esperado (izquierda) y obtenido (derecha):"
+                    + enParalelo(matrizEsperada, matrizObtenida));
         } else {
             fallo(descripcion + " -> esperado: " + formatear(esperado) + ", obtenido: " + formatear(obtenido));
         }
@@ -95,6 +99,9 @@ public final class Comprobador {
         if (valor instanceof boolean[][] matriz) {
             String texto = "";
             for (boolean[] fila : matriz) {
+                if (esGrande(matriz)) {
+                    texto += "\n      ";
+                }
                 texto += fila == null ? "null" : formatear(fila);
             }
             return texto;
@@ -110,5 +117,26 @@ public final class Comprobador {
             return Arrays.deepToString(array);
         }
         return String.valueOf(valor);
+    }
+
+    /** Las matrices de más de 4 filas se escriben con una fila en cada línea. */
+    private static boolean esGrande(boolean[][] matriz) {
+        return matriz.length > 4;
+    }
+
+    private static String enParalelo(boolean[][] izquierda, boolean[][] derecha) {
+        String texto = "";
+        for (int i = 0; i < Math.max(izquierda.length, derecha.length); i++) {
+            String filaIzquierda = i < izquierda.length ? formatearFila(izquierda[i]) : "";
+            String filaDerecha = i < derecha.length ? formatearFila(derecha[i]) : "";
+            String marca = filaIzquierda.equals(filaDerecha) ? "   " : " ≠ ";
+            texto += "\n      " + filaIzquierda + " ".repeat(Math.max(0, 24 - filaIzquierda.length()))
+                    + marca + filaDerecha;
+        }
+        return texto;
+    }
+
+    private static String formatearFila(boolean[] fila) {
+        return fila == null ? "null" : formatear(fila);
     }
 }

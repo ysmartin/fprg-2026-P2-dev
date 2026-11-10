@@ -1,7 +1,5 @@
 package es.upm.dit.fprg26.p2;
 
-import module java.base;
-
 import es.upm.dit.fprg26.p2.auxiliar.Comprobador;
 import es.upm.dit.fprg26.p2.auxiliar.DatosEjemplo;
 
@@ -43,11 +41,14 @@ public class PruebaAmpliaciones {
                     virusA.hibridaCon(new Lectura("L2", "GGATTCAGCTAACGGTCCAT")));
             Comprobador.comprobar("hibridaCon (sin diana)", false,
                     virusA.hibridaCon(new Lectura("L3", "GGATTCAGCTTACGGTCCAT")));
-            Muestra otraHebra = new Muestra("M5 (otra hebra)", LocalDate.of(2026, 6, 8),
-                    new Lectura[] { new Lectura("M5-L1", "GGATTCAGCTAACGGTCCAT") });
+            Muestra otraHebra = new Muestra("X1 (otra hebra)", DatosEjemplo.hace(1),
+                    new Lectura[] { new Lectura("X1-L1", "GGATTCAGCTAACGGTCCAT") });
             Comprobador.comprobar("panel de patógenos con una lectura de la otra hebra",
                     new boolean[][] { { true, false, false }, { false, false, false }, { false, false, false } },
                     DatosEjemplo.panelDePatogenos().hibridar(otraHebra));
+            Comprobador.comprobar("chip de expresión con M5 (con las dos hebras, sigue dibujando «ADN»)",
+                    aMatriz(DatosEjemplo.FORMA_MUESTRA_DE_EXPRESION),
+                    DatosEjemplo.chipDeExpresion().hibridar(DatosEjemplo.muestraDeExpresion()));
         } catch (Exception e) {
             Comprobador.fallo("No debería lanzarse ninguna excepción: " + e.getMessage());
         }
@@ -62,14 +63,25 @@ public class PruebaAmpliaciones {
                     new int[][] { { 0, 2, 0 }, { 0, 1, 0 }, { 0, 1, 0 } }, panel.intensidades(muestras[2]));
             Comprobador.comprobar("sondasDetectadas (M2)",
                     new String[] { "Virus B (variantes 1 y 2)", "Bacteria E (cepas 1 y 2)", "Control positivo" },
-                    new Analisis(muestras[2], panel, LocalDate.of(2026, 5, 12)).sondasDetectadas());
+                    new Analisis(muestras[2], panel).sondasDetectadas());
             Comprobador.comprobar("sondasDetectadas (M4)", new String[] { "Control positivo" },
-                    new Analisis(muestras[4], panel, LocalDate.of(2026, 5, 26)).sondasDetectadas());
+                    new Analisis(muestras[4], panel).sondasDetectadas());
             Comprobador.comprobar("sondasDetectadas (chip de prueba)", new String[] { "Exacta", "Con N", "Con Y y R" },
-                    new Analisis(DatosEjemplo.muestraDePrueba(), DatosEjemplo.chipDePrueba(),
-                            LocalDate.of(2026, 4, 27)).sondasDetectadas());
+                    new Analisis(DatosEjemplo.muestraDePrueba(), DatosEjemplo.chipDePrueba()).sondasDetectadas());
         } catch (Exception e) {
             Comprobador.fallo("No debería lanzarse ninguna excepción: " + e.getMessage());
         }
+    }
+
+    /** Convierte un dibujo hecho con {@code #} y {@code .} en una matriz de booleanos. */
+    private static boolean[][] aMatriz(String[] dibujo) {
+        boolean[][] matriz = new boolean[dibujo.length][];
+        for (int fila = 0; fila < dibujo.length; fila++) {
+            matriz[fila] = new boolean[dibujo[fila].length()];
+            for (int columna = 0; columna < dibujo[fila].length(); columna++) {
+                matriz[fila][columna] = dibujo[fila].charAt(columna) == '#';
+            }
+        }
+        return matriz;
     }
 }

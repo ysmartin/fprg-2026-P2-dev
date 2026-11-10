@@ -39,7 +39,7 @@ public class PruebaMicroarray {
             Comprobador.comprobar("TTGACTGCATT", new boolean[][] { { false, false, true } },
                     chip.hibridar(muestra.getLectura(2)));
         } catch (Exception e) {
-            Comprobador.fallo("No se han podido crear los datos de ejemplo: " + e.getMessage());
+            Comprobador.fallo("Se ha producido una excepción (en los datos de ejemplo o en hibridar): " + e);
         }
     }
 
@@ -59,9 +59,24 @@ public class PruebaMicroarray {
             Comprobador.comprobar("R1 con el chip de dianas de restricción (2x4)",
                     new boolean[][] { { true, false, false, false }, { true, true, true, true } },
                     DatosEjemplo.chipDeDianasDeRestriccion().hibridar(muestras[5]));
+            Comprobador.comprobar("M5 con el chip de expresión de 20x20 (dibuja «ADN»)",
+                    aMatriz(DatosEjemplo.FORMA_MUESTRA_DE_EXPRESION),
+                    DatosEjemplo.chipDeExpresion().hibridar(muestras[6]));
         } catch (Exception e) {
-            Comprobador.fallo("No se han podido crear los datos de ejemplo: " + e.getMessage());
+            Comprobador.fallo("Se ha producido una excepción (en los datos de ejemplo o en hibridar): " + e);
         }
+    }
+
+    /** Convierte un dibujo hecho con {@code #} y {@code .} en una matriz de booleanos. */
+    private static boolean[][] aMatriz(String[] dibujo) {
+        boolean[][] matriz = new boolean[dibujo.length][];
+        for (int fila = 0; fila < dibujo.length; fila++) {
+            matriz[fila] = new boolean[dibujo[fila].length()];
+            for (int columna = 0; columna < dibujo[fila].length(); columna++) {
+                matriz[fila][columna] = dibujo[fila].charAt(columna) == '#';
+            }
+        }
+        return matriz;
     }
 
     /**
