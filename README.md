@@ -177,8 +177,9 @@ getNombre() String
 getFilas() int
 getColumnas() int
 getSonda(int, int) Sonda
-hibridar(Lectura) boolean[][]
 toString() String
+……………A modificar……………()
+hibridar(Lectura) boolean[][]
 ……………A completar……………()
 hibridar(Muestra) boolean[][]
 }
@@ -210,7 +211,7 @@ Sonda ..> Lectura : busca su patrón en
 - Completar clases: constructores que validan sus datos y lanzan excepciones, y métodos que trabajan con sus atributos.
 - Recorrer cadenas de caracteres y arrays (de una y de dos dimensiones) con bucles, incluidos bucles anidados.
 - Aplicar un algoritmo de búsqueda de patrones con comodines (ventana deslizante).
-- Lanzar excepciones y propagarlas (`throws`), y entender cómo se capturan con `try`/`catch`.
+- Lanzar excepciones, propagarlas (`throws`) y capturarlas (`try`/`catch`).
 - Comprender el uso de clases de la biblioteca de Java para trabajar con fechas (`LocalDate`, `ChronoUnit`).
 - Desarrollar código a partir de su especificación en Javadoc, y probarlo con sus propios casos de prueba.
 
@@ -232,6 +233,7 @@ En Eclipse debe seguir los siguientes pasos:
 - Importe el proyecto con _File ➤ Import ➤ General ➤ Existing Projects into Workspace_ e indique la localización del fichero zip descargado usando la opción _Select archive file_.
 - El proyecto está configurado para Java 25 (_JavaSE-25_). Si Eclipse indica que no encuentra ese entorno, añada su JDK 25 en _Window ➤ Preferences ➤ Java ➤ Installed JREs_.
 - Las clases de la práctica están en la carpeta _src_, en el paquete `es.upm.dit.fprg26.p2`. El código auxiliar está en la carpeta _auxiliar_, en el mismo paquete.
+- Al importar el proyecto, Eclipse marcará un error en `Microarray.java`. Es intencionado: lo resolverá en el apartado 3. Mientras tanto, puede ejecutar los programas igualmente; si Eclipse le avisa de que el proyecto tiene errores, elija _Proceed_.
 - Para ejecutar un programa, pulse con el botón derecho sobre el fichero (por ejemplo, `PruebaSonda.java`) y elija _Run As ➤ Java Application_.
 
 ### 1. Explorar el proyecto
@@ -273,13 +275,14 @@ Se proporciona hecho el método `encontrarEn`, pero con una versión inicial que
 
 ### 3. Completar la clase `Microarray`
 
-La clase `Microarray` representa un chip con sondas en una cuadrícula: una matriz `Sonda[][]`, en la que `sondas[fila][columna]` es la sonda de cada punto. El constructor, los métodos de acceso y `hibridar(Lectura lectura)` se proporcionan hechos. Estudie este último: devuelve una matriz de `boolean` del mismo tamaño que la cuadrícula, con `true` en los puntos cuya sonda hibrida con la lectura; la crea con `new boolean[getFilas()][getColumnas()]` y la recorre con dos bucles anidados.
+La clase `Microarray` representa un chip con sondas en una cuadrícula: una matriz `Sonda[][]`, en la que `sondas[fila][columna]` es la sonda de cada punto. El constructor y los métodos de acceso se proporcionan hechos, y `hibridar(Lectura lectura)`, casi hecho. Estudie este último: devuelve una matriz de `boolean` del mismo tamaño que la cuadrícula, con `true` en los puntos cuya sonda hibrida con la lectura; la crea con `new boolean[getFilas()][getColumnas()]` y la recorre con dos bucles anidados.
 
 **Pasos:**
 
-1. **Desarrolle `hibridar(Muestra muestra)`**: este método debe hacer lo mismo con todas las lecturas de la muestra. Un punto se ilumina si su sonda hibrida con **alguna** de las lecturas. Puede recorrer las lecturas con un bucle `for` mejorado (`for (Lectura lectura : muestra.getLecturas())`) y reutilizar `hibridar(Lectura)` con cada una. Cuidado: un punto que ya se ha iluminado con una lectura no debe apagarse porque no hibride con la siguiente.
-2. Ejecute `PruebaMicroarray`. Las matrices se escriben con `#` para los puntos iluminados y `.` para los apagados, una fila entre corchetes. Como su `Sonda` todavía usa la versión inicial de `encontrarEn`, solo algunas comprobaciones serán correctas; entre ellas debe estar la de la **letra A** del chip de expresión, un chip de 20x20 sondas cuyos puntos iluminados forman una palabra. Si no lo es, corrija `hibridar(Muestra)`.
-3. Ejecute `PruebaInteractiva`, elija el **chip de expresión** y analice con él la muestra M5. Es más parecido a un chip real: tiene tantas sondas que no se escriben sus nombres ni sus patrones; para ver los de una sonda, deje el ratón sobre su punto. De momento solo se ilumina una letra, la A: sus sondas no tienen comodines, y sus dianas aparecen tal cual en las lecturas. Las demás letras se iluminarán en los apartados siguientes.
+1. **Complete `hibridar(Lectura lectura)` para que compile**. Es el error que marca Eclipse desde que importó el proyecto: `hibridaCon` puede lanzar una excepción (su cabecera incluye `throws Exception`), y quien lo invoca tiene que capturarla o declararla. `hibridar(Lectura)` no la declara, ni debe cambiar su cabecera: tiene que capturarla. Rodee la invocación de `hibridaCon` con un bloque `try`/`catch`; si se produce una excepción, la sonda no se ha podido comprobar, y su punto no se ilumina (`false`). Así, ni `hibridar(Muestra)` ni `Analisis` tendrán que ocuparse de las excepciones de `Sonda`.
+2. **Desarrolle `hibridar(Muestra muestra)`**: este método debe hacer lo mismo con todas las lecturas de la muestra. Un punto se ilumina si su sonda hibrida con **alguna** de las lecturas. Puede recorrer las lecturas con un bucle `for` mejorado (`for (Lectura lectura : muestra.getLecturas())`) y reutilizar `hibridar(Lectura)` con cada una. Cuidado: un punto que ya se ha iluminado con una lectura no debe apagarse porque no hibride con la siguiente.
+3. Ejecute `PruebaMicroarray`. Las matrices se escriben con `#` para los puntos iluminados y `.` para los apagados, una fila entre corchetes. Como su `Sonda` todavía usa la versión inicial de `encontrarEn`, solo algunas comprobaciones serán correctas; entre ellas debe estar la de la **letra A** del chip de expresión, un chip de 20x20 sondas cuyos puntos iluminados forman una palabra. Si no lo es, corrija `hibridar(Muestra)`.
+4. Ejecute `PruebaInteractiva`, elija el **chip de expresión** y analice con él la muestra M5. Es más parecido a un chip real: tiene tantas sondas que no se escriben sus nombres ni sus patrones; para ver los de una sonda, deje el ratón sobre su punto. De momento solo se ilumina una letra, la A: sus sondas no tienen comodines, y sus dianas aparecen tal cual en las lecturas. Las demás letras se iluminarán en los apartados siguientes.
 
    ![Ventana del microarray virtual con el chip de expresión cuando solo se ilumina la letra A](img/ventana-etapa-a.png)
 

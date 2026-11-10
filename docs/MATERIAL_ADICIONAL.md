@@ -13,9 +13,9 @@ Este documento **no es para el alumnado**. Recoge dos ampliaciones opcionales de
 
 | | LLOC | Total acumulado | Frente a 2025-26 (90) |
 |---|---:|---:|---:|
-| Versión base | 47 | 47 | −48 % |
-| A1 · Todas las apariciones | +12 | 59 | −34 % |
-| A2 · Intensidades y sondas detectadas | +16 | 75 | −17 % |
+| Versión base | 50 | 50 | −44 % |
+| A1 · Todas las apariciones | +12 | 62 | −31 % |
+| A2 · Intensidades y sondas detectadas | +16 | 78 | −13 % |
 
 ---
 

@@ -2,7 +2,9 @@
 # Verifica la plantilla y la solución de la P2 con un JDK 25 (o posterior):
 #   - la plantilla está al día respecto a la solución (scripts/derivar-plantilla.py),
 #   - ambas compilan sin avisos (javac -Xlint:all -Werror) y, si se indica ECJ_JAR, también
-#     con el compilador de Eclipse y la configuración de .settings,
+#     con el compilador de Eclipse y la configuración de .settings. La plantilla, a propósito,
+#     no compila hasta que se añade el try/catch de Microarray.hibridar(Lectura): se comprueba
+#     que da exactamente ese error, y el resto se verifica con una copia que ya lo tiene,
 #   - en la solución, las clases de prueba no dan ningún ✗; en la plantilla se ejecutan
 #     sin excepciones,
 #   - el Javadoc no produce avisos (en la plantilla, sin el grupo «missing»),
@@ -78,7 +80,34 @@ comprobar() {
 }
 
 comprobar solucion si
-comprobar plantilla no
+
+# La plantilla no compila hasta que el alumnado añade el try/catch de hibridar(Lectura)
+echo "== plantilla, tal como se entrega"
+errores=$("${BIN}javac" -encoding UTF-8 -d "$TMP/clases-plantilla-original" \
+    $(find "$RAIZ/plantilla/fprg-practica2-2026/src" "$RAIZ/plantilla/fprg-practica2-2026/auxiliar" -name '*.java') 2>&1 \
+    | grep 'error:' || true)
+if [ "$(echo "$errores" | grep -c 'Microarray.java.*unreported exception')" -eq 1 ] && [ "$(echo "$errores" | grep -c 'error:')" -eq 1 ]; then
+    echo "   no compila solo por la excepción sin capturar de hibridar(Lectura), como se espera"
+else
+    echo "   ✗ se esperaba un único error (la excepción sin capturar de hibridar(Lectura)):"; echo "$errores"
+    fallos=$((fallos + 1))
+fi
+COMPLETADA="$TMP/plantilla-completada/fprg-practica2-2026"
+mkdir -p "$TMP/plantilla-completada"
+cp -r "$RAIZ/plantilla/fprg-practica2-2026" "$COMPLETADA"
+python3 - "$RAIZ/solucion/fprg-practica2-2026/src/es/upm/dit/fprg26/p2/Microarray.java" \
+    "$COMPLETADA/src/es/upm/dit/fprg26/p2/Microarray.java" <<'FIN'
+import sys
+def metodo(texto):
+    i = texto.index('    boolean[][] hibridar(Lectura lectura) {')
+    return i, texto.index('\n    }\n', i) + 7
+solucion = open(sys.argv[1], encoding='utf-8').read()
+plantilla = open(sys.argv[2], encoding='utf-8').read()
+a, b = metodo(solucion)
+c, d = metodo(plantilla)
+open(sys.argv[2], 'w', encoding='utf-8').write(plantilla[:c] + solucion[a:b] + plantilla[d:])
+FIN
+comprobar "plantilla (con el try/catch de hibridar(Lectura))" no "$COMPLETADA"
 
 # Solución con las ampliaciones: la de referencia, con las clases ampliadas y sus pruebas
 AMPLIADA="$TMP/ampliada/fprg-practica2-2026"

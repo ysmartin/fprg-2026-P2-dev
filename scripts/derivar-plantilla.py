@@ -35,6 +35,17 @@ METODOS = {
         ('boolean hibridaCon(Lectura lectura)', [TODO, 'return false;']),
     ],
     'Microarray.java': [
+        # Se da sin el try/catch: no compila hasta que el alumnado lo añade
+        ('boolean[][] hibridar(Lectura lectura)', [
+            'boolean[][] iluminados = new boolean[getFilas()][getColumnas()];',
+            'for (int fila = 0; fila < getFilas(); fila++) {',
+            '    for (int columna = 0; columna < getColumnas(); columna++) {',
+            '        // TODO: esta línea no compila, porque hibridaCon puede lanzar una excepción:',
+            '        // captúrela (si se produce, el punto no se ilumina)',
+            '        iluminados[fila][columna] = sondas[fila][columna].hibridaCon(lectura);',
+            '    }',
+            '}',
+            'return iluminados;']),
         ('boolean[][] hibridar(Muestra muestra)', [TODO, 'return null;']),
     ],
 }
