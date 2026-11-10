@@ -1,0 +1,75 @@
+package es.upm.dit.fprg26.p2;
+
+import module java.base;
+
+import es.upm.dit.fprg26.p2.auxiliar.Comprobador;
+import es.upm.dit.fprg26.p2.auxiliar.DatosEjemplo;
+
+/**
+ * Pruebas de las ampliaciones A1 (las dos hebras) y A2 (intensidades y sondas detectadas).
+ * Se añade a la carpeta {@code src} del proyecto, en el paquete {@code es.upm.dit.fprg26.p2},
+ * cuando se trabajan las ampliaciones.
+ */
+public class PruebaAmpliaciones {
+
+    private PruebaAmpliaciones() {
+        // Solo contiene el método main: no se instancia
+    }
+
+    /**
+     * Ejecuta las pruebas.
+     *
+     * @param args no se usa
+     */
+    public static void main(String[] args) {
+        probarDosHebras();
+        probarIntensidadesYDetectadas();
+        Comprobador.resumen();
+    }
+
+    private static void probarDosHebras() {
+        Comprobador.titulo("A1 · Las dos hebras");
+        try {
+            Lectura lectura = new Lectura("L", "GATTACAN");
+            Lectura inversa = lectura.complementariaInversa();
+            Comprobador.comprobar("complementariaInversa() de \"GATTACAN\"", "NTGTAATC", inversa.getSecuencia());
+            Comprobador.comprobar("identificador de la complementaria inversa", "L (inversa)", inversa.getId());
+            Comprobador.comprobar("getSecuenciaSonda() de \"GAYTRCA\"", "TGYARTC",
+                    new Sonda("S", "GAYTRCA").getSecuenciaSonda());
+            Sonda virusA = new Sonda("Virus A", "ACCGTTAGCTGA");
+            Comprobador.comprobar("hibridaCon (diana en la misma hebra)", true,
+                    virusA.hibridaCon(new Lectura("L1", "GGAACCGTTAGCTGACCAT")));
+            Comprobador.comprobar("hibridaCon (diana en la otra hebra: TCAGCTAACGGT)", true,
+                    virusA.hibridaCon(new Lectura("L2", "GGATTCAGCTAACGGTCCAT")));
+            Comprobador.comprobar("hibridaCon (sin diana)", false,
+                    virusA.hibridaCon(new Lectura("L3", "GGATTCAGCTTACGGTCCAT")));
+            Muestra otraHebra = new Muestra("M5 (otra hebra)", LocalDate.of(2026, 6, 8),
+                    new Lectura[] { new Lectura("M5-L1", "GGATTCAGCTAACGGTCCAT") });
+            Comprobador.comprobar("panel de patógenos con una lectura de la otra hebra",
+                    new boolean[][] { { true, false, false }, { false, false, false }, { false, false, false } },
+                    DatosEjemplo.panelDePatogenos().hibridar(otraHebra));
+        } catch (Exception e) {
+            Comprobador.fallo("No debería lanzarse ninguna excepción: " + e.getMessage());
+        }
+    }
+
+    private static void probarIntensidadesYDetectadas() {
+        Comprobador.titulo("A2 · Intensidades y sondas detectadas");
+        try {
+            Muestra[] muestras = DatosEjemplo.muestras();
+            Microarray panel = DatosEjemplo.panelDePatogenos();
+            Comprobador.comprobar("intensidades (M2: el Virus B está en dos lecturas)",
+                    new int[][] { { 0, 2, 0 }, { 0, 1, 0 }, { 0, 1, 0 } }, panel.intensidades(muestras[2]));
+            Comprobador.comprobar("sondasDetectadas (M2)",
+                    new String[] { "Virus B (variantes 1 y 2)", "Bacteria E (cepas 1 y 2)", "Control positivo" },
+                    new Analisis(muestras[2], panel, LocalDate.of(2026, 5, 12)).sondasDetectadas());
+            Comprobador.comprobar("sondasDetectadas (M4)", new String[] { "Control positivo" },
+                    new Analisis(muestras[4], panel, LocalDate.of(2026, 5, 26)).sondasDetectadas());
+            Comprobador.comprobar("sondasDetectadas (chip de prueba)", new String[] { "Exacta", "Con N", "Con Y y R" },
+                    new Analisis(DatosEjemplo.muestraDePrueba(), DatosEjemplo.chipDePrueba(),
+                            LocalDate.of(2026, 4, 27)).sondasDetectadas());
+        } catch (Exception e) {
+            Comprobador.fallo("No debería lanzarse ninguna excepción: " + e.getMessage());
+        }
+    }
+}

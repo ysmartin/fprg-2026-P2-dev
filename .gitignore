@@ -1,0 +1,20 @@
+# Compilados y artefactos
+bin/
+*.class
+*.jar
+*.war
+*.ear
+*target*
+
+# Eclipse (los .settings de los proyectos SÍ se versionan: fijan Java 25 y UTF-8)
+.metadata
+*.pydevproject
+tmp/
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.loadpath
+.externalToolBuilders/
+*.launch
