@@ -13,9 +13,12 @@ class PruebaSonda {
     void main() {
         probarConstructor();
         probarEncaja();
-        probarEncajaEn();
+        probarEncajaEnDirecto();
         probarEncontrarEnSinComodines();
         probarEncontrarEnConComodines();
+        probarEncajaInverso();
+        probarEncajaEnInverso();
+        probarEncontrarEnHebraInversa();
         probarHibridaCon();
         pruebasPropias();
         Comprobador.resumen();
@@ -91,8 +94,8 @@ class PruebaSonda {
         }
     }
 
-    private static void probarEncajaEn() {
-        Comprobador.titulo("encajaEn");
+    private static void probarEncajaEnDirecto() {
+        Comprobador.titulo("encajaEn, en sentido directo");
         try {
             Sonda sonda = new Sonda("S", "TRC");
             Lectura lectura = new Lectura("L", "GATACA");
@@ -115,8 +118,8 @@ class PruebaSonda {
             Lectura lectura = new Lectura("L", "GATACATGCA");
             Comprobador.comprobar("\"GAT\" en \"GATACATGCA\" (al principio)", 0,
                     new Sonda("S", "GAT").encontrarEn(lectura));
-            Comprobador.comprobar("\"GCA\" en \"GATACATGCA\" (al final)", 7,
-                    new Sonda("S", "GCA").encontrarEn(lectura));
+            Comprobador.comprobar("\"AGC\" en \"GATTACATTAGC\" (al final)", 9,
+                    new Sonda("S", "AGC").encontrarEn(new Lectura("L", "GATTACATTAGC")));
             Comprobador.comprobar("\"CCC\" en \"GATACATGCA\" (no está)", -1,
                     new Sonda("S", "CCC").encontrarEn(lectura));
             Comprobador.comprobar("\"GATACATGCAT\" en \"GATACATGCA\" (más larga)", -1,
@@ -150,6 +153,68 @@ class PruebaSonda {
         }
     }
 
+    private static void probarEncajaInverso() {
+        Comprobador.titulo("encajaInverso");
+        probarEncajaInverso('A', 'T', true);
+        probarEncajaInverso('A', 'A', false);
+        probarEncajaInverso('G', 'C', true);
+        probarEncajaInverso('R', 'T', true);
+        probarEncajaInverso('R', 'G', false);
+        probarEncajaInverso('Y', 'A', true);
+        probarEncajaInverso('N', 'N', true);
+        probarEncajaInverso('A', 'N', false);
+        String descripcion = "encajaInverso('A', 'R')";
+        try {
+            Sonda.encajaInverso('A', 'R');
+            Comprobador.fallo(descripcion + " debería lanzar una excepción");
+        } catch (Exception e) {
+            Comprobador.acierto(descripcion + " lanza excepción: " + e.getMessage());
+        }
+    }
+
+    private static void probarEncajaInverso(char simbolo, char base, boolean esperado) {
+        String descripcion = "encajaInverso('" + simbolo + "', '" + base + "')";
+        try {
+            Comprobador.comprobar(descripcion, esperado, Sonda.encajaInverso(simbolo, base));
+        } catch (Exception e) {
+            Comprobador.fallo(descripcion + " no debería lanzar excepción: " + e.getMessage());
+        }
+    }
+
+    private static void probarEncajaEnInverso() {
+        Comprobador.titulo("encajaEn, en sentido inverso");
+        try {
+            Comprobador.comprobar("\"CAGCT\" en \"GATTAGCTGTTAGC\" desde 4 (AGCTG)", true,
+                    new Sonda("S", "CAGCT").encajaEn(new Lectura("L", "GATTAGCTGTTAGC"), 4));
+            Comprobador.comprobar("\"CAGCT\" en \"GATTAGCTGTTAGC\" desde 3", false,
+                    new Sonda("S", "CAGCT").encajaEn(new Lectura("L", "GATTAGCTGTTAGC"), 3));
+            Comprobador.comprobar("\"CAGYT\" en \"GATTAACTGTTAGC\" desde 4 (AACTG)", true,
+                    new Sonda("S", "CAGYT").encajaEn(new Lectura("L", "GATTAACTGTTAGC"), 4));
+            Comprobador.comprobar("\"CANYT\" en \"GATTAGNTGTTAGC\" desde 4 (N con N)", true,
+                    new Sonda("S", "CANYT").encajaEn(new Lectura("L", "GATTAGNTGTTAGC"), 4));
+            Comprobador.comprobar("\"CAGYT\" en \"GATTAGNTGTTAGC\" desde 4 (C con N)", false,
+                    new Sonda("S", "CAGYT").encajaEn(new Lectura("L", "GATTAGNTGTTAGC"), 4));
+        } catch (Exception e) {
+            Comprobador.fallo("Se ha producido una excepción: " + e);
+        }
+    }
+
+    private static void probarEncontrarEnHebraInversa() {
+        Comprobador.titulo("encontrarEn, con la diana en la otra hebra");
+        try {
+            Comprobador.comprobar("\"CAGCT\" en \"GATTAGCTGTTAGC\"", 4,
+                    new Sonda("S", "CAGCT").encontrarEn(new Lectura("L", "GATTAGCTGTTAGC")));
+            Comprobador.comprobar("\"GCA\" en \"GATACATGCA\" (en sentido inverso en la 6, antes que en directo en la 7)", 6,
+                    new Sonda("S", "GCA").encontrarEn(new Lectura("L", "GATACATGCA")));
+            Comprobador.comprobar("\"CAGYT\" en \"GATTAACTGTTAGC\"", 4,
+                    new Sonda("S", "CAGYT").encontrarEn(new Lectura("L", "GATTAACTGTTAGC")));
+            Comprobador.comprobar("\"CANYT\" en \"GATTAGNTGTTAGC\"", 4,
+                    new Sonda("S", "CANYT").encontrarEn(new Lectura("L", "GATTAGNTGTTAGC")));
+        } catch (Exception e) {
+            Comprobador.fallo("Se ha producido una excepción: " + e);
+        }
+    }
+
     private static void probarHibridaCon() {
         Comprobador.titulo("hibridaCon");
         try {
@@ -158,6 +223,8 @@ class PruebaSonda {
                     virusA.hibridaCon(new Lectura("L1", "GGAACCGTTAGCTGACCAT")));
             Comprobador.comprobar("Virus A, sin su diana", false,
                     virusA.hibridaCon(new Lectura("L2", "GGAACCGTTAGGTGACCAT")));
+            Comprobador.comprobar("Virus A, con su diana en la otra hebra (TCAGCTAACGGT)", true,
+                    virusA.hibridaCon(new Lectura("L6", "GGATTCAGCTAACGGTCCAT")));
             Sonda virusB = new Sonda("Virus B (variantes 1 y 2)", "TTGRCATCCAGT");
             Comprobador.comprobar("Virus B, variante 1 (TTGACATCCAGT)", true,
                     virusB.hibridaCon(new Lectura("L3", "CATTGACATCCAGTTT")));

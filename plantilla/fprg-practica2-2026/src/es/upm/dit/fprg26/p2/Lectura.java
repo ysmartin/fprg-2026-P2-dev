@@ -14,6 +14,9 @@ package es.upm.dit.fprg26.p2;
  */
 class Lectura {
 
+    /** Símbolos que pueden aparecer en una lectura: las cuatro bases y la base indeterminada. */
+    static final String SIMBOLOS = "ACGTN";
+
     /** Identificador de la lectura (en un fichero FASTQ, lo que sigue a la {@code @} de la cabecera). */
     private final String id;
 
@@ -36,9 +39,9 @@ class Lectura {
             throw new Exception("La secuencia de la lectura " + id + " no puede ser nula ni vacía");
         }
         for (int i = 0; i < secuencia.length(); i++) {
-            if (!Iupac.esSimboloDeLectura(secuencia.charAt(i))) {
+            if (!esSimboloValido(secuencia.charAt(i))) {
                 throw new Exception("La lectura " + id + " contiene el carácter '" + secuencia.charAt(i)
-                        + "' en la posición " + i + ", que no es " + Iupac.SIMBOLOS_DE_LECTURA);
+                        + "' en la posición " + i + ", que no es " + SIMBOLOS);
             }
         }
         this.id = id;
@@ -85,6 +88,41 @@ class Lectura {
                     + ", de " + getLongitud() + " bases");
         }
         return secuencia.charAt(posicion);
+    }
+
+    /**
+     * Indica si un carácter puede aparecer en una lectura.
+     *
+     * @param simbolo carácter que se comprueba
+     * @return {@code true} si es {@code A}, {@code C}, {@code G}, {@code T} o {@code N}
+     *         (en mayúsculas); {@code false} en otro caso
+     */
+    static boolean esSimboloValido(char simbolo) {
+        return SIMBOLOS.indexOf(simbolo) >= 0;
+    }
+
+    /**
+     * Devuelve la base complementaria de una base de una lectura: la que tiene enfrente en
+     * la otra hebra del ADN. La {@code A} se empareja con la {@code T}, y la {@code C} con la
+     * {@code G}; la complementaria de una base indeterminada ({@code N}) también es {@code N}.
+     * <p>
+     * Por ejemplo, {@code Lectura.complementaria('G')} devuelve {@code 'C'}.
+     * </p>
+     *
+     * @param base base de una lectura ({@code A}, {@code C}, {@code G}, {@code T} o {@code N})
+     * @return base complementaria
+     * @throws Exception si el carácter no es un símbolo de lectura
+     */
+    static char complementaria(char base) throws Exception {
+        switch (base) {
+            case 'A' -> { return 'T'; }
+            case 'T' -> { return 'A'; }
+            case 'C' -> { return 'G'; }
+            case 'G' -> { return 'C'; }
+            case 'N' -> { return 'N'; }
+            default -> throw new Exception("El carácter '" + base + "' no es un símbolo de lectura ("
+                    + SIMBOLOS + ")");
+        }
     }
 
     /**

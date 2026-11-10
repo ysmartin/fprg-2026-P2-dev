@@ -53,8 +53,14 @@ loadScripts(document, 'script');</script>
 <div class="toc-header">Contents&nbsp;<input type="text" class="filter-input" disabled placeholder="Filter contents (type .)" aria-label="Filter table of contents" autocomplete="off" spellcheck="false"><input type="reset" class="reset-filter" disabled tabindex="-1" value="Reset"></div>
 <ol class="toc-list" tabindex="-1">
 <li><a href="#" tabindex="0">Description</a></li>
+<li><a href="#field-summary" tabindex="0">Field Summary</a></li>
 <li><a href="#constructor-summary" tabindex="0">Constructor Summary</a></li>
 <li><a href="#method-summary" tabindex="0">Method Summary</a></li>
+<li><a href="#field-detail" tabindex="0">Field Details</a>
+<ol class="toc-list">
+<li><a href="#SIMBOLOS" tabindex="0">SIMBOLOS</a></li>
+</ol>
+</li>
 <li><a href="#constructor-detail" tabindex="0">Constructor Details</a>
 <ol class="toc-list">
 <li><a href="#%3Cinit%3E(java.lang.String,java.lang.String)" tabindex="0">Sonda(String, String)</a></li>
@@ -62,10 +68,12 @@ loadScripts(document, 'script');</script>
 </li>
 <li><a href="#method-detail" tabindex="0">Method Details</a>
 <ol class="toc-list">
+<li><a href="#esSimboloValido(char)" tabindex="0">esSimboloValido(char)</a></li>
 <li><a href="#getNombre()" tabindex="0">getNombre()</a></li>
 <li><a href="#getPatron()" tabindex="0">getPatron()</a></li>
 <li><a href="#getLongitud()" tabindex="0">getLongitud()</a></li>
 <li><a href="#encaja(char,char)" tabindex="0">encaja(char, char)</a></li>
+<li><a href="#encajaInverso(char,char)" tabindex="0">encajaInverso(char, char)</a></li>
 <li><a href="#encajaEn(es.upm.dit.fprg26.p2.Lectura,int)" tabindex="0">encajaEn(Lectura, int)</a></li>
 <li><a href="#encontrarEn(es.upm.dit.fprg26.p2.Lectura)" tabindex="0">encontrarEn(Lectura)</a></li>
 <li><a href="#hibridaCon(es.upm.dit.fprg26.p2.Lectura)" tabindex="0">hibridaCon(Lectura)</a></li>
@@ -97,7 +105,7 @@ compara cada símbolo del patrón con la base que ocupa la misma posición de la
 </p>
 <p>
 Las sondas pueden ser <em>degeneradas</em>: su patrón puede contener comodines del
-código IUPAC (ver <a href="Iupac.html" title="class in es.upm.dit.fprg26.p2"><code>Iupac</code></a>), que sirven, por ejemplo, para detectar a la vez las
+código de ambigüedad de la IUPAC, que sirven, por ejemplo, para detectar a la vez las
 variantes de un patógeno que se diferencian en una posición conocida:
 </p>
 <ul>
@@ -110,11 +118,34 @@ variantes de un patógeno que se diferencian en una posición conocida:
 Una base indeterminada (<code>N</code>) de la lectura solo encaja con el comodín <code>N</code>
 del patrón: como no se sabe qué base es, no puede asegurarse que coincida con ninguna
 otra.
+</p>
+<p>
+Además, una lectura puede proceder de cualquiera de las dos hebras del ADN de la muestra.
+Si procede de la otra hebra, no contiene la diana tal cual, sino su <em>complementaria
+inversa</em>: la secuencia de la otra hebra, leída en el mismo sentido. Por eso, el patrón
+se busca en los dos sentidos (ver <a href="#encajaEn(es.upm.dit.fprg26.p2.Lectura,int)"><code>encajaEn(Lectura, int)</code></a>).
 </p></div>
 </div>
 </section>
 <section class="summary">
 <ul class="summary-list">
+<!-- =========== FIELD SUMMARY =========== -->
+<li>
+<section class="field-summary" id="field-summary">
+<h2>Field Summary</h2>
+<div class="caption"><span>Fields</span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Field</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>(package private) static final <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><code><a href="#SIMBOLOS" class="member-name-link">SIMBOLOS</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Símbolos que pueden aparecer en un patrón: los de las lecturas y los comodines <code>R</code> e <code>Y</code>.</div>
+</div>
+</div>
+</section>
+</li>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <li>
 <section class="constructor-summary" id="constructor-summary">
@@ -153,15 +184,37 @@ reglas descritas en la documentación de la clase.</div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#encajaEn(es.upm.dit.fprg26.p2.Lectura,int)" class="member-name-link">encajaEn</a><wbr>(<a href="Lectura.html" title="class in es.upm.dit.fprg26.p2">Lectura</a>&nbsp;lectura,
  int&nbsp;inicio)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Indica si el patrón de la sonda encaja con una lectura a partir de una posición
-de la lectura: es decir, si cada símbolo del patrón encaja con la base que ocupa
-la posición correspondiente de la lectura.</div>
+<div class="block">Indica si el patrón de la sonda encaja con una lectura a partir de una posición de la
+lectura, en cualquiera de los dos sentidos:
+
+  en <strong>sentido directo</strong>, si cada símbolo del patrón encaja con la base
+      que ocupa la posición correspondiente de la lectura (ver
+      <a href="#encaja(char,char)"><code>encaja(char, char)</code></a>);
+  en <strong>sentido inverso</strong>, si el patrón, leído de derecha a izquierda,
+      encaja con las complementarias de las bases de esas mismas posiciones (ver
+      <a href="#encajaInverso(char,char)"><code>encajaInverso(char, char)</code></a>); es decir, si la lectura contiene la diana en
+      la otra hebra.
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>(package private) int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#encontrarEn(es.upm.dit.fprg26.p2.Lectura)" class="member-name-link">encontrarEn</a><wbr>(<a href="Lectura.html" title="class in es.upm.dit.fprg26.p2">Lectura</a>&nbsp;lectura)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>(package private) static boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#encajaInverso(char,char)" class="member-name-link">encajaInverso</a><wbr>(char&nbsp;simbolo,
+ char&nbsp;base)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Indica si un símbolo de un patrón encaja con la base complementaria de una base de
+una lectura (la que tiene enfrente en la otra hebra; ver
+<a href="Lectura.html#complementaria(char)"><code>Lectura.complementaria(char)</code></a>), según las reglas de <a href="#encaja(char,char)"><code>encaja(char, char)</code></a>.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>(package private) int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#encontrarEn(es.upm.dit.fprg26.p2.Lectura)" class="member-name-link">encontrarEn</a><wbr>(<a href="Lectura.html" title="class in es.upm.dit.fprg26.p2">Lectura</a>&nbsp;lectura)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Busca la primera posición de una lectura a partir de la cual encaja el patrón de
-la sonda, teniendo en cuenta sus comodines (ver <a href="#encajaEn(es.upm.dit.fprg26.p2.Lectura,int)"><code>encajaEn(Lectura, int)</code></a>).</div>
+la sonda, teniendo en cuenta sus comodines y los dos sentidos (ver
+<a href="#encajaEn(es.upm.dit.fprg26.p2.Lectura,int)"><code>encajaEn(Lectura, int)</code></a>).</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>(package private) static boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#esSimboloValido(char)" class="member-name-link">esSimboloValido</a><wbr>(char&nbsp;simbolo)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Indica si un carácter puede aparecer en el patrón de una sonda.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>(package private) int</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getLongitud()" class="member-name-link">getLongitud</a>()</code></div>
@@ -182,7 +235,7 @@ la sonda, teniendo en cuenta sus comodines (ver <a href="#encajaEn(es.upm.dit.fp
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#hibridaCon(es.upm.dit.fprg26.p2.Lectura)" class="member-name-link">hibridaCon</a><wbr>(<a href="Lectura.html" title="class in es.upm.dit.fprg26.p2">Lectura</a>&nbsp;lectura)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Indica si la sonda hibrida con una lectura, es decir, si su patrón encaja con la
-lectura en alguna posición.</div>
+lectura en alguna posición, en cualquiera de los dos sentidos.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
@@ -201,6 +254,31 @@ lectura en alguna posición.</div>
 </section>
 <section class="details">
 <ul class="details-list">
+<!-- ============ FIELD DETAIL =========== -->
+<li>
+<section class="field-details" id="field-detail">
+<h2>Field Details</h2>
+<ul class="member-list">
+<li>
+<section class="detail" id="SIMBOLOS">
+<h3>SIMBOLOS</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">SIMBOLOS</span></div>
+<div class="block">Símbolos que pueden aparecer en un patrón: los de las lecturas y los comodines <code>R</code> e <code>Y</code>.</div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="tag-list">
+<li><a href="../../../../../constant-values.html#es.upm.dit.fprg26.p2.Sonda.SIMBOLOS">Constant Field Values</a></li>
+</ul>
+</dd>
+</dl>
+</div>
+</section>
+</li>
+</ul>
+</section>
+</li>
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 <li>
 <section class="constructor-details" id="constructor-detail">
@@ -219,7 +297,7 @@ throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/
 <dd><code>nombre</code> - nombre de la sonda; no puede ser nulo ni estar en blanco</dd>
 <dd><code>patron</code> - patrón de la diana; no puede ser nulo ni vacío, y solo puede contener
               los símbolos <code>A</code>, <code>C</code>, <code>G</code>, <code>T</code>, <code>N</code>,
-              <code>R</code> e <code>Y</code> (ver <a href="Iupac.html#esSimboloDePatron(char)"><code>Iupac.esSimboloDePatron(char)</code></a>)</dd>
+              <code>R</code> e <code>Y</code> (ver <a href="#esSimboloValido(char)"><code>esSimboloValido(char)</code></a>)</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code> - si el nombre o el patrón no son válidos</dd>
 </dl>
@@ -234,6 +312,22 @@ throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/
 <section class="method-details" id="method-detail">
 <h2>Method Details</h2>
 <ul class="member-list">
+<li>
+<section class="detail" id="esSimboloValido(char)">
+<h3>esSimboloValido</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">esSimboloValido</span><wbr><span class="parameters">(char&nbsp;simbolo)</span></div>
+<div class="block">Indica si un carácter puede aparecer en el patrón de una sonda.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>simbolo</code> - carácter que se comprueba</dd>
+<dt>Returns:</dt>
+<dd><code>true</code> si es <code>A</code>, <code>C</code>, <code>G</code>, <code>T</code>, <code>N</code>,
+        <code>R</code> o <code>Y</code> (en mayúsculas); <code>false</code> en otro caso</dd>
+</dl>
+</div>
+</section>
+</li>
 <li>
 <section class="detail" id="getNombre()">
 <h3>getNombre</h3>
@@ -294,8 +388,40 @@ Por ejemplo, <code>encaja('R', 'G')</code> y <code>encaja('N', 'N')</code> devue
 <dt>Returns:</dt>
 <dd><code>true</code> si el símbolo encaja con la base; <code>false</code> en otro caso</dd>
 <dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code> - si el símbolo no es un símbolo de patrón (ver
+                  <a href="#esSimboloValido(char)"><code>esSimboloValido(char)</code></a>) o la base no es un símbolo de lectura
+                  (ver <a href="Lectura.html#esSimboloValido(char)"><code>Lectura.esSimboloValido(char)</code></a>)</dd>
+</dl>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="encajaInverso(char,char)">
+<h3>encajaInverso</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">encajaInverso</span><wbr><span class="parameters">(char&nbsp;simbolo,
+ char&nbsp;base)</span>
+                      throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
+<div class="block">Indica si un símbolo de un patrón encaja con la base complementaria de una base de
+una lectura (la que tiene enfrente en la otra hebra; ver
+<a href="Lectura.html#complementaria(char)"><code>Lectura.complementaria(char)</code></a>), según las reglas de <a href="#encaja(char,char)"><code>encaja(char, char)</code></a>.
+<p>
+Por ejemplo, <code>encajaInverso('A', 'T')</code> y <code>encajaInverso('R', 'C')</code> devuelven
+<code>true</code> (la complementaria de <code>T</code> es <code>A</code>, y la de <code>C</code> es
+<code>G</code>, que es una purina); <code>encajaInverso('A', 'A')</code> y
+<code>encajaInverso('A', 'N')</code>, <code>false</code>.
+</p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>simbolo</code> - símbolo del patrón (<code>A</code>, <code>C</code>, <code>G</code>, <code>T</code>,
+               <code>N</code>, <code>R</code> o <code>Y</code>)</dd>
+<dd><code>base</code> - base de la lectura (<code>A</code>, <code>C</code>, <code>G</code>, <code>T</code> o <code>N</code>)</dd>
+<dt>Returns:</dt>
+<dd><code>true</code> si el símbolo encaja con la complementaria de la base;
+        <code>false</code> en otro caso</dd>
+<dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code> - si el símbolo no es un símbolo de patrón o la base no es un
-                  símbolo de lectura (ver <a href="Iupac.html" title="class in es.upm.dit.fprg26.p2"><code>Iupac</code></a>)</dd>
+                  símbolo de lectura</dd>
 </dl>
 </div>
 </section>
@@ -306,23 +432,37 @@ Por ejemplo, <code>encaja('R', 'G')</code> y <code>encaja('N', 'N')</code> devue
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name">encajaEn</span><wbr><span class="parameters">(<a href="Lectura.html" title="class in es.upm.dit.fprg26.p2">Lectura</a>&nbsp;lectura,
  int&nbsp;inicio)</span></div>
-<div class="block">Indica si el patrón de la sonda encaja con una lectura a partir de una posición
-de la lectura: es decir, si cada símbolo del patrón encaja con la base que ocupa
-la posición correspondiente de la lectura.
+<div class="block">Indica si el patrón de la sonda encaja con una lectura a partir de una posición de la
+lectura, en cualquiera de los dos sentidos:
+<ul>
+  <li>en <strong>sentido directo</strong>, si cada símbolo del patrón encaja con la base
+      que ocupa la posición correspondiente de la lectura (ver
+      <a href="#encaja(char,char)"><code>encaja(char, char)</code></a>);</li>
+  <li>en <strong>sentido inverso</strong>, si el patrón, leído de derecha a izquierda,
+      encaja con las complementarias de las bases de esas mismas posiciones (ver
+      <a href="#encajaInverso(char,char)"><code>encajaInverso(char, char)</code></a>); es decir, si la lectura contiene la diana en
+      la otra hebra.</li>
+</ul>
 <p>
-Por ejemplo, el patrón <code>"TRC"</code> encaja con la lectura <code>"GATACA"</code> a partir
-de la posición 2 (<code>T</code> con <code>T</code>, <code>R</code> con <code>A</code>, <code>C</code> con
-<code>C</code>), pero no a partir de la posición 0. Si el patrón no cabe en la lectura
-a partir de esa posición (o la posición es negativa), no encaja. Para ello, captura
-las excepciones que lanzan <a href="Lectura.html#getBase(int)"><code>Lectura.getBase(int)</code></a> y <a href="#encaja(char,char)"><code>encaja(char, char)</code></a>.
+Por ejemplo, el patrón <code>"TRC"</code> encaja en sentido directo con la lectura
+<code>"GATACA"</code> a partir de la posición 2 (<code>T</code> con <code>T</code>, <code>R</code> con
+<code>A</code>, <code>C</code> con <code>C</code>), pero no a partir de la posición 0. Y el patrón
+<code>"CAGCT"</code> encaja en sentido inverso con la lectura <code>"GATTAGCTGTTAGC"</code> a
+partir de la posición 4: leído de derecha a izquierda (<code>TCGAC</code>), encaja con las
+complementarias de <code>AGCTG</code> (<code>TCGAC</code>).
+</p>
+<p>
+Si el patrón no cabe en la lectura a partir de esa posición (o la posición es
+negativa), no encaja. Para ello, captura las excepciones que lanzan
+<a href="Lectura.html#getBase(int)"><code>Lectura.getBase(int)</code></a> y <a href="#encaja(char,char)"><code>encaja(char, char)</code></a>.
 </p></div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>lectura</code> - lectura en la que se busca el patrón</dd>
-<dd><code>inicio</code> - posición de la lectura en la que se coloca el primer símbolo del patrón</dd>
+<dd><code>inicio</code> - posición de la lectura en la que empieza la comparación</dd>
 <dt>Returns:</dt>
-<dd><code>true</code> si el patrón encaja con la lectura a partir de esa posición;
-        <code>false</code> en otro caso</dd>
+<dd><code>true</code> si el patrón encaja con la lectura a partir de esa posición, en
+        sentido directo o inverso; <code>false</code> en otro caso</dd>
 </dl>
 </div>
 </section>
@@ -333,10 +473,12 @@ las excepciones que lanzan <a href="Lectura.html#getBase(int)"><code>Lectura.get
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name">encontrarEn</span><wbr><span class="parameters">(<a href="Lectura.html" title="class in es.upm.dit.fprg26.p2">Lectura</a>&nbsp;lectura)</span></div>
 <div class="block">Busca la primera posición de una lectura a partir de la cual encaja el patrón de
-la sonda, teniendo en cuenta sus comodines (ver <a href="#encajaEn(es.upm.dit.fprg26.p2.Lectura,int)"><code>encajaEn(Lectura, int)</code></a>).
+la sonda, teniendo en cuenta sus comodines y los dos sentidos (ver
+<a href="#encajaEn(es.upm.dit.fprg26.p2.Lectura,int)"><code>encajaEn(Lectura, int)</code></a>).
 <p>
 Por ejemplo, el patrón <code>"TRC"</code> se encuentra en la lectura <code>"GATACATGCA"</code>
-en la posición 2 (también encajaría en la 6, pero se devuelve la primera).
+en la posición 2 (también encaja en la 6, y en sentido inverso en la 7, pero se
+devuelve la primera).
 </p></div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -354,7 +496,7 @@ en la posición 2 (también encajaría en la 6, pero se devuelve la primera).
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name">hibridaCon</span><wbr><span class="parameters">(<a href="Lectura.html" title="class in es.upm.dit.fprg26.p2">Lectura</a>&nbsp;lectura)</span></div>
 <div class="block">Indica si la sonda hibrida con una lectura, es decir, si su patrón encaja con la
-lectura en alguna posición.</div>
+lectura en alguna posición, en cualquiera de los dos sentidos.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>lectura</code> - lectura que se analiza</dd>

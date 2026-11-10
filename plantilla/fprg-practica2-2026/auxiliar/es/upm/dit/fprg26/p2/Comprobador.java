@@ -113,6 +113,9 @@ final class Comprobador {
             }
             return texto + "]";
         }
+        if (valor instanceof int[] enteros) {
+            return Arrays.toString(enteros);
+        }
         if (valor instanceof Object[] array) {
             return Arrays.deepToString(array);
         }

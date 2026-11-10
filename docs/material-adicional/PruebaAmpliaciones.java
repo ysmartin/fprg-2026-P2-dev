@@ -1,7 +1,7 @@
 package es.upm.dit.fprg26.p2;
 
 /**
- * Pruebas de las ampliaciones A1 (las dos hebras) y A2 (intensidades y sondas detectadas).
+ * Pruebas de las ampliaciones A1 (todas las apariciones) y A2 (intensidades y sondas detectadas).
  * Se añade a la carpeta {@code src} del proyecto, en el paquete {@code es.upm.dit.fprg26.p2},
  * cuando se trabajan las ampliaciones.
  */
@@ -11,37 +11,29 @@ class PruebaAmpliaciones {
      * Ejecuta las pruebas.
      */
     void main() {
-        probarDosHebras();
+        probarTodasLasApariciones();
         probarIntensidadesYDetectadas();
         Comprobador.resumen();
     }
 
-    private static void probarDosHebras() {
-        Comprobador.titulo("A1 · Las dos hebras");
+    private static void probarTodasLasApariciones() {
+        Comprobador.titulo("A1 · Todas las apariciones");
         try {
-            Lectura lectura = new Lectura("L", "GATTACAN");
-            Lectura inversa = lectura.complementariaInversa();
-            Comprobador.comprobar("complementariaInversa() de \"GATTACAN\"", "NTGTAATC", inversa.getSecuencia());
-            Comprobador.comprobar("identificador de la complementaria inversa", "L (inversa)", inversa.getId());
-            Comprobador.comprobar("getSecuenciaSonda() de \"GAYTRCA\"", "TGYARTC",
-                    new Sonda("S", "GAYTRCA").getSecuenciaSonda());
-            Sonda virusA = new Sonda("Virus A", "ACCGTTAGCTGA");
-            Comprobador.comprobar("hibridaCon (diana en la misma hebra)", true,
-                    virusA.hibridaCon(new Lectura("L1", "GGAACCGTTAGCTGACCAT")));
-            Comprobador.comprobar("hibridaCon (diana en la otra hebra: TCAGCTAACGGT)", true,
-                    virusA.hibridaCon(new Lectura("L2", "GGATTCAGCTAACGGTCCAT")));
-            Comprobador.comprobar("hibridaCon (sin diana)", false,
-                    virusA.hibridaCon(new Lectura("L3", "GGATTCAGCTTACGGTCCAT")));
-            Muestra otraHebra = new Muestra("X1 (otra hebra)", DatosEjemplo.hace(1),
-                    new Lectura[] { new Lectura("X1-L1", "GGATTCAGCTAACGGTCCAT") });
-            Comprobador.comprobar("panel de patógenos con una lectura de la otra hebra",
-                    new boolean[][] { { true, false, false }, { false, false, false }, { false, false, false } },
-                    DatosEjemplo.panelDePatogenos().hibridar(otraHebra));
-            Comprobador.comprobar("chip de expresión con M5 (con las dos hebras, sigue dibujando «ADN»)",
-                    aMatriz(DatosEjemplo.FORMA_MUESTRA_DE_EXPRESION),
-                    DatosEjemplo.chipDeExpresion().hibridar(DatosEjemplo.muestraDeExpresion()));
+            Lectura lectura = new Lectura("L", "GATACATGCA");
+            Comprobador.comprobar("contarEn: \"TRC\" en \"GATACATGCA\" (2 y 6 en directo, 7 en inverso)", 3,
+                    new Sonda("S", "TRC").contarEn(lectura));
+            Comprobador.comprobar("contarEn: \"AAA\" en \"AAAAA\" (solapadas)", 3,
+                    new Sonda("S", "AAA").contarEn(new Lectura("L", "AAAAA")));
+            Comprobador.comprobar("contarEn: \"CCC\" en \"GATACATGCA\"", 0,
+                    new Sonda("S", "CCC").contarEn(lectura));
+            Comprobador.comprobar("encontrarTodasEn: \"TRC\" en \"GATACATGCA\"", new int[] { 2, 6, 7 },
+                    new Sonda("S", "TRC").encontrarTodasEn(lectura));
+            Comprobador.comprobar("encontrarTodasEn: \"CAGCT\" en \"GATTAGCTGTTAGC\" (en sentido inverso)",
+                    new int[] { 4 }, new Sonda("S", "CAGCT").encontrarTodasEn(new Lectura("L", "GATTAGCTGTTAGC")));
+            Comprobador.comprobar("encontrarTodasEn: \"CCC\" en \"GATACATGCA\" (ninguna)", new int[0],
+                    new Sonda("S", "CCC").encontrarTodasEn(lectura));
         } catch (Exception e) {
-            Comprobador.fallo("No debería lanzarse ninguna excepción: " + e.getMessage());
+            Comprobador.fallo("Se ha producido una excepción: " + e);
         }
     }
 
@@ -62,17 +54,5 @@ class PruebaAmpliaciones {
         } catch (Exception e) {
             Comprobador.fallo("No debería lanzarse ninguna excepción: " + e.getMessage());
         }
-    }
-
-    /** Convierte un dibujo hecho con {@code #} y {@code .} en una matriz de booleanos. */
-    private static boolean[][] aMatriz(String[] dibujo) {
-        boolean[][] matriz = new boolean[dibujo.length][];
-        for (int fila = 0; fila < dibujo.length; fila++) {
-            matriz[fila] = new boolean[dibujo[fila].length()];
-            for (int columna = 0; columna < dibujo[fila].length(); columna++) {
-                matriz[fila][columna] = dibujo[fila].charAt(columna) == '#';
-            }
-        }
-        return matriz;
     }
 }

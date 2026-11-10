@@ -25,8 +25,10 @@ METODOS = {
     'Sonda.java': [
         ('Sonda(String nombre, String patron)', [TODO]),
         ('static boolean encaja(char simbolo, char base)', [TODO, 'return false;']),
+        ('static boolean encajaInverso(char simbolo, char base)', [TODO, 'return false;']),
         ('boolean encajaEn(Lectura lectura, int inicio)',
-         [TODO + ' (use try/catch: si el patrón se sale de la lectura, no encaja)', 'return false;']),
+         [TODO + ': primero, solo en sentido directo; después, en los dos sentidos',
+          '// (use try/catch: si el patrón se sale de la lectura, no encaja)', 'return false;']),
         ('int encontrarEn(Lectura lectura)',
          ['// TODO: modificar para que tenga en cuenta los comodines (esta versión, que usa indexOf,',
           '// solo encuentra el patrón si aparece tal cual en la lectura)',

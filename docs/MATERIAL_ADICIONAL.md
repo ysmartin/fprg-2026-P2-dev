@@ -4,37 +4,33 @@ Este documento **no es para el alumnado**. Recoge dos ampliaciones opcionales de
 
 | Fichero | Contenido |
 |---------|-----------|
-| `docs/material-adicional/solucion/` | `Lectura`, `Sonda`, `Microarray` y `Analisis` con las ampliaciones resueltas (sustituyen a las de `solucion/`) |
+| `docs/material-adicional/solucion/` | `Sonda`, `Microarray` y `Analisis` con las ampliaciones resueltas (sustituyen a las de `solucion/`) |
 | `docs/material-adicional/PruebaAmpliaciones.java` | Pruebas de las dos ampliaciones (se añade al paquete `es.upm.dit.fprg26.p2`) |
 
-`scripts/verificar.sh` compila la solución con las ampliaciones y ejecuta sus pruebas junto con las de la versión base, que siguen pasando: los datos de ejemplo se generaron de modo que buscar en las dos hebras no cambia ningún resultado (tampoco en el chip de expresión de 20x20, que sigue dibujando «ADN»: `PruebaAmpliaciones` lo comprueba).
+`scripts/verificar.sh` compila la solución con las ampliaciones y ejecuta sus pruebas junto con las de la versión base, que siguen pasando.
 
 **Carga de trabajo** (LLOC, con la convención de `NOTAS_PROFESORADO.md`):
 
 | | LLOC | Total acumulado | Frente a 2025-26 (90) |
 |---|---:|---:|---:|
-| Versión base | 40 | 40 | −56 % |
-| A1 · Las dos hebras | +13 | 53 | −41 % |
-| A2 · Intensidades y sondas detectadas | +15 | 68 | −24 % |
+| Versión base | 48 | 48 | −47 % |
+| A1 · Todas las apariciones | +12 | 60 | −33 % |
+| A2 · Intensidades y sondas detectadas | +15 | 75 | −17 % |
 
 ---
 
-## A1. Las dos hebras
+## A1. Todas las apariciones
 
-Una lectura puede proceder de cualquiera de las dos hebras del ADN de la muestra. Si procede de la hebra contraria a la de la diana de una sonda, la lectura no contiene la diana tal cual, sino su **complementaria inversa**: la secuencia de la otra hebra, leída en el mismo sentido. Por ejemplo, la complementaria inversa de `GATTACAN` es `NTGTAATC` (se recorre la secuencia desde el final y se sustituye cada base por su complementaria; la `N` sigue siendo `N`).
+El método `encontrarEn` devuelve solo la primera posición en la que encaja el patrón de una sonda. A veces interesa saber cuántas veces aparece la diana en una lectura, y dónde.
 
-1. En `Lectura`, el método `Lectura complementariaInversa() throws Exception`, que devuelve una nueva lectura con la secuencia complementaria inversa y el mismo identificador seguido de `" (inversa)"`. Use `Iupac.complementario` con cada base.
-2. En `Sonda`, el método `String getSecuenciaSonda() throws Exception`, que devuelve la secuencia del fragmento de ADN que se fija en el chip: la complementaria inversa del patrón. Por ejemplo, la de una sonda con el patrón `GAYTRCA` es `TGYARTC` (el complementario de una purina cualquiera, `R`, es una pirimidina cualquiera, `Y`, y viceversa).
-3. Modifique `hibridaCon` para que la sonda hibride también con las lecturas que contienen su diana en la otra hebra: si el patrón no aparece en la lectura, búsquelo en su complementaria inversa. Como `complementariaInversa` puede lanzar una excepción, captúrela: en ese caso, la sonda no hibrida.
-
-¿Cambia algo en los resultados de la interfaz gráfica? ¿Por qué no hace falta modificar `Microarray`?
+1. En `Sonda`, el método `int contarEn(Lectura lectura)`, que devuelve en cuántas posiciones de la lectura encaja el patrón, en cualquiera de los dos sentidos. Cuente también las apariciones que se solapan: por ejemplo, el patrón `AAA` aparece tres veces en la lectura `AAAAA`.
+2. En `Sonda`, el método `int[] encontrarTodasEn(Lectura lectura)`, que devuelve un array con todas esas posiciones, de menor a mayor. Por ejemplo, para el patrón `TRC` y la lectura `GATACATGCA`, devuelve un array con 2, 6 y 7 (en la 7 encaja en sentido inverso). El array debe tener exactamente tantas posiciones como apariciones: cuéntelas primero (con `contarEn`) y rellénelo después.
 
 ### Notas para el profesorado
 
-- Es la continuación natural de la pregunta sobre los extremos 5'/3' de la P1: todas las lecturas se escriben de 5' a 3', pero pueden venir de cualquiera de las dos hebras.
-- Los recorridos hacia atrás (`for (int i = longitud - 1; i >= 0; i--)`) no aparecen en la versión base.
-- La respuesta a la pregunta final: `Microarray.hibridar` usa `hibridaCon`, así que se beneficia del cambio sin tocarlo (buen momento para hablar de la reutilización y la encapsulación). Los resultados de los datos de ejemplo no cambian (están generados para ello), pero una lectura como `GGATTCAGCTAACGGTCCAT` (con la diana del Virus A en la otra hebra) ilumina la sonda del Virus A solo con la ampliación.
-- Las secuencias de las enzimas de restricción del chip de ejemplo son palíndromos (su complementaria inversa es ella misma, también con los comodines: `GTYRAC`), así que buscar en las dos hebras no cambia nada para ellas.
+- Reutiliza la ventana deslizante de `encontrarEn` sin salida anticipada: se recorren todas las posiciones. Es un buen momento para comparar las dos formas de recorrido (buscar el primero frente a recorrerlo todo).
+- `encontrarTodasEn` ejercita el patrón «contar y después rellenar» un array, con un índice de escritura distinto del de lectura, que se retomará en la P3 con colecciones.
+- Sustituye a la antigua A1 («Las dos hebras»), que ha pasado a la versión base.
 
 ---
 
