@@ -34,7 +34,6 @@ METODOS = {
         ('boolean hibridaCon(Lectura lectura)', [TODO, 'return false;']),
     ],
     'Microarray.java': [
-        ('boolean[][] hibridar(Lectura lectura)', [TODO, 'return null;']),
         ('boolean[][] hibridar(Muestra muestra)', [TODO, 'return null;']),
     ],
 }

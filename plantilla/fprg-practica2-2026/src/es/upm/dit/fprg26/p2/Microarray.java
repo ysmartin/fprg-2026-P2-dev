@@ -101,8 +101,13 @@ class Microarray {
      *         cuya sonda hibrida con la lectura
      */
     boolean[][] hibridar(Lectura lectura) {
-        // TODO: desarrollar
-        return null;
+        boolean[][] iluminados = new boolean[getFilas()][getColumnas()];
+        for (int fila = 0; fila < getFilas(); fila++) {
+            for (int columna = 0; columna < getColumnas(); columna++) {
+                iluminados[fila][columna] = sondas[fila][columna].hibridaCon(lectura);
+            }
+        }
+        return iluminados;
     }
 
     /**

@@ -30,7 +30,7 @@ Para publicar, basta con copiar `README.md`, `logos/`, `img/` y `plantilla/fprg-
 | **Sin marcas 5'/3'** | Todas las lecturas de un FASTQ se escriben de 5' a 3', así que no hace falta mencionarlo en la versión base. Sí hay que tener en cuenta que una lectura puede proceder de cualquiera de las dos hebras (la diana puede aparecer como su complementaria inversa): es la ampliación A1. |
 | **Solo ADN**: las lecturas admiten `A`, `C`, `G`, `T` y `N` | El ARN se secuencia como ADN copia (con `T`), así que las lecturas de un FASTQ son siempre de ADN. Los patrones admiten además `R` e `Y`: dos validaciones parecidas con alfabetos distintos (como `Muestra` y `Patogeno` en 2025-26), pero una se proporciona hecha (`Lectura`) y la otra la escribe el alumnado (`Sonda`). |
 | **Proteínas, para la P3** | El algoritmo sería el mismo con otro alfabeto: en la P2 solo añadiría código duplicado. Su valor didáctico propio (aplicar el mismo reconocedor a distintas extensiones de una clase) encaja en la P3. |
-| **Clases proporcionadas como modelo** (`Lectura`, `Muestra`, `Analisis`, el constructor y los métodos de acceso de `Microarray` y de `Sonda`) y métodos que se completan (`Sonda` y `Microarray.hibridar`) | El punto de partida es más rico que en la P1: el alumnado estudia clases completas antes de escribir su código. Todos los atributos y métodos de acceso se dan hechos: el alumnado escribe un constructor con validación (el de `Sonda`, con el de `Lectura` como modelo) y los métodos del reconocimiento de patrones. `Analisis` se da completa: su constructor hace el análisis llamando a `hibridar(Muestra)`, y es el ejemplo de uso de fechas. El antiguo «calentamiento» (`Lectura.contarIndeterminadas`, primer recorrido de una cadena) se ha quitado y queda como ejercicio de examen. |
+| **Clases proporcionadas como modelo** (`Lectura`, `Muestra`, `Analisis`, el constructor, los métodos de acceso y `hibridar(Lectura)` de `Microarray`, y los métodos de acceso de `Sonda`) y métodos que se completan (`Sonda` y `Microarray.hibridar(Muestra)`) | El punto de partida es más rico que en la P1: el alumnado estudia clases completas antes de escribir su código. Todos los atributos y métodos de acceso se dan hechos: el alumnado escribe un constructor con validación (el de `Sonda`, con el de `Lectura` como modelo) y los métodos del reconocimiento de patrones; `hibridar(Lectura)` sirve de modelo de recorrido de una matriz para `hibridar(Muestra)`. `Analisis` se da completa: su constructor hace el análisis llamando a `hibridar(Muestra)`, y es el ejemplo de uso de fechas. El antiguo «calentamiento» (`Lectura.contarIndeterminadas`, primer recorrido de una cadena) se ha quitado y queda como ejercicio de examen. |
 | **Enumerados de la P1** (`BaseNitrogenada`, `AcidoNucleico`) y utilidades `Iupac` | `Iupac.complementario` reutiliza `BaseNitrogenada.fromChar`, `complementaria` y `toChar` de la P1. `Iupac` reúne las constantes y los métodos de utilidad (`esSimboloDeLectura`, `esSimboloDePatron`, `esPurina`, `esPirimidina`, `complementario`) para que el alumnado se centre en las clases y los bucles. |
 | **`try`/`catch`** en `encajaEn` | `Lectura.getBase` lanza una excepción comprobada si la posición está fuera de la lectura; `encajaEn` la captura y devuelve `false` (el patrón no cabe a partir de esa posición), igual que `coincideEn` en 2025-26. `encontrarEn` solo prueba las posiciones en las que cabe el patrón, así que la captura protege, sobre todo, las invocaciones directas a `encajaEn` con posiciones no válidas (las pruebas lo comprueban). El mismo `try` captura las excepciones de `encaja` (ver la fila siguiente). |
 | **Excepción en `encaja` con caracteres no válidos** | Todo carácter que no sea un símbolo válido se rechaza con una excepción: en los constructores de `Lectura` (proporcionado) y `Sonda`, y también en `encaja`, que es estático y público, así que puede invocarse con cualquier `char`. Con objetos ya validados no se produce nunca, pero obliga a declarar `throws Exception` en `encaja` y a capturarla en `encajaEn` (que no la declara): refuerza la diferencia entre lanzar y capturar. Las pruebas comprueban `encaja('X', 'A')`, `encaja('a', 'A')`, `encaja('A', 'R')` (la `R` no es una base de lectura) y `encaja('A', 'U')`. |
@@ -55,11 +55,11 @@ Se usa la misma convención que en la P1 (líneas lógicas de código, LLOC, en 
 | | P2 2025-26 | P2 2026-27 |
 |---|---:|---:|
 | LLOC triviales | 11 | 2 |
-| LLOC normales | 64 | 37 |
+| LLOC normales | 64 | 32 |
 | LLOC complejas | 15 | 6 |
-| **Total de LLOC de código** | **90** | **45 (−50 %)** |
-| Unidades ponderadas (trivial = 0,5) | ≈ 100 | ≈ 50 (−50 %) |
-| Unidades ponderadas (trivial = 0,25) | ≈ 97 | ≈ 49,5 (−49 %) |
+| **Total de LLOC de código** | **90** | **40 (−56 %)** |
+| Unidades ponderadas (trivial = 0,5) | ≈ 100 | ≈ 45 (−55 %) |
+| Unidades ponderadas (trivial = 0,25) | ≈ 97 | ≈ 44,5 (−54 %) |
 
 Detalle de 2025-26: `Muestra` 26 LLOC, `Patogeno` 30 y `Reconocedor` 34 (diferencia entre su plantilla y su solución).
 
@@ -72,13 +72,12 @@ Detalle de 2026-27 (LLOC que escribe el alumnado):
 | | `encajaEn` | 7 | Bucle con salida anticipada; `try`/`catch` (6 normales, 1 compleja) |
 | | `encontrarEn` | 4 | Ventana deslizante (límite del bucle), en lugar de la versión con `indexOf` que se da hecha (3 normales, 1 compleja) |
 | | `hibridaCon` | 1 | Reutilización |
-| `Microarray` | `hibridar(Lectura)` | 5 | Recorrido de una matriz con bucles anidados |
-| | `hibridar(Muestra)` | 8 | `for` mejorado sobre un array y combinación (O lógico) de matrices |
-| **Total** | | **45** | |
+| `Microarray` | `hibridar(Muestra)` | 8 | `for` mejorado sobre un array, recorrido de una matriz con bucles anidados (con `hibridar(Lectura)` como modelo) y combinación (O lógico) de matrices |
+| **Total** | | **40** | |
 
-**Interpretación**: la carga baja a la mitad. Respecto a la versión anterior de este enunciado (70 LLOC), se han quitado `Lectura.contarIndeterminadas` (5), los métodos de acceso de `Sonda` (3) y toda la clase `Analisis` (17: constructor, métodos de acceso, `getDiasDesdeCaptura` y `contarIluminados`), que se dan hechos o pasan al examen. Lo que queda es el núcleo de la práctica: un constructor con validación y el reconocimiento de patrones (cadenas, `switch`, `try`/`catch`, ventana deslizante) y su aplicación a una matriz (bucles anidados y `for` mejorado). A cambio, el alumnado lee más código proporcionado (`Lectura`, `Muestra`, `Analisis`, `Microarray`, `Iupac`).
+**Interpretación**: la carga baja algo más de la mitad. Respecto a la primera versión de este enunciado (70 LLOC), se han quitado `Lectura.contarIndeterminadas` (5), los métodos de acceso de `Sonda` (3), toda la clase `Analisis` (17: constructor, métodos de acceso, `getDiasDesdeCaptura` y `contarIluminados`) y `Microarray.hibridar(Lectura)` (5), que se dan hechos o pasan al examen. Lo que queda es el núcleo de la práctica: un constructor con validación y el reconocimiento de patrones (cadenas, `switch`, `try`/`catch`, ventana deslizante) y su aplicación a una muestra sobre una matriz (bucles anidados y `for` mejorado). A cambio, el alumnado lee más código proporcionado (`Lectura`, `Muestra`, `Analisis`, `Microarray`, `Iupac`).
 
-**Con las ampliaciones** (detalle en `MATERIAL_ADICIONAL.md`): A1 añade 13 LLOC (58, un 36 % menos que en 2025-26) y A2, 15 (73, un 19 % menos). Si se quiere recuperar carga, los candidatos naturales son los métodos que ahora se dan hechos: `contarIluminados` (6), el constructor de `Analisis` (6) o `contarIndeterminadas` (5).
+**Con las ampliaciones** (detalle en `MATERIAL_ADICIONAL.md`): A1 añade 13 LLOC (53, un 41 % menos que en 2025-26) y A2, 15 (68, un 24 % menos). Si se quiere recuperar carga, los candidatos naturales son los métodos que ahora se dan hechos: `contarIluminados` (6), el constructor de `Analisis` (6), `hibridar(Lectura)` (5) o `contarIndeterminadas` (5).
 
 ## 4. Errores previsibles
 

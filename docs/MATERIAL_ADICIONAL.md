@@ -13,9 +13,9 @@ Este documento **no es para el alumnado**. Recoge dos ampliaciones opcionales de
 
 | | LLOC | Total acumulado | Frente a 2025-26 (90) |
 |---|---:|---:|---:|
-| Versión base | 45 | 45 | −50 % |
-| A1 · Las dos hebras | +13 | 58 | −36 % |
-| A2 · Intensidades y sondas detectadas | +15 | 73 | −19 % |
+| Versión base | 40 | 40 | −56 % |
+| A1 · Las dos hebras | +13 | 53 | −41 % |
+| A2 · Intensidades y sondas detectadas | +15 | 68 | −24 % |
 
 ---
 

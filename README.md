@@ -145,9 +145,9 @@ getNombre() String
 getFilas() int
 getColumnas() int
 getSonda(int, int) Sonda
+hibridar(Lectura) boolean[][]
 toString() String
 ……………A completar……………()
-hibridar(Lectura) boolean[][]
 hibridar(Muestra) boolean[][]
 }
 
@@ -250,11 +250,14 @@ En Eclipse debe seguir los siguientes pasos:
 
 La clase `Sonda` representa una sonda del microarray: su nombre y el patrón de su diana, que puede contener comodines. Esta es la clase central de la práctica: contiene el algoritmo de reconocimiento de patrones. Se proporciona hecho el método `encontrarEn`, pero con una versión inicial que no tiene en cuenta los comodines: tendrá que modificarlo.
 
+> [!TIP]
+> En esta clase trabajará con cadenas de caracteres. Le serán útiles estos métodos de `String` (cada enlace lleva a su documentación): [`length()`](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html#length()), [`charAt(int)`](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html#charAt(int)), [`isEmpty()`](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html#isEmpty()), [`isBlank()`](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html#isBlank()) e [`indexOf(String)`](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html#indexOf(java.lang.String)).
+
 **Pasos:**
 
 1. **Desarrolle el constructor**: compruebe que el nombre no es nulo ni está en blanco, y que el patrón no es nulo ni vacío y solo contiene símbolos de patrón (use `Iupac.esSimboloDePatron` con cada carácter). Si algún dato no es válido, lance una excepción con un mensaje que explique el motivo; si todos lo son, asigne los atributos. Tome como modelo el constructor de `Lectura`.
 2. **Desarrolle `hibridaCon(Lectura lectura)`**: este método debe devolver si el patrón aparece en algún lugar de la lectura. Reutilice `encontrarEn`, que devuelve la primera posición de la lectura en la que encaja el patrón, o `-1` si no encaja en ninguna.
-3. **Pruebe la versión inicial de `encontrarEn`**. Se proporciona con una implementación muy sencilla, `lectura.getSecuencia().indexOf(patron)`: el método `indexOf` de `String` busca un texto dentro de otro, pero comparando los caracteres tal cual, así que no entiende los comodines. Ejecute `PruebaSonda`: las comprobaciones del grupo «encontrarEn, con patrones sin comodines» deberían aparecer con `✓`, y también las de `hibridaCon` con el Virus A; en cambio, fallarán casi todas las del grupo «encontrarEn, con patrones con comodines» (por ejemplo, no encuentra `CAGYT` en `GATTACAGTTTAGC`). Es normal: lo resolverá en los pasos siguientes.
+3. **Pruebe la versión inicial de `encontrarEn`**. Se proporciona con una implementación muy sencilla, `lectura.getSecuencia().indexOf(patron)`: el método [`indexOf`](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html#indexOf(java.lang.String)) de `String` busca un texto dentro de otro, pero comparando los caracteres tal cual, así que no entiende los comodines. Ejecute `PruebaSonda`: las comprobaciones del grupo «encontrarEn, con patrones sin comodines» deberían aparecer con `✓`, y también las de `hibridaCon` con el Virus A; en cambio, fallarán casi todas las del grupo «encontrarEn, con patrones con comodines» (por ejemplo, no encuentra `CAGYT` en `GATTACAGTTTAGC`). Es normal: lo resolverá en los pasos siguientes.
 4. **Desarrolle `encaja(char simbolo, char base)`**: este método debe devolver si un símbolo del patrón encaja con una base de la lectura, según la tabla de los [patrones con comodines](#patrones-con-comodines). Primero, compruebe que el símbolo es un símbolo de patrón y la base, un símbolo de lectura (con `Iupac.esSimboloDePatron` e `Iupac.esSimboloDeLectura`); si alguno no lo es, lance una excepción. Después, use una sentencia `switch` con un caso para cada comodín y un caso `default` para las bases. Puede apoyarse en `Iupac.esPurina` e `Iupac.esPirimidina`. Es un método **estático**: no depende de ninguna sonda concreta, y se invoca con el nombre de la clase (`Sonda.encaja('R', 'G')`).
 5. **Desarrolle `encajaEn(Lectura lectura, int inicio)`**: este método debe devolver si el patrón encaja con la lectura colocando su primer símbolo en la posición `inicio` de la lectura. Recorra el patrón con un bucle: el símbolo `i` del patrón se compara (con `encaja`) con la base `inicio + i` de la lectura, que puede obtener con `lectura.getBase(...)`. En cuanto un símbolo no encaje, el patrón no encaja.
 
@@ -276,13 +279,12 @@ La clase `Sonda` representa una sonda del microarray: su nombre y el patrón de 
 
 ### 3. Completar la clase `Microarray`
 
-La clase `Microarray` representa un chip con sondas en una cuadrícula: una matriz `Sonda[][]`, en la que `sondas[fila][columna]` es la sonda de cada punto. El constructor y los métodos de acceso se proporcionan hechos (fíjese en cómo el constructor recorre la matriz con dos bucles anidados para validarla).
+La clase `Microarray` representa un chip con sondas en una cuadrícula: una matriz `Sonda[][]`, en la que `sondas[fila][columna]` es la sonda de cada punto. El constructor, los métodos de acceso y `hibridar(Lectura lectura)` se proporcionan hechos. Estudie este último: devuelve una matriz de `boolean` del mismo tamaño que la cuadrícula, con `true` en los puntos cuya sonda hibrida con la lectura; la crea con `new boolean[getFilas()][getColumnas()]` y la recorre con dos bucles anidados.
 
 **Pasos:**
 
-1. **Desarrolle `hibridar(Lectura lectura)`**: este método debe devolver una matriz de `boolean` del mismo tamaño que la cuadrícula, con `true` en los puntos cuya sonda hibrida con la lectura. Cree la matriz con `new boolean[filas][columnas]` y recórrala con dos bucles anidados.
-2. **Desarrolle `hibridar(Muestra muestra)`**: este método debe hacer lo mismo con todas las lecturas de la muestra. Un punto se ilumina si su sonda hibrida con **alguna** de las lecturas. Puede recorrer las lecturas con un bucle `for` mejorado (`for (Lectura lectura : muestra.getLecturas())`) y reutilizar el método anterior. Cuidado: un punto que ya se ha iluminado con una lectura no debe apagarse porque no hibride con la siguiente.
-3. Ejecute `PruebaMicroarray` y corrija lo que sea necesario. Las matrices se escriben con `#` para los puntos iluminados y `.` para los apagados, una fila entre corchetes. Fíjese en la prueba con el chip de 2x4: si confunde filas y columnas, fallará. La última prueba usa un chip de 20x20 sondas: si su código es correcto, los puntos iluminados forman una palabra.
+1. **Desarrolle `hibridar(Muestra muestra)`**: este método debe hacer lo mismo con todas las lecturas de la muestra. Un punto se ilumina si su sonda hibrida con **alguna** de las lecturas. Puede recorrer las lecturas con un bucle `for` mejorado (`for (Lectura lectura : muestra.getLecturas())`) y reutilizar `hibridar(Lectura)` con cada una. Cuidado: un punto que ya se ha iluminado con una lectura no debe apagarse porque no hibride con la siguiente.
+2. Ejecute `PruebaMicroarray` y corrija lo que sea necesario. Las matrices se escriben con `#` para los puntos iluminados y `.` para los apagados, una fila entre corchetes. Fíjese en la prueba con el chip de 2x4: si confunde filas y columnas, fallará. La última prueba usa un chip de 20x20 sondas: si su código es correcto, los puntos iluminados forman una palabra.
 
 ### 4. Probar el sistema completo
 
