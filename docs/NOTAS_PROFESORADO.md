@@ -6,13 +6,14 @@ Este documento **no es para el alumnado**. Recoge las decisiones de diseño de l
 
 | Ruta | Contenido | Destino |
 |------|-----------|---------|
-| `README.md`, `logos/`, `img/` | Enunciado de la P2 y sus imágenes (`img/ventana.png` e `img/ventana-grande.png`: capturas de la interfaz gráfica) | Repositorio del alumnado |
+| `README.md`, `logos/`, `img/` | Enunciado de la P2 y sus imágenes (capturas de la interfaz gráfica y figuras SVG de la ventana deslizante) | Repositorio del alumnado |
 | `plantilla/fprg-practica2-2026/` | Proyecto Eclipse (JavaSE-25, paquete `es.upm.dit.fprg26.p2`, con dos carpetas de fuentes: `src`, con las clases de la práctica y las pruebas, y `auxiliar`, con `DatosEjemplo`, `Comprobador` y la ventana) que reciben los alumnos, con la documentación HTML ya generada (`doc/`) | Repositorio del alumnado |
 | `solucion/fprg-practica2-2026/` | Mismo proyecto, con la solución de referencia | Repositorio de la solución |
 | `docs/NOTAS_PROFESORADO.md` | Este documento | Solo desarrollo |
 | `docs/MATERIAL_ADICIONAL.md`, `docs/material-adicional/` | Ampliaciones A1 y A2: enunciado, solución (clases ampliadas) y pruebas | Solo profesorado |
 | `scripts/derivar-plantilla.py` | Deriva la plantilla a partir de la solución (vacía los métodos que completa el alumnado) | Solo desarrollo |
 | `scripts/generar-doc.sh` | Regenera la documentación HTML de la plantilla | Solo desarrollo |
+| `scripts/generar-figuras.py` | Genera las figuras SVG de la ventana deslizante del enunciado (`img/ventana-sin-comodines.svg`, `img/ventana-deslizante.svg` e `img/ventana-inversa.svg`): la búsqueda sin comodines, con comodines y en sentido inverso, todas sobre la lectura `GATACATGCA` | Solo desarrollo |
 | `scripts/verificar.sh` | Comprueba que la plantilla y `doc/` están al día, compila (javac y, con `ECJ_JAR`, ECJ), ejecuta las pruebas de la solución, de la plantilla y de la solución con ampliaciones, y revisa el Javadoc | Solo desarrollo |
 
 Para publicar, basta con copiar `README.md`, `logos/`, `img/` y `plantilla/fprg-practica2-2026/` al repositorio del alumnado (con la carpeta del proyecto en la raíz, como en la P1), y `README.md`, `logos/`, `img/` y `solucion/fprg-practica2-2026/` al de la solución. Los proyectos se llaman `Practica2` (plantilla) y `Practica2-solucion` (solución).

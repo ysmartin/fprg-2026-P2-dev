@@ -48,15 +48,11 @@ Además, cada análisis registrará sus **datos de procedencia**: la fecha en qu
 
 Para saber si una sonda hibrida con una lectura, se busca su patrón en la lectura. Se coloca el patrón bajo la lectura, a partir de una posición, y se compara cada símbolo del patrón con la base que tiene encima: si todos coinciden, el patrón **encaja** en esa posición; si no, se prueba en la siguiente. La sonda hibrida con la lectura si su patrón encaja en alguna posición.
 
-Por ejemplo, el patrón `CAGCT` encaja en la lectura `GATTACAGCTTAGC` a partir de la posición 5 (las posiciones se cuentan desde 0, como en un `String`):
+Por ejemplo, así se busca el patrón `TAC` en la lectura `GATACATGCA` (las posiciones se cuentan desde 0, como en un `String`). En las posiciones 0 y 1 ya no encaja el primer símbolo, así que se prueba en la siguiente; en la 2 encajan los tres, y la búsqueda termina:
 
-```
-posición  01234567890123
-lectura   GATTACAGCTTAGC
-patrón         CAGCT
-```
+![Búsqueda del patrón TAC en la lectura GATACATGCA. En la posición 0, la T no encaja con la G; en la 1, la T no encaja con la A; en la 2, la T encaja con la T, la A con la A y la C con la C, así que el patrón encaja a partir de la posición 2](img/ventana-sin-comodines.svg)
 
-En cambio, no encaja en ninguna posición de la lectura `GATTACAGGTTAGC`: basta con que una base no coincida (aquí, la `G` de la posición 8, bajo la que queda la segunda `C` del patrón) para que el patrón no encaje.
+En cambio, el patrón `TAC` no encaja en ninguna posición de la lectura `GATAGATGCA`: basta con que una base no coincida para que el patrón no encaje en esa posición (en la 2, por ejemplo, la `T` y la `A` encajan, pero la `C` queda bajo una `G`).
 
 ### Patrones con comodines
 
@@ -80,22 +76,17 @@ Las lecturas solo pueden contener `A`, `C`, `G`, `T` y `N`, y los patrones, adem
 
 ### Las dos hebras
 
-El ADN tiene dos hebras complementarias: frente a cada `A` de una hebra hay una `T` en la otra, y frente a cada `C`, una `G` (y al revés). Cada lectura procede de una de las dos hebras, sin que se sepa de cuál. Si procede de la hebra contraria a la de la diana, no contiene la diana tal cual, sino su **complementaria inversa**: la secuencia de la otra hebra, leída en el mismo sentido que las lecturas. Se obtiene recorriendo la diana de derecha a izquierda y sustituyendo cada base por su complementaria. Por ejemplo, la complementaria inversa de `CAGCT` es `AGCTG`:
+El ADN tiene dos hebras complementarias: frente a cada `A` de una hebra hay una `T` en la otra, y frente a cada `C`, una `G` (y al revés). Cada lectura procede de una de las dos hebras, sin que se sepa de cuál. Si procede de la hebra contraria a la de la diana, no contiene la diana tal cual, sino su **complementaria inversa**: la secuencia de la otra hebra, leída en el mismo sentido que las lecturas. Se obtiene recorriendo la diana de derecha a izquierda y sustituyendo cada base por su complementaria. Por ejemplo, la complementaria inversa de `GTA` es `TAC`:
 
 ```
-diana                        CAGCT
-de derecha a izquierda       TCGAC
-complementaria de cada base  AGCTG
+diana                        GTA
+de derecha a izquierda       ATG
+complementaria de cada base  TAC
 ```
 
-Por eso, el patrón de una sonda se busca en los dos sentidos. En **sentido directo**, como se ha explicado antes. En **sentido inverso**, se compara el patrón, leído de derecha a izquierda, con las complementarias de las bases de la lectura. Por ejemplo, el patrón `CAGCT` encaja en sentido inverso en la lectura `GATTAGCTGTTAGC` a partir de la posición 4:
+Por eso, el patrón de una sonda se busca en los dos sentidos. En **sentido directo**, como se ha explicado antes. En **sentido inverso**, se compara el patrón, leído de derecha a izquierda, con las complementarias de las bases de la lectura. Por ejemplo, así se busca en sentido inverso el patrón `GTA` en la lectura `GATACATGCA`, que contiene su complementaria inversa, `TAC`, a partir de la posición 2:
 
-```
-posición                   01234567890123
-lectura                    GATTAGCTGTTAGC
-complementarias                TCGAC
-patrón, de derecha a izq.      TCGAC
-```
+![Búsqueda en sentido inverso del patrón GTA en la lectura GATACATGCA. Debajo de la lectura están sus complementarias (CTATGTACGT), y el patrón se compara con ellas leído de derecha a izquierda (ATG). En la posición 0, la A no encaja con la C; en la 1, la A no encaja con la T; en la 2, la A encaja con la A, la T con la T y la G con la G, así que el patrón encaja en sentido inverso a partir de la posición 2](img/ventana-inversa.svg)
 
 Los símbolos del patrón se comparan con las complementarias igual que en sentido directo, así que los comodines funcionan en los dos sentidos: por ejemplo, `CAGYT` encaja en sentido inverso en la lectura `GATTAACTGTTAGC`.
 
