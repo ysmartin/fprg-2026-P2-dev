@@ -96,61 +96,32 @@ class PruebaSonda {
 
     private static void probarEncajaEnDirecto() {
         Comprobador.titulo("encajaEn, en sentido directo");
-        try {
-            Sonda sonda = new Sonda("S", "TRC");
-            Lectura lectura = new Lectura("L", "GATACA");
-            Comprobador.comprobar("\"TRC\" en \"GATACA\" desde 2", true, sonda.encajaEn(lectura, 2));
-            Comprobador.comprobar("\"TRC\" en \"GATACA\" desde 0", false, sonda.encajaEn(lectura, 0));
-            Comprobador.comprobar("\"TRC\" en \"GATACA\" desde 4 (no cabe)", false, sonda.encajaEn(lectura, 4));
-            Comprobador.comprobar("\"TRC\" en \"GATACA\" desde -1", false, sonda.encajaEn(lectura, -1));
-            Comprobador.comprobar("\"GANTACA\" en \"GANTACA\" desde 0 (N con N)", true,
-                    new Sonda("S", "GANTACA").encajaEn(new Lectura("L", "GANTACA"), 0));
-            Comprobador.comprobar("\"GATTACA\" en \"GANTACA\" desde 0 (T con N)", false,
-                    new Sonda("S", "GATTACA").encajaEn(new Lectura("L", "GANTACA"), 0));
-        } catch (Exception e) {
-            Comprobador.fallo("No se ha podido crear una sonda o una lectura válida: " + e.getMessage());
-        }
+        probarEncajaEn("TRC", "GATACA", 2, true, "");
+        probarEncajaEn("TRC", "GATACA", 0, false, "");
+        probarEncajaEn("GANTACA", "GANTACA", 0, true, " (N con N)");
+        probarEncajaEn("GATTACA", "GANTACA", 0, false, " (T con N)");
+        probarEncajaEnNoCabe("TRC", "GATACA", 4);
+        probarEncajaEnNoCabe("TRC", "GATACA", -1);
     }
 
     private static void probarEncontrarEnSinComodines() {
         Comprobador.titulo("encontrarEn, con patrones sin comodines");
-        try {
-            Lectura lectura = new Lectura("L", "GATACATGCA");
-            Comprobador.comprobar("\"GAT\" en \"GATACATGCA\" (al principio)", 0,
-                    new Sonda("S", "GAT").encontrarEn(lectura));
-            Comprobador.comprobar("\"AGC\" en \"GATTACATTAGC\" (al final)", 9,
-                    new Sonda("S", "AGC").encontrarEn(new Lectura("L", "GATTACATTAGC")));
-            Comprobador.comprobar("\"CCC\" en \"GATACATGCA\" (no está)", -1,
-                    new Sonda("S", "CCC").encontrarEn(lectura));
-            Comprobador.comprobar("\"GATACATGCAT\" en \"GATACATGCA\" (más larga)", -1,
-                    new Sonda("S", "GATACATGCAT").encontrarEn(lectura));
-            Comprobador.comprobar("\"CAGCT\" en \"GATTACAGCTTAGC\"", 5,
-                    new Sonda("S", "CAGCT").encontrarEn(new Lectura("L", "GATTACAGCTTAGC")));
-            Comprobador.comprobar("\"CAGCT\" en \"GATTACANCTTAGC\" (la N de la lectura no encaja con G)", -1,
-                    new Sonda("S", "CAGCT").encontrarEn(new Lectura("L", "GATTACANCTTAGC")));
-        } catch (Exception e) {
-            Comprobador.fallo("Se ha producido una excepción: " + e);
-        }
+        probarEncontrarEn("GAT", "GATACATGCA", 0, " (al principio)");
+        probarEncontrarEn("AGC", "GATTACATTAGC", 9, " (al final)");
+        probarEncontrarEn("CCC", "GATACATGCA", -1, " (no está)");
+        probarEncontrarEn("GATACATGCAT", "GATACATGCA", -1, " (más largo que la lectura)");
+        probarEncontrarEn("CAGCT", "GATTACAGCTTAGC", 5, "");
+        probarEncontrarEn("CAGCT", "GATTACANCTTAGC", -1, " (la N de la lectura no encaja con G)");
     }
 
     private static void probarEncontrarEnConComodines() {
         Comprobador.titulo("encontrarEn, con patrones con comodines");
-        try {
-            Comprobador.comprobar("\"TRC\" en \"GATACATGCA\" (primera de dos)", 2,
-                    new Sonda("S", "TRC").encontrarEn(new Lectura("L", "GATACATGCA")));
-            Comprobador.comprobar("\"CAGYT\" en \"GATTACAGCTTAGC\"", 5,
-                    new Sonda("S", "CAGYT").encontrarEn(new Lectura("L", "GATTACAGCTTAGC")));
-            Comprobador.comprobar("\"CAGYT\" en \"GATTACAGTTTAGC\"", 5,
-                    new Sonda("S", "CAGYT").encontrarEn(new Lectura("L", "GATTACAGTTTAGC")));
-            Comprobador.comprobar("\"CANYT\" en \"GATTACANCTTAGC\" (N con N)", 5,
-                    new Sonda("S", "CANYT").encontrarEn(new Lectura("L", "GATTACANCTTAGC")));
-            Comprobador.comprobar("\"CAGYT\" en \"GATTACANCTTAGC\" (G con N)", -1,
-                    new Sonda("S", "CAGYT").encontrarEn(new Lectura("L", "GATTACANCTTAGC")));
-            Comprobador.comprobar("\"NNNN\" en \"GATACATGCA\" (al principio)", 0,
-                    new Sonda("S", "NNNN").encontrarEn(new Lectura("L", "GATACATGCA")));
-        } catch (Exception e) {
-            Comprobador.fallo("Se ha producido una excepción: " + e);
-        }
+        probarEncontrarEn("TRC", "GATACATGCA", 2, " (la primera aparición)");
+        probarEncontrarEn("CAGYT", "GATTACAGCTTAGC", 5, "");
+        probarEncontrarEn("CAGYT", "GATTACAGTTTAGC", 5, "");
+        probarEncontrarEn("CANYT", "GATTACANCTTAGC", 5, " (N con N)");
+        probarEncontrarEn("CAGYT", "GATTACANCTTAGC", -1, " (G con N)");
+        probarEncontrarEn("NNNN", "GATACATGCA", 0, " (al principio)");
     }
 
     private static void probarEncajaInverso() {
@@ -183,57 +154,67 @@ class PruebaSonda {
 
     private static void probarEncajaEnInverso() {
         Comprobador.titulo("encajaEn, en sentido inverso");
-        try {
-            Comprobador.comprobar("\"CAGCT\" en \"GATTAGCTGTTAGC\" desde 4 (AGCTG)", true,
-                    new Sonda("S", "CAGCT").encajaEn(new Lectura("L", "GATTAGCTGTTAGC"), 4));
-            Comprobador.comprobar("\"CAGCT\" en \"GATTAGCTGTTAGC\" desde 3", false,
-                    new Sonda("S", "CAGCT").encajaEn(new Lectura("L", "GATTAGCTGTTAGC"), 3));
-            Comprobador.comprobar("\"CAGYT\" en \"GATTAACTGTTAGC\" desde 4 (AACTG)", true,
-                    new Sonda("S", "CAGYT").encajaEn(new Lectura("L", "GATTAACTGTTAGC"), 4));
-            Comprobador.comprobar("\"CANYT\" en \"GATTAGNTGTTAGC\" desde 4 (N con N)", true,
-                    new Sonda("S", "CANYT").encajaEn(new Lectura("L", "GATTAGNTGTTAGC"), 4));
-            Comprobador.comprobar("\"CAGYT\" en \"GATTAGNTGTTAGC\" desde 4 (C con N)", false,
-                    new Sonda("S", "CAGYT").encajaEn(new Lectura("L", "GATTAGNTGTTAGC"), 4));
-        } catch (Exception e) {
-            Comprobador.fallo("Se ha producido una excepción: " + e);
-        }
+        probarEncajaEn("CAGCT", "GATTAGCTGTTAGC", 4, true, " (AGCTG)");
+        probarEncajaEn("CAGCT", "GATTAGCTGTTAGC", 3, false, "");
+        probarEncajaEn("CAGYT", "GATTAACTGTTAGC", 4, true, " (AACTG)");
+        probarEncajaEn("CANYT", "GATTAGNTGTTAGC", 4, true, " (N con N)");
+        probarEncajaEn("CAGYT", "GATTAGNTGTTAGC", 4, false, " (C con N)");
     }
 
     private static void probarEncontrarEnHebraInversa() {
         Comprobador.titulo("encontrarEn, con la diana en la otra hebra");
-        try {
-            Comprobador.comprobar("\"CAGCT\" en \"GATTAGCTGTTAGC\"", 4,
-                    new Sonda("S", "CAGCT").encontrarEn(new Lectura("L", "GATTAGCTGTTAGC")));
-            Comprobador.comprobar("\"GCA\" en \"GATACATGCA\" (en sentido inverso en la 6, antes que en directo en la 7)", 6,
-                    new Sonda("S", "GCA").encontrarEn(new Lectura("L", "GATACATGCA")));
-            Comprobador.comprobar("\"CAGYT\" en \"GATTAACTGTTAGC\"", 4,
-                    new Sonda("S", "CAGYT").encontrarEn(new Lectura("L", "GATTAACTGTTAGC")));
-            Comprobador.comprobar("\"CANYT\" en \"GATTAGNTGTTAGC\"", 4,
-                    new Sonda("S", "CANYT").encontrarEn(new Lectura("L", "GATTAGNTGTTAGC")));
-        } catch (Exception e) {
-            Comprobador.fallo("Se ha producido una excepción: " + e);
-        }
+        probarEncontrarEn("CAGCT", "GATTAGCTGTTAGC", 4, "");
+        probarEncontrarEn("GCA", "GATACATGCA", 6, " (en sentido inverso en la 6, antes que en directo en la 7)");
+        probarEncontrarEn("CAGYT", "GATTAACTGTTAGC", 4, "");
+        probarEncontrarEn("CANYT", "GATTAGNTGTTAGC", 4, "");
     }
 
     private static void probarHibridaCon() {
         Comprobador.titulo("hibridaCon");
+        probarHibridaCon("ACCGTTAGCTGA", "GGAACCGTTAGCTGACCAT", true, " (Virus A, con su diana)");
+        probarHibridaCon("ACCGTTAGCTGA", "GGAACCGTTAGGTGACCAT", false, " (Virus A, sin su diana)");
+        probarHibridaCon("ACCGTTAGCTGA", "GGATTCAGCTAACGGTCCAT", true, " (Virus A, con su diana en la otra hebra)");
+        probarHibridaCon("TTGRCATCCAGT", "CATTGACATCCAGTTT", true, " (Virus B, variante 1)");
+        probarHibridaCon("TTGRCATCCAGT", "CATTGGCATCCAGTTT", true, " (Virus B, variante 2)");
+        probarHibridaCon("TTGRCATCCAGT", "CATTGCCATCCAGTTT", false, " (Virus B, otra variante)");
+    }
+
+    // Métodos auxiliares: cada uno comprueba un caso, y también le pueden servir para sus pruebas
+
+    private static void probarEncajaEn(String patron, String lectura, int inicio, boolean esperado, String nota) {
+        String descripcion = "\"" + patron + "\" en \"" + lectura + "\" desde " + inicio + nota;
         try {
-            Sonda virusA = new Sonda("Virus A", "ACCGTTAGCTGA");
-            Comprobador.comprobar("Virus A, con su diana (ACCGTTAGCTGA)", true,
-                    virusA.hibridaCon(new Lectura("L1", "GGAACCGTTAGCTGACCAT")));
-            Comprobador.comprobar("Virus A, sin su diana", false,
-                    virusA.hibridaCon(new Lectura("L2", "GGAACCGTTAGGTGACCAT")));
-            Comprobador.comprobar("Virus A, con su diana en la otra hebra (TCAGCTAACGGT)", true,
-                    virusA.hibridaCon(new Lectura("L6", "GGATTCAGCTAACGGTCCAT")));
-            Sonda virusB = new Sonda("Virus B (variantes 1 y 2)", "TTGRCATCCAGT");
-            Comprobador.comprobar("Virus B, variante 1 (TTGACATCCAGT)", true,
-                    virusB.hibridaCon(new Lectura("L3", "CATTGACATCCAGTTT")));
-            Comprobador.comprobar("Virus B, variante 2 (TTGGCATCCAGT)", true,
-                    virusB.hibridaCon(new Lectura("L4", "CATTGGCATCCAGTTT")));
-            Comprobador.comprobar("Virus B, otra variante (TTGCCATCCAGT)", false,
-                    virusB.hibridaCon(new Lectura("L5", "CATTGCCATCCAGTTT")));
+            Comprobador.comprobar(descripcion, esperado, new Sonda("S", patron).encajaEn(new Lectura("L", lectura), inicio));
         } catch (Exception e) {
-            Comprobador.fallo("Se ha producido una excepción: " + e);
+            Comprobador.fallo(descripcion + " no debería lanzar excepción: " + e.getMessage());
+        }
+    }
+
+    private static void probarEncajaEnNoCabe(String patron, String lectura, int inicio) {
+        String descripcion = "\"" + patron + "\" en \"" + lectura + "\" desde " + inicio + " (no cabe)";
+        try {
+            new Sonda("S", patron).encajaEn(new Lectura("L", lectura), inicio);
+            Comprobador.fallo(descripcion + " debería lanzar una excepción");
+        } catch (Exception e) {
+            Comprobador.acierto(descripcion + " lanza excepción: " + e.getMessage());
+        }
+    }
+
+    private static void probarEncontrarEn(String patron, String lectura, int esperado, String nota) {
+        String descripcion = "\"" + patron + "\" en \"" + lectura + "\"" + nota;
+        try {
+            Comprobador.comprobar(descripcion, esperado, new Sonda("S", patron).encontrarEn(new Lectura("L", lectura)));
+        } catch (Exception e) {
+            Comprobador.fallo(descripcion + " no debería lanzar excepción: " + e.getMessage());
+        }
+    }
+
+    private static void probarHibridaCon(String patron, String lectura, boolean esperado, String nota) {
+        String descripcion = "\"" + patron + "\" con \"" + lectura + "\"" + nota;
+        try {
+            Comprobador.comprobar(descripcion, esperado, new Sonda("S", patron).hibridaCon(new Lectura("L", lectura)));
+        } catch (Exception e) {
+            Comprobador.fallo(descripcion + " no debería lanzar excepción: " + e.getMessage());
         }
     }
 
@@ -242,6 +223,7 @@ class PruebaSonda {
      */
     private static void pruebasPropias() {
         Comprobador.titulo("Pruebas propias");
-        // TODO: añada aquí sus propios casos de prueba
+        // TODO: añada aquí sus propios casos de prueba. Puede usar los métodos auxiliares de
+        // esta clase; por ejemplo: probarEncontrarEn("GAT", "CCGATCC", 2, "");
     }
 }

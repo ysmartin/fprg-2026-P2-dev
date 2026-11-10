@@ -95,6 +95,12 @@ class Microarray {
 
     /**
      * Analiza una única lectura: indica qué puntos del chip se iluminan con ella.
+     * <p>
+     * {@link Sonda#hibridaCon(Lectura)} puede lanzar una excepción (con una sonda y una
+     * lectura válidas, solo si hay algún error en el código de {@code Sonda}). Este método la
+     * captura con un bloque {@code try}/{@code catch}: si no se puede saber si una sonda
+     * hibrida con la lectura, su punto no se ilumina.
+     * </p>
      *
      * @param lectura lectura que se analiza
      * @return matriz del mismo tamaño que la cuadrícula, con {@code true} en los puntos
@@ -104,7 +110,11 @@ class Microarray {
         boolean[][] iluminados = new boolean[getFilas()][getColumnas()];
         for (int fila = 0; fila < getFilas(); fila++) {
             for (int columna = 0; columna < getColumnas(); columna++) {
-                iluminados[fila][columna] = sondas[fila][columna].hibridaCon(lectura);
+                try {
+                    iluminados[fila][columna] = sondas[fila][columna].hibridaCon(lectura);
+                } catch (Exception e) {
+                    iluminados[fila][columna] = false;
+                }
             }
         }
         return iluminados;
@@ -145,9 +155,10 @@ class Microarray {
     int[][] intensidades(Muestra muestra) {
         int[][] intensidades = new int[getFilas()][getColumnas()];
         for (Lectura lectura : muestra.getLecturas()) {
+            boolean[][] conLectura = hibridar(lectura);
             for (int fila = 0; fila < getFilas(); fila++) {
                 for (int columna = 0; columna < getColumnas(); columna++) {
-                    if (sondas[fila][columna].hibridaCon(lectura)) {
+                    if (conLectura[fila][columna]) {
                         intensidades[fila][columna]++;
                     }
                 }

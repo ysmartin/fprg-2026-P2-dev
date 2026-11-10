@@ -13,9 +13,9 @@ Este documento **no es para el alumnado**. Recoge dos ampliaciones opcionales de
 
 | | LLOC | Total acumulado | Frente a 2025-26 (90) |
 |---|---:|---:|---:|
-| Versión base | 48 | 48 | −47 % |
-| A1 · Todas las apariciones | +12 | 60 | −33 % |
-| A2 · Intensidades y sondas detectadas | +15 | 75 | −17 % |
+| Versión base | 47 | 47 | −48 % |
+| A1 · Todas las apariciones | +12 | 59 | −34 % |
+| A2 · Intensidades y sondas detectadas | +16 | 75 | −17 % |
 
 ---
 
@@ -23,8 +23,8 @@ Este documento **no es para el alumnado**. Recoge dos ampliaciones opcionales de
 
 El método `encontrarEn` devuelve solo la primera posición en la que encaja el patrón de una sonda. A veces interesa saber cuántas veces aparece la diana en una lectura, y dónde.
 
-1. En `Sonda`, el método `int contarEn(Lectura lectura)`, que devuelve en cuántas posiciones de la lectura encaja el patrón, en cualquiera de los dos sentidos. Cuente también las apariciones que se solapan: por ejemplo, el patrón `AAA` aparece tres veces en la lectura `AAAAA`.
-2. En `Sonda`, el método `int[] encontrarTodasEn(Lectura lectura)`, que devuelve un array con todas esas posiciones, de menor a mayor. Por ejemplo, para el patrón `TRC` y la lectura `GATACATGCA`, devuelve un array con 2, 6 y 7 (en la 7 encaja en sentido inverso). El array debe tener exactamente tantas posiciones como apariciones: cuéntelas primero (con `contarEn`) y rellénelo después.
+1. En `Sonda`, el método `int contarEn(Lectura lectura) throws Exception`, que devuelve en cuántas posiciones de la lectura encaja el patrón, en cualquiera de los dos sentidos. Cuente también las apariciones que se solapan: por ejemplo, el patrón `AAA` aparece tres veces en la lectura `AAAAA`.
+2. En `Sonda`, el método `int[] encontrarTodasEn(Lectura lectura) throws Exception`, que devuelve un array con todas esas posiciones, de menor a mayor. Por ejemplo, para el patrón `TRC` y la lectura `GATACATGCA`, devuelve un array con 2, 6 y 7 (en la 7 encaja en sentido inverso). El array debe tener exactamente tantas posiciones como apariciones: cuéntelas primero (con `contarEn`) y rellénelo después.
 
 ### Notas para el profesorado
 
@@ -38,7 +38,7 @@ El método `encontrarEn` devuelve solo la primera posición en la que encaja el 
 
 En un microarray real, el brillo de cada punto es más intenso cuantos más fragmentos de la muestra se unen a su sonda.
 
-1. En `Microarray`, el método `int[][] intensidades(Muestra muestra)`, que devuelve, para cada punto del chip, con cuántas lecturas de la muestra hibrida su sonda.
+1. En `Microarray`, el método `int[][] intensidades(Muestra muestra)`, que devuelve, para cada punto del chip, con cuántas lecturas de la muestra hibrida su sonda. Reutilice `hibridar(Lectura)`, como en `hibridar(Muestra)`.
 2. En `Analisis` (que se proporciona hecha), el método `String[] sondasDetectadas() throws Exception`, que devuelve los nombres de las sondas de los puntos iluminados, recorriendo el chip por filas (de izquierda a derecha y de arriba abajo). El array debe tener exactamente tantas posiciones como puntos iluminados: cuéntelos primero (con `contarIluminados`) y rellénelo después.
 
 ### Notas para el profesorado

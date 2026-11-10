@@ -159,20 +159,16 @@ class Sonda {
      * partir de la posición 4: leído de derecha a izquierda ({@code TCGAC}), encaja con las
      * complementarias de {@code AGCTG} ({@code TCGAC}).
      * </p>
-     * <p>
-     * Si el patrón no cabe en la lectura a partir de esa posición (o la posición es
-     * negativa), no encaja. Para ello, captura las excepciones que lanzan
-     * {@link Lectura#getBase(int)} y {@link #encaja(char, char)}.
-     * </p>
      *
      * @param lectura lectura en la que se busca el patrón
      * @param inicio posición de la lectura en la que empieza la comparación
      * @return {@code true} si el patrón encaja con la lectura a partir de esa posición, en
      *         sentido directo o inverso; {@code false} en otro caso
+     * @throws Exception si el patrón no cabe en la lectura a partir de esa posición (porque
+     *                   {@code inicio} es negativa o porque el patrón se saldría por el final)
      */
-    boolean encajaEn(Lectura lectura, int inicio) {
+    boolean encajaEn(Lectura lectura, int inicio) throws Exception {
         // TODO: desarrollar: primero, solo en sentido directo; después, en los dos sentidos
-        // (use try/catch: si el patrón se sale de la lectura, no encaja)
         return false;
     }
 
@@ -189,8 +185,10 @@ class Sonda {
      * @param lectura lectura en la que se busca el patrón
      * @return primera posición de la lectura en la que encaja el patrón, o -1 si no
      *         encaja en ninguna
+     * @throws Exception si se produce algún error al comparar el patrón con la lectura (no
+     *                   debería ocurrir con una sonda y una lectura válidas)
      */
-    int encontrarEn(Lectura lectura) {
+    int encontrarEn(Lectura lectura) throws Exception {
         // TODO: modificar para que tenga en cuenta los comodines (esta versión, que usa indexOf,
         // solo encuentra el patrón si aparece tal cual en la lectura)
         return lectura.getSecuencia().indexOf(patron);
@@ -202,8 +200,9 @@ class Sonda {
      *
      * @param lectura lectura que se analiza
      * @return {@code true} si el patrón aparece en la lectura; {@code false} en otro caso
+     * @throws Exception si se produce algún error al buscar el patrón en la lectura
      */
-    boolean hibridaCon(Lectura lectura) {
+    boolean hibridaCon(Lectura lectura) throws Exception {
         // TODO: desarrollar
         return false;
     }

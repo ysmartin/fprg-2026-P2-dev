@@ -231,7 +231,15 @@ class VentanaMicroarray {
             for (int fila = 0; fila < microarray.getFilas(); fila++) {
                 for (int columna = 0; columna < microarray.getColumnas(); columna++) {
                     Sonda sonda = sondaEn(microarray, fila, columna);
-                    int posicion = sonda.encontrarEn(lectura);
+                    int posicion;
+                    try {
+                        posicion = sonda.encontrarEn(lectura);
+                    } catch (Exception e) {
+                        alguna = true;
+                        texto.append("(").append(sonda.getNombre()).append(": encontrarEn lanza una excepción: ")
+                                .append(e.getMessage()).append(")\n");
+                        continue;
+                    }
                     if (posicion >= 0) {
                         alguna = true;
                         texto.append(" ".repeat(posicion)).append("^".repeat(sonda.getLongitud()))

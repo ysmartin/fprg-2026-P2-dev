@@ -179,38 +179,35 @@ class Sonda {
      * partir de la posición 4: leído de derecha a izquierda ({@code TCGAC}), encaja con las
      * complementarias de {@code AGCTG} ({@code TCGAC}).
      * </p>
-     * <p>
-     * Si el patrón no cabe en la lectura a partir de esa posición (o la posición es
-     * negativa), no encaja. Para ello, captura las excepciones que lanzan
-     * {@link Lectura#getBase(int)} y {@link #encaja(char, char)}.
-     * </p>
      *
      * @param lectura lectura en la que se busca el patrón
      * @param inicio posición de la lectura en la que empieza la comparación
      * @return {@code true} si el patrón encaja con la lectura a partir de esa posición, en
      *         sentido directo o inverso; {@code false} en otro caso
+     * @throws Exception si el patrón no cabe en la lectura a partir de esa posición (porque
+     *                   {@code inicio} es negativa o porque el patrón se saldría por el final)
      */
-    boolean encajaEn(Lectura lectura, int inicio) {
-        try {
-            boolean directo = true;
-            boolean inverso = true;
-            for (int i = 0; i < patron.length(); i++) {
-                char base = lectura.getBase(inicio + i);
-                if (!encaja(patron.charAt(i), base)) {
-                    directo = false;
-                }
-                if (!encajaInverso(patron.charAt(patron.length() - 1 - i), base)) {
-                    inverso = false;
-                }
-                if (!directo && !inverso) {
-                    break;
-                }
-            }
-            return directo || inverso;
-        } catch (Exception e) {
-            // El patrón se sale de la lectura (o algún símbolo no es válido): no encaja
-            return false;
+    boolean encajaEn(Lectura lectura, int inicio) throws Exception {
+        if (inicio < 0 || inicio + patron.length() > lectura.getLongitud()) {
+            throw new Exception("El patrón de la sonda " + nombre + " no cabe en la lectura " + lectura.getId()
+                    + " a partir de la posición " + inicio);
         }
+        boolean directo = true;
+        for (int i = 0; i < patron.length(); i++) {
+            if (!encaja(patron.charAt(i), lectura.getBase(inicio + i))) {
+                directo = false;
+                break;
+            }
+        }
+        if (directo) {
+            return true;
+        }
+        for (int i = 0; i < patron.length(); i++) {
+            if (!encajaInverso(patron.charAt(patron.length() - 1 - i), lectura.getBase(inicio + i))) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -226,8 +223,10 @@ class Sonda {
      * @param lectura lectura en la que se busca el patrón
      * @return primera posición de la lectura en la que encaja el patrón, o -1 si no
      *         encaja en ninguna
+     * @throws Exception si se produce algún error al comparar el patrón con la lectura (no
+     *                   debería ocurrir con una sonda y una lectura válidas)
      */
-    int encontrarEn(Lectura lectura) {
+    int encontrarEn(Lectura lectura) throws Exception {
         for (int inicio = 0; inicio <= lectura.getLongitud() - patron.length(); inicio++) {
             if (encajaEn(lectura, inicio)) {
                 return inicio;
@@ -247,8 +246,9 @@ class Sonda {
      *
      * @param lectura lectura en la que se busca el patrón
      * @return número de posiciones de la lectura en las que encaja el patrón
+     * @throws Exception si se produce algún error al comparar el patrón con la lectura
      */
-    int contarEn(Lectura lectura) {
+    int contarEn(Lectura lectura) throws Exception {
         int apariciones = 0;
         for (int inicio = 0; inicio <= lectura.getLongitud() - patron.length(); inicio++) {
             if (encajaEn(lectura, inicio)) {
@@ -269,8 +269,9 @@ class Sonda {
      * @param lectura lectura en la que se busca el patrón
      * @return array con las posiciones en las que encaja el patrón (vacío si no encaja en
      *         ninguna)
+     * @throws Exception si se produce algún error al comparar el patrón con la lectura
      */
-    int[] encontrarTodasEn(Lectura lectura) {
+    int[] encontrarTodasEn(Lectura lectura) throws Exception {
         int[] posiciones = new int[contarEn(lectura)];
         int siguiente = 0;
         for (int inicio = 0; inicio <= lectura.getLongitud() - patron.length(); inicio++) {
@@ -288,8 +289,9 @@ class Sonda {
      *
      * @param lectura lectura que se analiza
      * @return {@code true} si el patrón aparece en la lectura; {@code false} en otro caso
+     * @throws Exception si se produce algún error al buscar el patrón en la lectura
      */
-    boolean hibridaCon(Lectura lectura) {
+    boolean hibridaCon(Lectura lectura) throws Exception {
         return encontrarEn(lectura) >= 0;
     }
 

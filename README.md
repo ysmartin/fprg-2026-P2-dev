@@ -16,7 +16,6 @@
     - [Búsqueda de patrones](#búsqueda-de-patrones)
     - [Patrones con comodines](#patrones-con-comodines)
     - [Las dos hebras](#las-dos-hebras)
-    - [Modelo del dominio](#modelo-del-dominio)
     - [Organización del proyecto](#organización-del-proyecto)
   - [Objetivos](#objetivos)
   - [Requisitos previos](#requisitos-previos)
@@ -100,9 +99,25 @@ patrón, de derecha a izq.      TCGAC
 
 Los símbolos del patrón se comparan con las complementarias igual que en sentido directo, así que los comodines funcionan en los dos sentidos: por ejemplo, `CAGYT` encaja en sentido inverso en la lectura `GATTAACTGTTAGC`.
 
-### Modelo del dominio
+### Organización del proyecto
 
-El siguiente diagrama resume las clases de la práctica, con sus atributos, sus métodos y sus relaciones. En cada clase se indica qué métodos se proporcionan ya hechos y cuáles debe completar o modificar usted:
+A diferencia de la práctica 1, el código se organiza en **clases**, dentro del paquete `es.upm.dit.fprg26.p2`. Cada clase está en su propio fichero, y cualquier clase del proyecto puede usar las demás.
+
+| Elementos | Qué son | Qué debe hacer usted |
+|---|---|---|
+| `Lectura`, `Muestra`, `Analisis` | Una lectura, una muestra con sus lecturas y el resultado de analizar una muestra con un microarray, ya programadas | Estudiarlas (son un buen modelo de clase) |
+| `Sonda`, `Microarray` | Las clases del reconocimiento de patrones | Completar los métodos que se indican en cada apartado |
+| `PruebaSonda`, `PruebaMicroarray` | Pruebas de cada clase, con una muestra de casos | Ejecutarlas y añadir sus propios casos de prueba |
+| `PruebaInteractiva` | Programa que abre la ventana del microarray virtual | Ejecutarlo al final, y añadir sus propios microarrays y muestras |
+| Carpeta `auxiliar` (en el mismo paquete) | Datos de ejemplo (`DatosEjemplo`), comprobaciones de las pruebas (`Comprobador`) y ventana gráfica | Usarlo (**no es necesario entender el código de la ventana, ni mucho menos modificarlo**) |
+| Carpeta `doc` | Documentación de todo el proyecto, en HTML (generada con Javadoc) | Consultarla con el navegador |
+
+Para usar las clases de la biblioteca de Java, como `LocalDate`, las clases empiezan con una **importación de módulo**: `import module java.base;` importa de una vez todos los paquetes del módulo básico de Java (`java.util`, `java.time`, etc.).
+
+> [!WARNING]
+> No modifique las cabeceras de los métodos que se proporcionan, ni añada más atributos a las clases que completa: sus atributos ya están declarados.
+
+El siguiente diagrama resume las clases de la práctica, con sus atributos, sus métodos y sus relaciones. En las dos clases que completa usted, `Sonda` y `Microarray`, se indica qué métodos se proporcionan ya hechos y cuáles debe completar o modificar:
 
 ````mermaid
 classDiagram
@@ -111,7 +126,6 @@ direction LR
 class Lectura {
 -id: String
 -secuencia: String
-……………Proporcionados……………()
 Lectura(String, String)
 getId() String
 getSecuencia() String
@@ -126,7 +140,6 @@ class Muestra {
 -id: String
 -fechaCaptura: LocalDate
 -lecturas: Lectura[]
-……………Proporcionados……………()
 Muestra(String, LocalDate, Lectura[])
 getId() String
 getFechaCaptura() LocalDate
@@ -175,7 +188,6 @@ class Analisis {
 -microarray: Microarray
 -fechaAnalisis: LocalDate
 -iluminados: boolean[][]
-……………Proporcionados……………()
 Analisis(Muestra, Microarray)
 getMuestra() Muestra
 getMicroarray() Microarray
@@ -193,30 +205,12 @@ Analisis --> Microarray
 Sonda ..> Lectura : busca su patrón en
 ````
 
-### Organización del proyecto
-
-A diferencia de la práctica 1, el código se organiza en **clases**, dentro del paquete `es.upm.dit.fprg26.p2`. Cada clase está en su propio fichero, y cualquier clase del proyecto puede usar las demás.
-
-| Elementos | Qué son | Qué debe hacer usted |
-|---|---|---|
-| `Lectura`, `Muestra`, `Analisis` | Una lectura, una muestra con sus lecturas y el resultado de analizar una muestra con un microarray, ya programadas | Estudiarlas (son un buen modelo de clase) |
-| `Sonda`, `Microarray` | Las clases del reconocimiento de patrones | Completar los métodos que se indican en cada apartado |
-| `PruebaSonda`, `PruebaMicroarray` | Pruebas de cada clase, con una muestra de casos | Ejecutarlas y añadir sus propios casos de prueba |
-| `PruebaInteractiva` | Programa que abre la ventana del microarray virtual | Ejecutarlo al final, y añadir sus propios microarrays y muestras |
-| Carpeta `auxiliar` (en el mismo paquete) | Datos de ejemplo (`DatosEjemplo`), comprobaciones de las pruebas (`Comprobador`) y ventana gráfica | Usarlo (**no es necesario entender el código de la ventana, ni mucho menos modificarlo**) |
-| Carpeta `doc` | Documentación de todo el proyecto, en HTML (generada con Javadoc) | Consultarla con el navegador |
-
-Para usar las clases de la biblioteca de Java, como `LocalDate`, las clases empiezan con una **importación de módulo**: `import module java.base;` importa de una vez todos los paquetes del módulo básico de Java (`java.util`, `java.time`, etc.).
-
-> [!WARNING]
-> No modifique las cabeceras de los métodos que se proporcionan, ni añada más atributos a las clases que completa: sus atributos ya están declarados.
-
 ## Objetivos
 
 - Completar clases: constructores que validan sus datos y lanzan excepciones, y métodos que trabajan con sus atributos.
 - Recorrer cadenas de caracteres y arrays (de una y de dos dimensiones) con bucles, incluidos bucles anidados.
 - Aplicar un algoritmo de búsqueda de patrones con comodines (ventana deslizante).
-- Capturar excepciones con `try`/`catch`.
+- Lanzar excepciones y propagarlas (`throws`), y entender cómo se capturan con `try`/`catch`.
 - Comprender el uso de clases de la biblioteca de Java para trabajar con fechas (`LocalDate`, `ChronoUnit`).
 - Desarrollar código a partir de su especificación en Javadoc, y probarlo con sus propios casos de prueba.
 
@@ -296,21 +290,18 @@ En este apartado, la sonda aprenderá a reconocer patrones con comodines, de mom
 **Pasos:**
 
 1. **Desarrolle `encaja(char simbolo, char base)`**: este método debe devolver si un símbolo del patrón encaja con una base de la lectura, según la tabla de los [patrones con comodines](#patrones-con-comodines). Primero, compruebe que el símbolo es un símbolo de patrón y la base, un símbolo de lectura (con `esSimboloValido` y `Lectura.esSimboloValido`); si alguno no lo es, lance una excepción. Después, use una sentencia `switch` con un caso para cada comodín (`'N'`, `'R'` e `'Y'`) y un caso `default` para las bases. Es un método **estático**: no depende de ninguna sonda concreta, y se invoca con el nombre de la clase (`Sonda.encaja('R', 'G')`).
-2. **Desarrolle `encajaEn(Lectura lectura, int inicio)`, de momento solo en sentido directo**: este método debe devolver si el patrón encaja con la lectura colocando su primer símbolo en la posición `inicio` de la lectura. Recorra el patrón con un bucle: el símbolo `i` del patrón se compara (con `encaja`) con la base `inicio + i` de la lectura, que puede obtener con `lectura.getBase(...)`.
+2. **Desarrolle `encajaEn(Lectura lectura, int inicio)`, de momento solo en sentido directo**: este método debe devolver si el patrón encaja con la lectura colocando su primer símbolo en la posición `inicio` de la lectura.
+   - Empiece con una **cláusula de guarda**, como en la práctica 1: si el patrón no cabe en la lectura a partir de esa posición (porque `inicio` es negativa o porque el patrón se saldría por el final de la lectura), lance una excepción.
+   - Después, recorra el patrón con un bucle: el símbolo `i` del patrón se compara (con `encaja`) con la base `inicio + i` de la lectura, que puede obtener con `lectura.getBase(...)`.
 
-   `getBase` lanza una excepción si la posición está fuera de la lectura, así que el patrón no cabe en ella a partir de esa posición. Capture esa excepción con un bloque `try`/`catch`: en ese caso, `encajaEn` debe devolver `false`. El mismo bloque captura también las excepciones de `encaja`.
+   `encaja` y `getBase` también pueden lanzar excepciones. No hace falta capturarlas: se propagan a quien invoque `encajaEn`, y por eso su cabecera incluye `throws Exception`.
 
    > **Pista**: en cuanto un símbolo no encaje, el patrón ya no puede encajar a partir de esa posición, así que no hace falta seguir comparando: devuelva `false` desde dentro del bucle. Un `return` termina el método en ese mismo momento, y con él, el bucle. Si el bucle llega al final sin que falle ningún símbolo, el patrón encaja: devuelva `true` después del bucle.
 3. **Modifique `encontrarEn(Lectura lectura)`** para que tenga en cuenta los comodines: en lugar de `indexOf`, use el algoritmo de la **ventana deslizante**. Se coloca el patrón al principio de la lectura y se va desplazando una posición cada vez, comprobando en cada una si encaja (con `encajaEn`); el método devuelve la primera posición en la que encaja, o `-1` si no encaja en ninguna. Por ejemplo, para buscar el patrón `TRC` en la lectura `GATACATGCA`:
 
-   ```
-   GATACATGCA
-   TRC            posición 0: T no encaja con G
-    TRC           posición 1: T no encaja con A
-     TRC          posición 2: T con T, R con A, C con C → encaja: devuelve 2
-   ```
+   ![Ventana deslizante: el patrón TRC recorre la lectura GATACATGCA. En la posición 0, la T no encaja con la G; en la 1, la T no encaja con la A; en la 2, la T encaja con la T, la R con la A y la C con la C, así que el método devuelve 2](img/ventana-deslizante.svg)
 
-   ¿Cuál es la última posición en la que tiene sentido colocar el patrón? Piense en un patrón de 3 símbolos y una lectura de 10 bases.
+   ¿Cuál es la última posición en la que tiene sentido colocar el patrón? Piense en un patrón de 3 símbolos y una lectura de 10 bases. Si el bucle se pasa, `encajaEn` lanzará su excepción.
 4. Ejecute `PruebaSonda`. Ahora deberían aparecer con `✓` todas las comprobaciones, salvo las de la otra hebra: los grupos «encajaInverso», «encajaEn, en sentido inverso» y «encontrarEn, con la diana en la otra hebra», y la de `hibridaCon` con la diana en la otra hebra.
 5. Ejecute `PruebaMicroarray`: ahora también debe ser correcta la comprobación de la **letra D**, cuyas sondas tienen comodines. Analice de nuevo la muestra M5 con el chip de expresión en `PruebaInteractiva`: se iluminan la A y la D.
 
@@ -324,9 +315,9 @@ Las dianas de las sondas de la letra N están en la otra hebra (consulte la secc
 **Pasos:**
 
 1. **Desarrolle `encajaInverso(char simbolo, char base)`**: este método debe devolver si un símbolo del patrón encaja con la base **complementaria** de una base de la lectura (la que tiene enfrente en la otra hebra; consulte la sección [Las dos hebras](#las-dos-hebras)). Obtenga la complementaria con `Lectura.complementaria(base)` y reutilice `encaja`.
-2. **Modifique `encajaEn` para que funcione en los dos sentidos**. En el mismo bucle, compare también cada base de la lectura con el símbolo correspondiente del patrón leído de derecha a izquierda: la base `inicio + i` de la lectura, con el símbolo `patron.length() - 1 - i` del patrón, usando `encajaInverso`. El método debe devolver `true` si el patrón encaja en alguno de los dos sentidos.
+2. **Modifique `encajaEn` para que funcione en los dos sentidos**: si el patrón no encaja en sentido directo, el método debe comprobar si encaja en sentido inverso. Para ello, añada un segundo bucle después del primero, que compare cada base `inicio + i` de la lectura con el símbolo `patron.length() - 1 - i` del patrón (es decir, el patrón leído de derecha a izquierda), usando `encajaInverso`.
 
-   > **Pista**: ahora ya no puede devolver `false` en cuanto falle un símbolo en sentido directo, porque el patrón todavía podría encajar en sentido inverso (y al revés). Use dos variables `boolean`, `directo` e `inverso`, que empiezan valiendo `true` y pasan a valer `false` en cuanto falla una comparación en ese sentido. Cuando las dos valgan `false`, ya no tiene sentido seguir comparando: salga del bucle con `break`, que termina el bucle, pero no el método. Después del bucle, devuelva si el patrón encaja en alguno de los dos sentidos.
+   > **Pista**: el `return false` del primer bucle ya no sirve: aunque el patrón no encaje en sentido directo, todavía puede encajar en sentido inverso, así que el método no debe terminar. Sustitúyalo por `break`, que termina el bucle, pero no el método; y antes, anote en una variable `boolean` que el patrón no encaja en sentido directo. Entre los dos bucles, si el patrón encaja en sentido directo, devuelva `true`. El segundo bucle es como era el primero: en él sí puede devolver `false` en cuanto falle un símbolo.
 3. Ejecute `PruebaSonda` y `PruebaMicroarray`, y corrija lo que sea necesario hasta que todas las comprobaciones aparezcan con `✓`. Después, añada sus propios casos de prueba: por ejemplo, patrones al principio y al final de la lectura, patrones que aparecen varias veces, lecturas con `N`, patrones más largos que la lectura y dianas en la otra hebra. Analice de nuevo la muestra M5 con el chip de expresión: ahora se ilumina la palabra completa.
 
 ### 6. Probar el sistema completo

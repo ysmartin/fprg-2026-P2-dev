@@ -431,7 +431,8 @@ Por ejemplo, <code>encajaInverso('A', 'T')</code> y <code>encajaInverso('R', 'C'
 <h3>encajaEn</h3>
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name">encajaEn</span><wbr><span class="parameters">(<a href="Lectura.html" title="class in es.upm.dit.fprg26.p2">Lectura</a>&nbsp;lectura,
- int&nbsp;inicio)</span></div>
+ int&nbsp;inicio)</span>
+          throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
 <div class="block">Indica si el patrón de la sonda encaja con una lectura a partir de una posición de la
 lectura, en cualquiera de los dos sentidos:
 <ul>
@@ -450,11 +451,6 @@ Por ejemplo, el patrón <code>"TRC"</code> encaja en sentido directo con la lect
 <code>"CAGCT"</code> encaja en sentido inverso con la lectura <code>"GATTAGCTGTTAGC"</code> a
 partir de la posición 4: leído de derecha a izquierda (<code>TCGAC</code>), encaja con las
 complementarias de <code>AGCTG</code> (<code>TCGAC</code>).
-</p>
-<p>
-Si el patrón no cabe en la lectura a partir de esa posición (o la posición es
-negativa), no encaja. Para ello, captura las excepciones que lanzan
-<a href="Lectura.html#getBase(int)"><code>Lectura.getBase(int)</code></a> y <a href="#encaja(char,char)"><code>encaja(char, char)</code></a>.
 </p></div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -463,6 +459,9 @@ negativa), no encaja. Para ello, captura las excepciones que lanzan
 <dt>Returns:</dt>
 <dd><code>true</code> si el patrón encaja con la lectura a partir de esa posición, en
         sentido directo o inverso; <code>false</code> en otro caso</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code> - si el patrón no cabe en la lectura a partir de esa posición (porque
+                  <code>inicio</code> es negativa o porque el patrón se saldría por el final)</dd>
 </dl>
 </div>
 </section>
@@ -471,7 +470,8 @@ negativa), no encaja. Para ello, captura las excepciones que lanzan
 <section class="detail" id="encontrarEn(es.upm.dit.fprg26.p2.Lectura)">
 <h3>encontrarEn</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name">encontrarEn</span><wbr><span class="parameters">(<a href="Lectura.html" title="class in es.upm.dit.fprg26.p2">Lectura</a>&nbsp;lectura)</span></div>
+<div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name">encontrarEn</span><wbr><span class="parameters">(<a href="Lectura.html" title="class in es.upm.dit.fprg26.p2">Lectura</a>&nbsp;lectura)</span>
+         throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
 <div class="block">Busca la primera posición de una lectura a partir de la cual encaja el patrón de
 la sonda, teniendo en cuenta sus comodines y los dos sentidos (ver
 <a href="#encajaEn(es.upm.dit.fprg26.p2.Lectura,int)"><code>encajaEn(Lectura, int)</code></a>).
@@ -486,6 +486,9 @@ devuelve la primera).
 <dt>Returns:</dt>
 <dd>primera posición de la lectura en la que encaja el patrón, o -1 si no
         encaja en ninguna</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code> - si se produce algún error al comparar el patrón con la lectura (no
+                  debería ocurrir con una sonda y una lectura válidas)</dd>
 </dl>
 </div>
 </section>
@@ -494,7 +497,8 @@ devuelve la primera).
 <section class="detail" id="hibridaCon(es.upm.dit.fprg26.p2.Lectura)">
 <h3>hibridaCon</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name">hibridaCon</span><wbr><span class="parameters">(<a href="Lectura.html" title="class in es.upm.dit.fprg26.p2">Lectura</a>&nbsp;lectura)</span></div>
+<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name">hibridaCon</span><wbr><span class="parameters">(<a href="Lectura.html" title="class in es.upm.dit.fprg26.p2">Lectura</a>&nbsp;lectura)</span>
+            throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
 <div class="block">Indica si la sonda hibrida con una lectura, es decir, si su patrón encaja con la
 lectura en alguna posición, en cualquiera de los dos sentidos.</div>
 <dl class="notes">
@@ -502,6 +506,8 @@ lectura en alguna posición, en cualquiera de los dos sentidos.</div>
 <dd><code>lectura</code> - lectura que se analiza</dd>
 <dt>Returns:</dt>
 <dd><code>true</code> si el patrón aparece en la lectura; <code>false</code> en otro caso</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code> - si se produce algún error al buscar el patrón en la lectura</dd>
 </dl>
 </div>
 </section>

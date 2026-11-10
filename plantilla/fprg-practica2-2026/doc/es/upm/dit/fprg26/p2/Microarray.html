@@ -271,7 +271,13 @@ sonda hibrida con <em>alguna</em> de las lecturas.</div>
 <h3>hibridar</h3>
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="return-type">boolean[][]</span>&nbsp;<span class="element-name">hibridar</span><wbr><span class="parameters">(<a href="Lectura.html" title="class in es.upm.dit.fprg26.p2">Lectura</a>&nbsp;lectura)</span></div>
-<div class="block">Analiza una única lectura: indica qué puntos del chip se iluminan con ella.</div>
+<div class="block">Analiza una única lectura: indica qué puntos del chip se iluminan con ella.
+<p>
+<a href="Sonda.html#hibridaCon(es.upm.dit.fprg26.p2.Lectura)"><code>Sonda.hibridaCon(Lectura)</code></a> puede lanzar una excepción (con una sonda y una
+lectura válidas, solo si hay algún error en el código de <code>Sonda</code>). Este método la
+captura con un bloque <code>try</code>/<code>catch</code>: si no se puede saber si una sonda
+hibrida con la lectura, su punto no se ilumina.
+</p></div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>lectura</code> - lectura que se analiza</dd>
