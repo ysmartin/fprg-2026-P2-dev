@@ -18,3 +18,4 @@ local.properties
 .loadpath
 .externalToolBuilders/
 *.launch
+__pycache__/
