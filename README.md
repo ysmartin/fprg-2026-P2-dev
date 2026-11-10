@@ -35,13 +35,13 @@
 
 ### Contexto de la práctica
 
-En la práctica 1 programamos las piezas más pequeñas del microarray virtual: funciones que trabajaban con una base, con una posición de una secuencia o con un codón. En esta segunda práctica daremos el paso siguiente: **recorreremos secuencias completas** para buscar en ellas patrones, y organizaremos el programa en **clases** que representan los elementos del experimento.
+En la práctica 1 habíamos programado las piezas más pequeñas del microarray virtual: funciones que trabajaban con una base, con una posición de una secuencia o con un codón. En esta segunda práctica daremos el paso siguiente: **recorreremos secuencias completas** para **buscar en ellas patrones**, y organizaremos el programa en **clases** que representan los elementos del experimento.
 
-Cuando se analiza una muestra, el secuenciador obtiene miles de fragmentos cortos de su ADN, llamados **lecturas**, y los guarda en un fichero de texto con formato FASTQ, una lectura tras otra. En esta práctica, cada lectura será una cadena de bases (por ejemplo, `GATTACAGCTTAGC`) con un identificador. Algunas posiciones pueden contener la letra `N`, con la que el secuenciador indica que no ha podido determinar la base.
+Cuando se va a analizar una muestra de ADN, el secuenciador obtiene miles de fragmentos cortos de ADN llamados **lecturas**, y los guarda en un fichero de texto con formato FASTQ, una lectura tras otra. En esta práctica, cada lectura será una cadena (`String`) de bases (por ejemplo, `GATTACAGCTTAGC`) con un identificador. También es posible que algunas posiciones contengan  contener la letra `N`, con la que el secuenciador indica que no ha podido determinar la base.
 
-Un **microarray** es un chip con miles de **sondas** ordenadas en una cuadrícula. Cada sonda reconoce los fragmentos de la muestra que contienen su *diana*, una secuencia corta característica de un patógeno o de un gen. Cuando un fragmento contiene la diana de una sonda, se une a ella (*hibrida*) y ese punto del chip se ilumina. En nuestro microarray virtual, cada sonda guarda directamente el **patrón** de su diana, tal como aparece en las lecturas, y lo busca en cada lectura de la muestra comparando base a base.
+Un **microarray** es un chip con miles de **sondas** ordenadas en una cuadrícula. Cada sonda está diseñada para encontrar en las muestras de ADN una secuencia corta llamada *diana*, característica de un patógeno o de un gen. Cuando un fragmento contiene la diana de una sonda, se une a ella (se *hibrida*) y ese punto del chip se ilumina. En nuestro microarray virtual, cada sonda guarda directamente el **patrón** de su diana, tal como aparece en las lecturas, y lo busca en cada lectura de la muestra comparando base a base.
 
-Además, cada análisis registra sus **datos de procedencia**: la fecha en que se capturó la muestra y la fecha en que se analizó, que es siempre la del día en que se hace el análisis (la fecha actual).
+Además, cada análisis registrará sus **datos de procedencia**: la fecha en que se capturó la muestra y la fecha en que se analizó, que es siempre la del día en que se hace el análisis (la fecha actual).
 
 ### Patrones con comodines
 
