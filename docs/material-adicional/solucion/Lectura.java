@@ -9,7 +9,7 @@ package es.upm.dit.fprg26.p2;
  * podido determinar la base de esa posición. Las posiciones se numeran desde 0.
  * </p>
  * <p>
- * Una lectura no se puede modificar una vez creada (sus atributos son {@code final}).
+ * Una lectura no se puede modificar una vez creada.
  * </p>
  */
 public class Lectura {

@@ -13,6 +13,7 @@
   - [Contenido](#contenido)
   - [Introducción](#introducción)
     - [Contexto de la práctica](#contexto-de-la-práctica)
+    - [Búsqueda de patrones](#búsqueda-de-patrones)
     - [Patrones con comodines](#patrones-con-comodines)
     - [Modelo del dominio](#modelo-del-dominio)
     - [Organización del proyecto](#organización-del-proyecto)
@@ -37,15 +38,29 @@
 
 En la práctica 1 habíamos programado las piezas más pequeñas del microarray virtual: funciones que trabajaban con una base, con una posición de una secuencia o con un codón. En esta segunda práctica daremos el paso siguiente: **recorreremos secuencias completas** para **buscar en ellas patrones**, y organizaremos el programa en **clases** que representan los elementos del experimento.
 
-Cuando se va a analizar una muestra de ADN, el secuenciador obtiene miles de fragmentos cortos de ADN llamados **lecturas**, y los guarda en un fichero de texto con formato FASTQ, una lectura tras otra. En esta práctica, cada lectura será una cadena (`String`) de bases (por ejemplo, `GATTACAGCTTAGC`) con un identificador. También es posible que algunas posiciones contengan  contener la letra `N`, con la que el secuenciador indica que no ha podido determinar la base.
+Cuando se va a analizar una muestra de ADN, el secuenciador obtiene miles de fragmentos cortos de ADN llamados **lecturas**, y los guarda en un fichero de texto con formato FASTQ, una lectura tras otra. En esta práctica, cada lectura será una cadena (`String`) de bases (por ejemplo, `GATTACAGCTTAGC`) con un identificador. También es posible que algunas posiciones contengan la letra `N`, con la que el secuenciador indica que no ha podido determinar la base.
 
-Un **microarray** es un chip con miles de **sondas** ordenadas en una cuadrícula. Cada sonda está diseñada para encontrar en las muestras de ADN una secuencia corta llamada *diana*, característica de un patógeno o de un gen. Cuando un fragmento contiene la diana de una sonda, se une a ella (se *hibrida*) y ese punto del chip se ilumina. En nuestro microarray virtual, cada sonda guarda directamente el **patrón** de su diana, tal como aparece en las lecturas, y lo busca en cada lectura de la muestra comparando base a base.
+Un **microarray** es un chip con miles de **sondas** ordenadas en una cuadrícula. Cada sonda está diseñada para encontrar en las muestras de ADN una secuencia corta llamada *diana*, característica de un patógeno o de un gen. Cuando un fragmento contiene la diana de una sonda, se une a ella (se *hibrida*) y ese punto del chip se ilumina. En nuestro microarray virtual, cada sonda guarda directamente el **patrón** de su diana, tal como aparece en las lecturas.
 
 Además, cada análisis registrará sus **datos de procedencia**: la fecha en que se capturó la muestra y la fecha en que se analizó, que es siempre la del día en que se hace el análisis (la fecha actual).
 
+### Búsqueda de patrones
+
+Para saber si una sonda hibrida con una lectura, se busca su patrón en la lectura. Se coloca el patrón bajo la lectura, a partir de una posición, y se compara cada símbolo del patrón con la base que tiene encima: si todos coinciden, el patrón **encaja** en esa posición; si no, se prueba en la siguiente. La sonda hibrida con la lectura si su patrón encaja en alguna posición.
+
+Por ejemplo, el patrón `CAGCT` encaja en la lectura `GATTACAGCTTAGC` a partir de la posición 5 (las posiciones se cuentan desde 0, como en un `String`):
+
+```
+posición  01234567890123
+lectura   GATTACAGCTTAGC
+patrón         CAGCT
+```
+
+En cambio, no encaja en ninguna posición de la lectura `GATTACAGGTTAGC`: basta con que una base no coincida (aquí, la `G` de la posición 8, bajo la que queda la segunda `C` del patrón) para que el patrón no encaje.
+
 ### Patrones con comodines
 
-Las sondas pueden ser **degeneradas**: su patrón puede contener comodines que encajan con varias bases. Así, una misma sonda puede detectar, por ejemplo, las variantes de un virus que se diferencian en una posición conocida. Usaremos tres de los símbolos del código de ambigüedad de la IUPAC, que es la notación habitual en bioinformática:
+Las sondas también pueden ser **degeneradas**: su patrón puede contener comodines, que encajan con varias bases. Así, una misma sonda puede detectar, por ejemplo, las variantes de un virus que se diferencian en una posición conocida. Usaremos tres de los símbolos del código de ambigüedad de la IUPAC, que es la notación habitual en bioinformática:
 
 | Símbolo del patrón | Encaja con estas bases de la lectura |
 |:---:|---|
@@ -54,9 +69,11 @@ Las sondas pueden ser **degeneradas**: su patrón puede contener comodines que e
 | `R` (purina) | Con `A` o con `G` |
 | `Y` (pirimidina) | Con `C` o con `T` |
 
-Una `N` de la **lectura** es una base desconocida: no se puede asegurar que coincida con ninguna base concreta del patrón, así que solo encaja con el comodín `N`. Por ejemplo, el patrón `GAYTRCA` encaja con las lecturas `GATTACA` y `GACTGCA`, pero no con `GATNACA`.
+Por ejemplo, el patrón `CAGYT` encaja a partir de la posición 5 tanto en la lectura `GATTACAGCTTAGC` (la `Y` con una `C`) como en `GATTACAGTTTAGC` (la `Y` con una `T`): una sola sonda detecta las dos variantes.
 
-Las lecturas solo pueden contener `A`, `C`, `G`, `T` y `N`, y los patrones, además, `R` e `Y`. Cualquier otro carácter (una letra minúscula, una `U`, un espacio…) no es válido: las clases de la práctica lo rechazan lanzando una excepción.
+En cambio, una `N` de la **lectura** es una base desconocida: no se puede asegurar que coincida con ninguna base concreta del patrón, así que solo encaja con el comodín `N`. Por ejemplo, en la lectura `GATTACANCTTAGC` se desconoce la base de la posición 7: el patrón `CAGYT` no encaja, porque no se puede asegurar que esa base sea una `G`, pero `CANYT` sí.
+
+Las lecturas solo pueden contener `A`, `C`, `G`, `T` y `N`, y los patrones, además, `R` e `Y`. Cualquier otro carácter no es válido: las clases de la práctica lo rechazan lanzando una excepción.
 
 > [!NOTE]
 > Estos comodines se usan en la práctica real: por ejemplo, la enzima de restricción HincII corta el ADN allí donde encuentra la secuencia `GTYRAC`. Uno de los microarrays de ejemplo de la práctica contiene las secuencias que reconocen ocho de estas enzimas.
@@ -181,7 +198,7 @@ A diferencia de la práctica 1, el código se organiza en **clases**, dentro del
 Para usar las clases de la biblioteca de Java, como `LocalDate`, las clases empiezan con una **importación de módulo**: `import module java.base;` importa de una vez todos los paquetes del módulo básico de Java (`java.util`, `java.time`, etc.).
 
 > [!WARNING]
-> No modifique las cabeceras de los métodos que se proporcionan, ni añada más atributos a las clases que completa: sus atributos ya están declarados (puede declararlos `final`, porque no cambian después de crear el objeto).
+> No modifique las cabeceras de los métodos que se proporcionan, ni añada más atributos a las clases que completa: sus atributos ya están declarados.
 
 ## Objetivos
 
@@ -218,7 +235,7 @@ En Eclipse debe seguir los siguientes pasos:
 
 1. Abra la documentación del proyecto en el navegador: pulse con el botón derecho sobre `doc/index.html` y elija _Open With ➤ Web Browser_. Lea la de la clase `Iupac`: le servirá en toda la práctica.
 2. Estudie las clases `Lectura` y `Muestra`, que se proporcionan ya programadas. Fíjese en cómo están construidas, porque las clases que completará usted siguen el mismo modelo:
-   - sus **atributos** son privados y `final`;
+   - sus **atributos** son privados;
    - el **constructor** comprueba que los datos son válidos y, si no lo son, lanza una excepción con un mensaje que explica el motivo. Por ejemplo, el de `Lectura` recorre la secuencia con un bucle para comprobar cada carácter;
    - los **métodos de acceso** (`getId`, `getSecuencia`…) devuelven los atributos o datos calculados a partir de ellos;
    - `getBase` lanza una excepción si se le pide una posición que está fuera de la lectura.
@@ -249,7 +266,7 @@ La clase `Sonda` representa una sonda del microarray: su nombre y el patrón de 
 3. **`encaja(char simbolo, char base)`**: indica si un símbolo del patrón encaja con una base de la lectura, según la tabla de los [patrones con comodines](#patrones-con-comodines). Primero, compruebe que el símbolo es un símbolo de patrón y la base, un símbolo de lectura (con `Iupac.esSimboloDePatron` e `Iupac.esSimboloDeLectura`); si alguno no lo es, lance una excepción. Después, use una sentencia `switch` con un caso para cada comodín y un caso `default` para las bases. Puede apoyarse en `Iupac.esPurina` e `Iupac.esPirimidina`. Es un método **estático**: no depende de ninguna sonda concreta, y se invoca con el nombre de la clase (`Sonda.encaja('R', 'G')`).
 4. **`encajaEn(Lectura lectura, int inicio)`**: indica si el patrón encaja con la lectura colocando su primer símbolo en la posición `inicio` de la lectura. Recorra el patrón con un bucle: el símbolo `i` del patrón se compara con la base `inicio + i` de la lectura, que puede obtener con `lectura.getBase(...)`. En cuanto un símbolo no encaje, el patrón no encaja.
 
-   `getBase` lanza una excepción si la posición está fuera de la lectura, así que el patrón no cabe en ella a partir de esa posición. Capture esa excepción con un bloque `try`/`catch`: en ese caso, `encajaEn` debe devolver `false`. El mismo bloque captura también las excepciones de `encaja`, que no deberían producirse, porque los constructores de `Sonda` y de `Lectura` ya comprueban sus caracteres.
+   `getBase` lanza una excepción si la posición está fuera de la lectura, así que el patrón no cabe en ella a partir de esa posición. Capture esa excepción con un bloque `try`/`catch`: en ese caso, `encajaEn` debe devolver `false`. El mismo bloque captura también las excepciones de `encaja`.
 5. **`buscarEn(Lectura lectura)`**: devuelve la primera posición de la lectura a partir de la cual encaja el patrón, o `-1` si no encaja en ninguna. Es el algoritmo de la **ventana deslizante**: se coloca el patrón al principio de la lectura y se va desplazando una posición cada vez, comprobando en cada una si encaja (con `encajaEn`). Por ejemplo, para buscar el patrón `TRC` en la lectura `GATACATGCA`:
 
    ```
@@ -274,17 +291,17 @@ La clase `Microarray` representa un chip con sondas en una cuadrícula: una matr
 
 1. **`hibridar(Lectura lectura)`**: devuelve una matriz de `boolean` del mismo tamaño que la cuadrícula, con `true` en los puntos cuya sonda hibrida con la lectura. Cree la matriz con `new boolean[filas][columnas]` y recórrala con dos bucles anidados.
 2. **`hibridar(Muestra muestra)`**: hace lo mismo con todas las lecturas de la muestra. Un punto se ilumina si su sonda hibrida con **alguna** de las lecturas. Puede recorrer las lecturas con un bucle `for` mejorado (`for (Lectura lectura : muestra.getLecturas())`) y reutilizar el método anterior. Cuidado: un punto que ya se ha iluminado con una lectura no debe apagarse porque no hibride con la siguiente.
-3. Ejecute `PruebaMicroarray` y corrija lo que sea necesario. Las matrices se escriben con `#` para los puntos iluminados y `.` para los apagados, una fila entre corchetes (las grandes, una fila en cada línea). Fíjese en la prueba con el chip de 2x4: si confunde filas y columnas, fallará. La última prueba usa un chip de 20x20 sondas: si su código es correcto, los puntos iluminados forman una palabra.
+3. Ejecute `PruebaMicroarray` y corrija lo que sea necesario. Las matrices se escriben con `#` para los puntos iluminados y `.` para los apagados, una fila entre corchetes. Fíjese en la prueba con el chip de 2x4: si confunde filas y columnas, fallará. La última prueba usa un chip de 20x20 sondas: si su código es correcto, los puntos iluminados forman una palabra.
 
 ### 5. Completar la clase `Analisis`
 
-La clase `Analisis` representa el resultado de analizar una muestra con un microarray. Como en un laboratorio, el análisis se registra en el momento en que se hace: su fecha es la fecha actual.
+La clase `Analisis` representa el resultado de analizar una muestra con un microarray en la fecha actual.
 
 **Pasos:**
 
-1. **Constructor**: compruebe que ningún parámetro es nulo; si alguno lo es, lance una excepción. Después, asigne los atributos: la fecha del análisis es la fecha actual, que se obtiene con `LocalDate.now()`, y los puntos iluminados se calculan con `hibridar(Muestra)`. No hace falta comprobar que la fecha del análisis no es anterior a la de captura: `Muestra` no admite fechas de captura futuras.
+1. **Constructor**: compruebe que ningún parámetro es nulo; si alguno lo es, lance una excepción. Después, asigne los atributos: la fecha del análisis es la fecha actual, que se obtiene con `LocalDate.now()`, y los puntos iluminados se calculan con `hibridar(Muestra)`.
 2. **Métodos de acceso**: `getMuestra`, `getMicroarray`, `getFechaAnalisis` y `getIluminados`.
-3. **`getDiasDesdeCaptura`**: devuelve cuántos días han pasado entre la captura de la muestra y el análisis. Use `ChronoUnit.DAYS.between(fechaInicial, fechaFinal)`, que tiene en cuenta los meses de distinta duración y los años bisiestos. Como el análisis siempre es de hoy, las fechas de captura de las muestras de ejemplo son relativas a la fecha actual (de 1 a 6 días antes), y las pruebas crean muestras capturadas hace 0, 40 y 400 días.
+3. **`getDiasDesdeCaptura`**: devuelve cuántos días han pasado entre la captura de la muestra y el análisis. Use `ChronoUnit.DAYS.between(fechaInicial, fechaFinal)`, que tiene en cuenta los meses de distinta duración y los años bisiestos.
 4. **`contarIluminados`**: devuelve cuántos puntos del chip se han iluminado.
 5. Ejecute `PruebaAnalisis` y corrija lo que sea necesario. Después, añada sus propios casos de prueba.
 
