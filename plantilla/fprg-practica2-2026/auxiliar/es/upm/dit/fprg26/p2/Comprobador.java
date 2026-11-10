@@ -1,4 +1,4 @@
-package es.upm.dit.fprg26.p2.auxiliar;
+package es.upm.dit.fprg26.p2;
 
 import module java.base;
 
@@ -9,8 +9,8 @@ import module java.base;
  * Ejemplo de uso, en una clase de prueba:
  * </p>
  * <pre>
- * Comprobador.titulo("buscarEn");
- * Comprobador.comprobar("buscarEn(\"GATACA\")", 2, sonda.buscarEn(lectura));
+ * Comprobador.titulo("encontrarEn");
+ * Comprobador.comprobar("encontrarEn(\"GATACA\")", 2, sonda.encontrarEn(lectura));
  * ...
  * Comprobador.resumen();
  * </pre>
@@ -20,7 +20,7 @@ import module java.base;
  * {@link #acierto(String)} en el {@code catch}.
  * </p>
  */
-public final class Comprobador {
+final class Comprobador {
 
     private static int realizadas = 0;
     private static int correctas = 0;
@@ -34,7 +34,7 @@ public final class Comprobador {
      *
      * @param titulo texto del título
      */
-    public static void titulo(String titulo) {
+    static void titulo(String titulo) {
         IO.println();
         IO.println("[" + titulo + "]");
     }
@@ -48,7 +48,7 @@ public final class Comprobador {
      * @param esperado resultado esperado
      * @param obtenido resultado obtenido
      */
-    public static void comprobar(String descripcion, Object esperado, Object obtenido) {
+    static void comprobar(String descripcion, Object esperado, Object obtenido) {
         if (Objects.deepEquals(esperado, obtenido)) {
             acierto(descripcion + " = " + formatear(obtenido));
         } else if (esperado instanceof boolean[][] matrizEsperada && obtenido instanceof boolean[][] matrizObtenida
@@ -65,7 +65,7 @@ public final class Comprobador {
      *
      * @param descripcion descripción de la comprobación
      */
-    public static void acierto(String descripcion) {
+    static void acierto(String descripcion) {
         realizadas++;
         correctas++;
         IO.println("  ✓ " + descripcion);
@@ -76,7 +76,7 @@ public final class Comprobador {
      *
      * @param descripcion descripción de la comprobación y del motivo del fallo
      */
-    public static void fallo(String descripcion) {
+    static void fallo(String descripcion) {
         realizadas++;
         IO.println("  ✗ " + descripcion);
     }
@@ -84,7 +84,7 @@ public final class Comprobador {
     /**
      * Escribe cuántas comprobaciones han sido correctas.
      */
-    public static void resumen() {
+    static void resumen() {
         IO.println();
         IO.println("Resumen: " + correctas + " de " + realizadas + " comprobaciones correctas");
     }

@@ -2,8 +2,8 @@
 # Genera la documentación HTML (Javadoc) que se entrega con la plantilla, en
 # plantilla/fprg-practica2-2026/doc (o en la carpeta que se indique), con un JDK 25.
 #
-# Documenta los paquetes es.upm.dit.fprg26.p2 y es.upm.dit.fprg26.p2.auxiliar de la
-# plantilla. Hay que volver a ejecutarlo cada vez que cambie el Javadoc de la plantilla
+# Documenta el paquete es.upm.dit.fprg26.p2 de la plantilla (carpetas src y auxiliar),
+# incluidos los miembros sin modificador de acceso (-package). Hay que volver a ejecutarlo cada vez que cambie el Javadoc de la plantilla
 # (por ejemplo, después de scripts/derivar-plantilla.py); scripts/verificar.sh comprueba
 # que la carpeta doc está al día.
 #
@@ -17,6 +17,7 @@ DESTINO="${1:-$RAIZ/plantilla/fprg-practica2-2026/doc}"
 rm -rf "$DESTINO"
 "${BIN}javadoc" -quiet -notimestamp --no-fonts -Xdoclint:all,-missing \
     -encoding UTF-8 -docencoding UTF-8 -charset UTF-8 \
-    -sourcepath "$RAIZ/plantilla/fprg-practica2-2026/src" -d "$DESTINO" \
+    -package -sourcepath "$RAIZ/plantilla/fprg-practica2-2026/src:$RAIZ/plantilla/fprg-practica2-2026/auxiliar" \
+    -d "$DESTINO" \
     -doctitle "FPRG 2026-27 · Práctica 2" -windowtitle "FPRG 2026-27 · Práctica 2" \
-    -subpackages es.upm.dit.fprg26.p2
+    es.upm.dit.fprg26.p2

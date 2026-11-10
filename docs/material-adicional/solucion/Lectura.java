@@ -12,7 +12,7 @@ package es.upm.dit.fprg26.p2;
  * Una lectura no se puede modificar una vez creada.
  * </p>
  */
-public class Lectura {
+class Lectura {
 
     /** Identificador de la lectura (en un fichero FASTQ, lo que sigue a la {@code @} de la cabecera). */
     private final String id;
@@ -28,7 +28,7 @@ public class Lectura {
      *                  puede contener {@code A}, {@code C}, {@code G}, {@code T} y {@code N}
      * @throws Exception si el identificador o la secuencia no son válidos
      */
-    public Lectura(String id, String secuencia) throws Exception {
+    Lectura(String id, String secuencia) throws Exception {
         if (id == null || id.isBlank()) {
             throw new Exception("El identificador de la lectura no puede ser nulo ni estar en blanco");
         }
@@ -50,7 +50,7 @@ public class Lectura {
      *
      * @return identificador de la lectura
      */
-    public String getId() {
+    String getId() {
         return id;
     }
 
@@ -59,7 +59,7 @@ public class Lectura {
      *
      * @return secuencia de la lectura
      */
-    public String getSecuencia() {
+    String getSecuencia() {
         return secuencia;
     }
 
@@ -68,7 +68,7 @@ public class Lectura {
      *
      * @return número de bases de la lectura
      */
-    public int getLongitud() {
+    int getLongitud() {
         return secuencia.length();
     }
 
@@ -79,7 +79,7 @@ public class Lectura {
      * @return base de esa posición ({@code A}, {@code C}, {@code G}, {@code T} o {@code N})
      * @throws Exception si la posición está fuera de la lectura
      */
-    public char getBase(int posicion) throws Exception {
+    char getBase(int posicion) throws Exception {
         if (posicion < 0 || posicion >= getLongitud()) {
             throw new Exception("La posición " + posicion + " está fuera de la lectura " + id
                     + ", de " + getLongitud() + " bases");
@@ -95,7 +95,7 @@ public class Lectura {
      *
      * @return número de posiciones de la lectura que contienen {@code N}
      */
-    public int contarIndeterminadas() {
+    int contarIndeterminadas() {
         int indeterminadas = 0;
         for (int i = 0; i < secuencia.length(); i++) {
             if (secuencia.charAt(i) == Iupac.INDETERMINADA) {
@@ -118,7 +118,7 @@ public class Lectura {
      *         secuencia complementaria inversa
      * @throws Exception si no se puede crear la nueva lectura
      */
-    public Lectura complementariaInversa() throws Exception {
+    Lectura complementariaInversa() throws Exception {
         String complementaria = "";
         for (int i = secuencia.length() - 1; i >= 0; i--) {
             complementaria += Iupac.complementario(secuencia.charAt(i));

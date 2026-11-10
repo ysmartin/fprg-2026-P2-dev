@@ -26,7 +26,7 @@ package es.upm.dit.fprg26.p2;
  * otra.
  * </p>
  */
-public class Sonda {
+class Sonda {
 
     /** Nombre de la sonda (por ejemplo, el del patógeno o el gen que detecta). */
     private final String nombre;
@@ -43,7 +43,7 @@ public class Sonda {
      *               {@code R} e {@code Y} (ver {@link Iupac#esSimboloDePatron(char)})
      * @throws Exception si el nombre o el patrón no son válidos
      */
-    public Sonda(String nombre, String patron) throws Exception {
+    Sonda(String nombre, String patron) throws Exception {
         if (nombre == null || nombre.isBlank()) {
             throw new Exception("El nombre de la sonda no puede ser nulo ni estar en blanco");
         }
@@ -65,7 +65,7 @@ public class Sonda {
      *
      * @return nombre de la sonda
      */
-    public String getNombre() {
+    String getNombre() {
         return nombre;
     }
 
@@ -74,7 +74,7 @@ public class Sonda {
      *
      * @return patrón de la sonda
      */
-    public String getPatron() {
+    String getPatron() {
         return patron;
     }
 
@@ -83,7 +83,7 @@ public class Sonda {
      *
      * @return número de símbolos del patrón
      */
-    public int getLongitud() {
+    int getLongitud() {
         return patron.length();
     }
 
@@ -102,7 +102,7 @@ public class Sonda {
      * @throws Exception si el símbolo no es un símbolo de patrón o la base no es un
      *                   símbolo de lectura (ver {@link Iupac})
      */
-    public static boolean encaja(char simbolo, char base) throws Exception {
+    static boolean encaja(char simbolo, char base) throws Exception {
         if (!Iupac.esSimboloDePatron(simbolo) || !Iupac.esSimboloDeLectura(base)) {
             throw new Exception("No se puede comparar el símbolo '" + simbolo + "' con la base '" + base
                     + "': los símbolos de patrón son " + Iupac.SIMBOLOS_DE_PATRON
@@ -133,7 +133,7 @@ public class Sonda {
      * @return {@code true} si el patrón encaja con la lectura a partir de esa posición;
      *         {@code false} en otro caso
      */
-    public boolean encajaEn(Lectura lectura, int inicio) {
+    boolean encajaEn(Lectura lectura, int inicio) {
         try {
             for (int i = 0; i < patron.length(); i++) {
                 if (!encaja(patron.charAt(i), lectura.getBase(inicio + i))) {
@@ -149,7 +149,7 @@ public class Sonda {
 
     /**
      * Busca la primera posición de una lectura a partir de la cual encaja el patrón de
-     * la sonda.
+     * la sonda, teniendo en cuenta sus comodines (ver {@link #encajaEn(Lectura, int)}).
      * <p>
      * Por ejemplo, el patrón {@code "TRC"} se encuentra en la lectura {@code "GATACATGCA"}
      * en la posición 2 (también encajaría en la 6, pero se devuelve la primera).
@@ -159,7 +159,7 @@ public class Sonda {
      * @return primera posición de la lectura en la que encaja el patrón, o -1 si no
      *         encaja en ninguna
      */
-    public int buscarEn(Lectura lectura) {
+    int encontrarEn(Lectura lectura) {
         for (int inicio = 0; inicio <= lectura.getLongitud() - patron.length(); inicio++) {
             if (encajaEn(lectura, inicio)) {
                 return inicio;
@@ -176,7 +176,7 @@ public class Sonda {
      * @return secuencia de la sonda, complementaria inversa de su patrón
      * @throws Exception si el patrón contiene algún símbolo que no tiene complementario
      */
-    public String getSecuenciaSonda() throws Exception {
+    String getSecuenciaSonda() throws Exception {
         String secuencia = "";
         for (int i = patron.length() - 1; i >= 0; i--) {
             secuencia += Iupac.complementario(patron.charAt(i));
@@ -193,12 +193,12 @@ public class Sonda {
      * @return {@code true} si el patrón aparece en la lectura o en su complementaria inversa;
      *         {@code false} en otro caso
      */
-    public boolean hibridaCon(Lectura lectura) {
-        if (buscarEn(lectura) >= 0) {
+    boolean hibridaCon(Lectura lectura) {
+        if (encontrarEn(lectura) >= 0) {
             return true;
         }
         try {
-            return buscarEn(lectura.complementariaInversa()) >= 0;
+            return encontrarEn(lectura.complementariaInversa()) >= 0;
         } catch (Exception e) {
             return false;
         }

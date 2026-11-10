@@ -10,7 +10,7 @@ import module java.base;
  * de Java para fechas sin hora (por ejemplo, {@code LocalDate.of(2026, 11, 10)}).
  * </p>
  */
-public class Muestra {
+class Muestra {
 
     /** Identificador de la muestra. */
     private final String id;
@@ -29,7 +29,7 @@ public class Muestra {
      * @param lecturas lecturas de la muestra; tiene que haber al menos una, y ninguna puede ser nula
      * @throws Exception si alguno de los datos no es válido
      */
-    public Muestra(String id, LocalDate fechaCaptura, Lectura[] lecturas) throws Exception {
+    Muestra(String id, LocalDate fechaCaptura, Lectura[] lecturas) throws Exception {
         if (id == null || id.isBlank()) {
             throw new Exception("El identificador de la muestra no puede ser nulo ni estar en blanco");
         }
@@ -58,7 +58,7 @@ public class Muestra {
      *
      * @return identificador de la muestra
      */
-    public String getId() {
+    String getId() {
         return id;
     }
 
@@ -67,7 +67,7 @@ public class Muestra {
      *
      * @return fecha de captura
      */
-    public LocalDate getFechaCaptura() {
+    LocalDate getFechaCaptura() {
         return fechaCaptura;
     }
 
@@ -76,7 +76,7 @@ public class Muestra {
      *
      * @return número de lecturas
      */
-    public int getNumeroLecturas() {
+    int getNumeroLecturas() {
         return lecturas.length;
     }
 
@@ -87,7 +87,7 @@ public class Muestra {
      * @return lectura que ocupa esa posición
      * @throws Exception si el índice está fuera del rango de lecturas
      */
-    public Lectura getLectura(int indice) throws Exception {
+    Lectura getLectura(int indice) throws Exception {
         if (indice < 0 || indice >= lecturas.length) {
             throw new Exception("La muestra " + id + " no tiene lectura " + indice
                     + " (tiene " + lecturas.length + ")");
@@ -101,7 +101,7 @@ public class Muestra {
      *
      * @return array con las lecturas de la muestra
      */
-    public Lectura[] getLecturas() {
+    Lectura[] getLecturas() {
         return lecturas;
     }
 

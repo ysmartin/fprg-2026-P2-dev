@@ -1,10 +1,7 @@
-package es.upm.dit.fprg26.p2.auxiliar;
+package es.upm.dit.fprg26.p2;
 
 import module java.desktop;
 import java.awt.event.MouseEvent;
-
-import es.upm.dit.fprg26.p2.Microarray;
-import es.upm.dit.fprg26.p2.Sonda;
 
 /**
  * Panel que dibuja la cuadrícula de un microarray, con sus puntos iluminados o apagados.
@@ -19,7 +16,7 @@ import es.upm.dit.fprg26.p2.Sonda;
  * código, ni mucho menos modificarlo</strong>.
  * </p>
  */
-public final class PanelMicroarray extends JPanel {
+final class PanelMicroarray extends JPanel {
 
     private static final long serialVersionUID = 1L;
 
@@ -49,7 +46,7 @@ public final class PanelMicroarray extends JPanel {
     /**
      * Crea un panel vacío.
      */
-    public PanelMicroarray() {
+    PanelMicroarray() {
         setBackground(FONDO);
         setToolTipText("");
         MouseAdapter raton = new MouseAdapter() {
@@ -73,7 +70,7 @@ public final class PanelMicroarray extends JPanel {
      * @param microarray microarray que se dibuja (o {@code null} para no dibujar ninguno)
      * @param iluminados puntos iluminados (o {@code null} si aún no se ha analizado nada)
      */
-    public void mostrar(Microarray microarray, boolean[][] iluminados) {
+    void mostrar(Microarray microarray, boolean[][] iluminados) {
         this.microarray = microarray;
         this.iluminados = iluminados;
         this.celdaBajoRaton = null;
@@ -86,7 +83,7 @@ public final class PanelMicroarray extends JPanel {
      *
      * @return {@code true} si el chip tiene más de 6 filas o más de 6 columnas
      */
-    public boolean esCompacto() {
+    boolean esCompacto() {
         return microarray != null
                 && (microarray.getFilas() > MAXIMO_DETALLADO || microarray.getColumnas() > MAXIMO_DETALLADO);
     }

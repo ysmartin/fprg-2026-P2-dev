@@ -10,7 +10,7 @@ package es.upm.dit.fprg26.p2;
  * iluminados.
  * </p>
  */
-public class Microarray {
+class Microarray {
 
     /** Nombre del microarray. */
     private final String nombre;
@@ -27,7 +27,7 @@ public class Microarray {
      *               de sondas, y ninguna sonda puede ser nula
      * @throws Exception si alguno de los datos no es válido
      */
-    public Microarray(String nombre, Sonda[][] sondas) throws Exception {
+    Microarray(String nombre, Sonda[][] sondas) throws Exception {
         if (nombre == null || nombre.isBlank()) {
             throw new Exception("El nombre del microarray no puede ser nulo ni estar en blanco");
         }
@@ -55,7 +55,7 @@ public class Microarray {
      *
      * @return nombre del microarray
      */
-    public String getNombre() {
+    String getNombre() {
         return nombre;
     }
 
@@ -64,7 +64,7 @@ public class Microarray {
      *
      * @return número de filas
      */
-    public int getFilas() {
+    int getFilas() {
         return sondas.length;
     }
 
@@ -73,7 +73,7 @@ public class Microarray {
      *
      * @return número de columnas
      */
-    public int getColumnas() {
+    int getColumnas() {
         return sondas[0].length;
     }
 
@@ -85,7 +85,7 @@ public class Microarray {
      * @return sonda de ese punto
      * @throws Exception si el punto está fuera de la cuadrícula
      */
-    public Sonda getSonda(int fila, int columna) throws Exception {
+    Sonda getSonda(int fila, int columna) throws Exception {
         if (fila < 0 || fila >= getFilas() || columna < 0 || columna >= getColumnas()) {
             throw new Exception("El punto (" + fila + ", " + columna + ") está fuera del microarray "
                     + nombre + ", de " + getFilas() + "x" + getColumnas());
@@ -100,7 +100,7 @@ public class Microarray {
      * @return matriz del mismo tamaño que la cuadrícula, con {@code true} en los puntos
      *         cuya sonda hibrida con la lectura
      */
-    public boolean[][] hibridar(Lectura lectura) {
+    boolean[][] hibridar(Lectura lectura) {
         boolean[][] iluminados = new boolean[getFilas()][getColumnas()];
         for (int fila = 0; fila < getFilas(); fila++) {
             for (int columna = 0; columna < getColumnas(); columna++) {
@@ -118,7 +118,7 @@ public class Microarray {
      * @return matriz del mismo tamaño que la cuadrícula, con {@code true} en los puntos
      *         cuya sonda hibrida con al menos una lectura de la muestra
      */
-    public boolean[][] hibridar(Muestra muestra) {
+    boolean[][] hibridar(Muestra muestra) {
         boolean[][] iluminados = new boolean[getFilas()][getColumnas()];
         for (Lectura lectura : muestra.getLecturas()) {
             boolean[][] conLectura = hibridar(lectura);
@@ -142,7 +142,7 @@ public class Microarray {
      * @return matriz del mismo tamaño que la cuadrícula, con el número de lecturas de la
      *         muestra que hibridan con la sonda de cada punto
      */
-    public int[][] intensidades(Muestra muestra) {
+    int[][] intensidades(Muestra muestra) {
         int[][] intensidades = new int[getFilas()][getColumnas()];
         for (Lectura lectura : muestra.getLecturas()) {
             for (int fila = 0; fila < getFilas(); fila++) {

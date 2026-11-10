@@ -7,7 +7,7 @@ package es.upm.dit.fprg26.p2;
  * se diferencian en la cuarta base: timina en el ADN y uracilo en el ARN.
  * </p>
  */
-public enum AcidoNucleico {
+enum AcidoNucleico {
     /** Ácido desoxirribonucleico: bases A, C, G y T. */
     ADN,
     /** Ácido ribonucleico: bases A, C, G y U. */

@@ -10,7 +10,7 @@ import module java.base;
  * procedencia: la fecha del análisis, que es la del día en que se hace (la fecha actual).
  * </p>
  */
-public class Analisis {
+class Analisis {
 
     /** Muestra analizada. */
     private Muestra muestra;
@@ -37,7 +37,7 @@ public class Analisis {
      * @param microarray microarray con el que se analiza; no puede ser nulo
      * @throws Exception si la muestra o el microarray son nulos
      */
-    public Analisis(Muestra muestra, Microarray microarray) throws Exception {
+    Analisis(Muestra muestra, Microarray microarray) throws Exception {
         // TODO: desarrollar
     }
 
@@ -46,7 +46,7 @@ public class Analisis {
      *
      * @return muestra analizada
      */
-    public Muestra getMuestra() {
+    Muestra getMuestra() {
         // TODO: desarrollar
         return null;
     }
@@ -56,7 +56,7 @@ public class Analisis {
      *
      * @return microarray del análisis
      */
-    public Microarray getMicroarray() {
+    Microarray getMicroarray() {
         // TODO: desarrollar
         return null;
     }
@@ -66,7 +66,7 @@ public class Analisis {
      *
      * @return fecha del análisis
      */
-    public LocalDate getFechaAnalisis() {
+    LocalDate getFechaAnalisis() {
         // TODO: desarrollar
         return null;
     }
@@ -77,7 +77,7 @@ public class Analisis {
      * @return matriz del mismo tamaño que la cuadrícula del microarray, con {@code true}
      *         en los puntos iluminados
      */
-    public boolean[][] getIluminados() {
+    boolean[][] getIluminados() {
         // TODO: desarrollar
         return null;
     }
@@ -92,7 +92,7 @@ public class Analisis {
      *
      * @return días entre la fecha de captura y la del análisis (0 si son el mismo día)
      */
-    public long getDiasDesdeCaptura() {
+    long getDiasDesdeCaptura() {
         // TODO: desarrollar
         return 0;
     }
@@ -102,7 +102,7 @@ public class Analisis {
      *
      * @return número de puntos iluminados
      */
-    public int contarIluminados() {
+    int contarIluminados() {
         // TODO: desarrollar
         return 0;
     }

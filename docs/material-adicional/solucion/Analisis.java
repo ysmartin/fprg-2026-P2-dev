@@ -10,7 +10,7 @@ import module java.base;
  * procedencia: la fecha del análisis, que es la del día en que se hace (la fecha actual).
  * </p>
  */
-public class Analisis {
+class Analisis {
 
     /** Muestra analizada. */
     private final Muestra muestra;
@@ -37,7 +37,7 @@ public class Analisis {
      * @param microarray microarray con el que se analiza; no puede ser nulo
      * @throws Exception si la muestra o el microarray son nulos
      */
-    public Analisis(Muestra muestra, Microarray microarray) throws Exception {
+    Analisis(Muestra muestra, Microarray microarray) throws Exception {
         if (muestra == null || microarray == null) {
             throw new Exception("La muestra y el microarray del análisis no pueden ser nulos");
         }
@@ -52,7 +52,7 @@ public class Analisis {
      *
      * @return muestra analizada
      */
-    public Muestra getMuestra() {
+    Muestra getMuestra() {
         return muestra;
     }
 
@@ -61,7 +61,7 @@ public class Analisis {
      *
      * @return microarray del análisis
      */
-    public Microarray getMicroarray() {
+    Microarray getMicroarray() {
         return microarray;
     }
 
@@ -70,7 +70,7 @@ public class Analisis {
      *
      * @return fecha del análisis
      */
-    public LocalDate getFechaAnalisis() {
+    LocalDate getFechaAnalisis() {
         return fechaAnalisis;
     }
 
@@ -80,7 +80,7 @@ public class Analisis {
      * @return matriz del mismo tamaño que la cuadrícula del microarray, con {@code true}
      *         en los puntos iluminados
      */
-    public boolean[][] getIluminados() {
+    boolean[][] getIluminados() {
         return iluminados;
     }
 
@@ -94,7 +94,7 @@ public class Analisis {
      *
      * @return días entre la fecha de captura y la del análisis (0 si son el mismo día)
      */
-    public long getDiasDesdeCaptura() {
+    long getDiasDesdeCaptura() {
         return ChronoUnit.DAYS.between(muestra.getFechaCaptura(), fechaAnalisis);
     }
 
@@ -103,7 +103,7 @@ public class Analisis {
      *
      * @return número de puntos iluminados
      */
-    public int contarIluminados() {
+    int contarIluminados() {
         int iluminadosEnTotal = 0;
         for (int fila = 0; fila < iluminados.length; fila++) {
             for (int columna = 0; columna < iluminados[fila].length; columna++) {
@@ -123,7 +123,7 @@ public class Analisis {
      *         ningún punto)
      * @throws Exception si no se puede obtener alguna sonda del microarray
      */
-    public String[] sondasDetectadas() throws Exception {
+    String[] sondasDetectadas() throws Exception {
         String[] nombres = new String[contarIluminados()];
         int siguiente = 0;
         for (int fila = 0; fila < iluminados.length; fila++) {

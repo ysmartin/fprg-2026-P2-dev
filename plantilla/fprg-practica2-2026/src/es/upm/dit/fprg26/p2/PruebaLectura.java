@@ -1,24 +1,16 @@
 package es.upm.dit.fprg26.p2;
 
-import es.upm.dit.fprg26.p2.auxiliar.Comprobador;
-
 /**
  * Pruebas de la clase {@link Lectura}: comprueban el método {@code contarIndeterminadas},
  * que debe programar usted, con una muestra de casos. Añada sus propios casos de prueba en
  * {@link #pruebasPropias()}.
  */
-public class PruebaLectura {
-
-    private PruebaLectura() {
-        // Solo contiene el método main: no se instancia
-    }
+class PruebaLectura {
 
     /**
      * Ejecuta las pruebas.
-     *
-     * @param args no se usa
      */
-    public static void main(String[] args) {
+    void main() {
         probarContarIndeterminadas();
         pruebasPropias();
         Comprobador.resumen();

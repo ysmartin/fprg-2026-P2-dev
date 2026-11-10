@@ -1,26 +1,17 @@
 package es.upm.dit.fprg26.p2;
 
-import es.upm.dit.fprg26.p2.auxiliar.Comprobador;
-import es.upm.dit.fprg26.p2.auxiliar.DatosEjemplo;
-
 /**
  * Pruebas de los métodos {@code hibridar} de la clase {@link Microarray}, con los datos
  * de ejemplo de {@link DatosEjemplo}. Los resultados se escriben con {@code #} para los
  * puntos iluminados y {@code .} para los apagados, una fila entre corchetes. Añada sus
  * propios casos de prueba en {@link #pruebasPropias()}.
  */
-public class PruebaMicroarray {
-
-    private PruebaMicroarray() {
-        // Solo contiene el método main: no se instancia
-    }
+class PruebaMicroarray {
 
     /**
      * Ejecuta las pruebas.
-     *
-     * @param args no se usa
      */
-    public static void main(String[] args) {
+    void main() {
         probarHibridarLectura();
         probarHibridarMuestra();
         pruebasPropias();

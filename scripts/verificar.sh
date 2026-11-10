@@ -42,7 +42,7 @@ comprobar() {
     local nombre="$1" es_solucion="$2" proyecto="${3:-$RAIZ/$1/fprg-practica2-2026}" pruebas="$PRUEBAS ${4:-}"
     echo "== $nombre"
     local fuentes
-    fuentes=$(find "$proyecto/src" -name '*.java')
+    fuentes=$(find "$proyecto/src" "$proyecto/auxiliar" -name '*.java')
     # shellcheck disable=SC2086
     if ! "${BIN}javac" -Xlint:all -Werror -encoding UTF-8 -d "$TMP/clases-$nombre" $fuentes; then
         echo "   ✗ no compila sin avisos con javac"; fallos=$((fallos + 1)); return
@@ -50,7 +50,7 @@ comprobar() {
     if [ -n "${ECJ_JAR:-}" ]; then
         local ecj
         ecj=$("${BIN}java" -jar "$ECJ_JAR" -25 -encoding UTF-8 -properties "$proyecto/.settings/org.eclipse.jdt.core.prefs" \
-            -d "$TMP/ecj-$nombre" "$proyecto/src" 2>&1 | grep -v JAVA_TOOL || true)
+            -d "$TMP/ecj-$nombre" "$proyecto/src" "$proyecto/auxiliar" 2>&1 | grep -v JAVA_TOOL || true)
         if [ -n "$ecj" ]; then
             echo "   ✗ el compilador de Eclipse da avisos o errores:"; echo "$ecj" | tail -5; fallos=$((fallos + 1))
         else
@@ -68,8 +68,11 @@ comprobar() {
     done
     local doclint=all avisos
     [ "$es_solucion" = si ] || doclint=all,-missing
-    avisos=$("${BIN}javadoc" -quiet -Xdoclint:$doclint -encoding UTF-8 -d "$TMP/doc-$nombre" \
-        -sourcepath "$proyecto/src" -subpackages es.upm.dit.fprg26.p2 2>&1 | grep -c 'warning\|error' || true)
+    # Las clases Prueba* tienen un main de instancia (void main(), como en la P1), que necesita el
+    # constructor por defecto: se ignora el aviso de que ese constructor no tiene comentario.
+    avisos=$("${BIN}javadoc" -quiet -package -Xdoclint:$doclint -encoding UTF-8 -d "$TMP/doc-$nombre" \
+        -sourcepath "$proyecto/src:$proyecto/auxiliar" es.upm.dit.fprg26.p2 2>&1 \
+        | grep -v 'use of default constructor' | grep -c ': warning:\|: error:' || true)
     echo "   Javadoc: $avisos avisos"
     [ "$avisos" -eq 0 ] || fallos=$((fallos + 1))
 }

@@ -2,26 +2,18 @@ package es.upm.dit.fprg26.p2;
 
 import module java.base;
 
-import es.upm.dit.fprg26.p2.auxiliar.DatosEjemplo;
-import es.upm.dit.fprg26.p2.auxiliar.VentanaMicroarray;
-
 /**
  * Abre la ventana del microarray virtual con los microarrays y las muestras de ejemplo,
  * más los que usted añada en este método {@code main}.
  */
-public class PruebaInteractiva {
-
-    private PruebaInteractiva() {
-        // Solo contiene el método main: no se instancia
-    }
+class PruebaInteractiva {
 
     /**
      * Abre la ventana.
      *
-     * @param args no se usa
      * @throws Exception si alguno de los microarrays o de las muestras no se puede crear
      */
-    public static void main(String[] args) throws Exception {
+    void main() throws Exception {
         Microarray[] ejemplos = DatosEjemplo.microarrays();
 
         // Puede añadir sus propios microarrays y muestras aquí. Por ejemplo:

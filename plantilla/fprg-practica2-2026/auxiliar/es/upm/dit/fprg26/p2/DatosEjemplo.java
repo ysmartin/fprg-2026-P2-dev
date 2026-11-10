@@ -1,11 +1,6 @@
-package es.upm.dit.fprg26.p2.auxiliar;
+package es.upm.dit.fprg26.p2;
 
 import module java.base;
-
-import es.upm.dit.fprg26.p2.Lectura;
-import es.upm.dit.fprg26.p2.Microarray;
-import es.upm.dit.fprg26.p2.Muestra;
-import es.upm.dit.fprg26.p2.Sonda;
 
 /**
  * Microarrays y muestras de ejemplo para las pruebas y para la interfaz gráfica.
@@ -24,7 +19,7 @@ import es.upm.dit.fprg26.p2.Sonda;
  * saber qué datos ofrece cada método.
  * </p>
  */
-public final class DatosEjemplo {
+final class DatosEjemplo {
 
     private DatosEjemplo() {
         // No se instancia: solo contiene métodos estáticos
@@ -38,7 +33,7 @@ public final class DatosEjemplo {
      * @return chip de prueba
      * @throws Exception si alguno de los objetos no se puede crear (con su clase {@code Sonda} incompleta)
      */
-    public static Microarray chipDePrueba() throws Exception {
+    static Microarray chipDePrueba() throws Exception {
         return new Microarray("Chip de prueba", new Sonda[][] {
             { new Sonda("Exacta", "GATTACA"), new Sonda("Con N", "GANTACA"), new Sonda("Con Y y R", "GAYTRCA") }
         });
@@ -55,7 +50,7 @@ public final class DatosEjemplo {
      * @return panel de patógenos
      * @throws Exception si alguno de los objetos no se puede crear
      */
-    public static Microarray panelDePatogenos() throws Exception {
+    static Microarray panelDePatogenos() throws Exception {
         return new Microarray("Panel de patógenos (sintético)", new Sonda[][] {
             { new Sonda("Virus A", "ACCGTTAGCTGA"), new Sonda("Virus B (variantes 1 y 2)", "TTGRCATCCAGT"),
               new Sonda("Virus C", "GGTACAAGTCCA") },
@@ -74,7 +69,7 @@ public final class DatosEjemplo {
      * @return chip de dianas de restricción
      * @throws Exception si alguno de los objetos no se puede crear
      */
-    public static Microarray chipDeDianasDeRestriccion() throws Exception {
+    static Microarray chipDeDianasDeRestriccion() throws Exception {
         return new Microarray("Dianas de restricción", new Sonda[][] {
             { new Sonda("EcoRI", "GAATTC"), new Sonda("BamHI", "GGATCC"),
               new Sonda("HindIII", "AAGCTT"), new Sonda("NotI", "GCGGCCGC") },
@@ -84,14 +79,14 @@ public final class DatosEjemplo {
     }
 
     /** Número de filas y de columnas del chip de expresión. */
-    public static final int LADO_CHIP_DE_EXPRESION = 20;
+    static final int LADO_CHIP_DE_EXPRESION = 20;
 
     /**
      * Puntos del chip de expresión que debe iluminar la muestra de expresión ({@code #}):
      * forman la palabra «ADN». Como no es simétrica, si se confunden las filas con las
      * columnas, el dibujo sale traspuesto.
      */
-    public static final String[] FORMA_MUESTRA_DE_EXPRESION = {
+    static final String[] FORMA_MUESTRA_DE_EXPRESION = {
         "....................",
         "....................",
         "....................",
@@ -123,7 +118,7 @@ public final class DatosEjemplo {
      * @return chip de expresión
      * @throws Exception si alguno de los objetos no se puede crear
      */
-    public static Microarray chipDeExpresion() throws Exception {
+    static Microarray chipDeExpresion() throws Exception {
         String[][] patrones = patronesDelChipDeExpresion();
         Sonda[][] sondas = new Sonda[LADO_CHIP_DE_EXPRESION][LADO_CHIP_DE_EXPRESION];
         for (int fila = 0; fila < LADO_CHIP_DE_EXPRESION; fila++) {
@@ -142,7 +137,7 @@ public final class DatosEjemplo {
      * @return muestra para el chip de expresión
      * @throws Exception si alguno de los objetos no se puede crear
      */
-    public static Muestra muestraDeExpresion() throws Exception {
+    static Muestra muestraDeExpresion() throws Exception {
         String[][] patrones = patronesDelChipDeExpresion();
         Random azar = new Random(7);
         String[] dianas = new String[0];
@@ -169,7 +164,7 @@ public final class DatosEjemplo {
      * @return chip de prueba, panel de patógenos, chip de dianas de restricción y chip de expresión
      * @throws Exception si alguno de los objetos no se puede crear
      */
-    public static Microarray[] microarrays() throws Exception {
+    static Microarray[] microarrays() throws Exception {
         return new Microarray[] { chipDePrueba(), panelDePatogenos(), chipDeDianasDeRestriccion(), chipDeExpresion() };
     }
 
@@ -181,7 +176,7 @@ public final class DatosEjemplo {
      * @return muestra de prueba
      * @throws Exception si alguno de los objetos no se puede crear
      */
-    public static Muestra muestraDePrueba() throws Exception {
+    static Muestra muestraDePrueba() throws Exception {
         return new Muestra("P1 (prueba)", hace(1), new Lectura[] {
             new Lectura("P1-L1", "GATTACA"),
             new Lectura("P1-L2", "GANTACA"),
@@ -206,7 +201,7 @@ public final class DatosEjemplo {
      * @return muestras de ejemplo
      * @throws Exception si alguno de los objetos no se puede crear
      */
-    public static Muestra[] muestras() throws Exception {
+    static Muestra[] muestras() throws Exception {
         return new Muestra[] {
             muestraDePrueba(),
             new Muestra("M1 (paciente 1)", hace(2), new Lectura[] {
@@ -243,7 +238,7 @@ public final class DatosEjemplo {
      * @param dias número de días antes de la fecha actual
      * @return fecha correspondiente
      */
-    public static LocalDate hace(int dias) {
+    static LocalDate hace(int dias) {
         return LocalDate.now().minusDays(dias);
     }
 

@@ -1,25 +1,16 @@
 package es.upm.dit.fprg26.p2;
 
-import es.upm.dit.fprg26.p2.auxiliar.Comprobador;
-import es.upm.dit.fprg26.p2.auxiliar.DatosEjemplo;
-
 /**
  * Pruebas de las ampliaciones A1 (las dos hebras) y A2 (intensidades y sondas detectadas).
  * Se añade a la carpeta {@code src} del proyecto, en el paquete {@code es.upm.dit.fprg26.p2},
  * cuando se trabajan las ampliaciones.
  */
-public class PruebaAmpliaciones {
-
-    private PruebaAmpliaciones() {
-        // Solo contiene el método main: no se instancia
-    }
+class PruebaAmpliaciones {
 
     /**
      * Ejecuta las pruebas.
-     *
-     * @param args no se usa
      */
-    public static void main(String[] args) {
+    void main() {
         probarDosHebras();
         probarIntensidadesYDetectadas();
         Comprobador.resumen();

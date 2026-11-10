@@ -1,13 +1,7 @@
-package es.upm.dit.fprg26.p2.auxiliar;
+package es.upm.dit.fprg26.p2;
 
 import module java.base;
 import module java.desktop;
-
-import es.upm.dit.fprg26.p2.Analisis;
-import es.upm.dit.fprg26.p2.Lectura;
-import es.upm.dit.fprg26.p2.Microarray;
-import es.upm.dit.fprg26.p2.Muestra;
-import es.upm.dit.fprg26.p2.Sonda;
 
 /**
  * Ventana para analizar muestras con microarrays y ver qué puntos del chip se iluminan.
@@ -23,7 +17,7 @@ import es.upm.dit.fprg26.p2.Sonda;
  * código, ni mucho menos modificarlo</strong>.
  * </p>
  */
-public class VentanaMicroarray {
+class VentanaMicroarray {
 
     private static final String A_MANO = "Lecturas escritas a mano…";
 
@@ -43,7 +37,7 @@ public class VentanaMicroarray {
      * @param microarrays microarrays disponibles (al menos uno)
      * @param muestras muestras disponibles (puede estar vacío: siempre se pueden escribir lecturas a mano)
      */
-    public VentanaMicroarray(Microarray[] microarrays, Muestra[] muestras) {
+    VentanaMicroarray(Microarray[] microarrays, Muestra[] muestras) {
         this.microarrays = microarrays;
         this.muestras = muestras;
     }
@@ -51,7 +45,7 @@ public class VentanaMicroarray {
     /**
      * Muestra la ventana.
      */
-    public void mostrar() {
+    void mostrar() {
         SwingUtilities.invokeLater(this::crearVentana);
     }
 
@@ -226,7 +220,7 @@ public class VentanaMicroarray {
                 .append(" (días desde la captura: ").append(analisis.getDiasDesdeCaptura()).append(")\n");
         texto.append("Puntos iluminados: ").append(analisis.contarIluminados())
                 .append(" de ").append(microarray.getFilas() * microarray.getColumnas()).append("\n\n");
-        texto.append("Dónde encaja cada sonda en cada lectura (según buscarEn):\n");
+        texto.append("Dónde encaja cada sonda en cada lectura (según encontrarEn):\n");
         for (Lectura lectura : muestra.getLecturas()) {
             int indeterminadas = lectura.contarIndeterminadas();
             texto.append("\n@").append(lectura.getId()).append("   (").append(indeterminadas)
@@ -236,7 +230,7 @@ public class VentanaMicroarray {
             for (int fila = 0; fila < microarray.getFilas(); fila++) {
                 for (int columna = 0; columna < microarray.getColumnas(); columna++) {
                     Sonda sonda = sondaEn(microarray, fila, columna);
-                    int posicion = sonda.buscarEn(lectura);
+                    int posicion = sonda.encontrarEn(lectura);
                     if (posicion >= 0) {
                         alguna = true;
                         texto.append(" ".repeat(posicion)).append("^".repeat(sonda.getLongitud()))

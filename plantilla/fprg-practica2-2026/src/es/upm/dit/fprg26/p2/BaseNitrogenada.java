@@ -17,7 +17,7 @@ package es.upm.dit.fprg26.p2;
  *       una base concreta: {@code BaseNitrogenada.GUANINA.complementaria(AcidoNucleico.ADN)}.</li>
  * </ul>
  */
-public enum BaseNitrogenada {
+enum BaseNitrogenada {
     /** Adenina (A): purina; se empareja con la timina (ADN) o con el uracilo (ARN). */
     ADENINA,
     /** Citosina (C): pirimidina; se empareja con la guanina. */
@@ -43,7 +43,7 @@ public enum BaseNitrogenada {
      *                   (por ejemplo, {@code 'N'}, con la que los secuenciadores indican
      *                   que no han podido determinar una base)
      */
-    public static BaseNitrogenada fromChar(char letra) throws Exception {
+    static BaseNitrogenada fromChar(char letra) throws Exception {
         switch (letra) {
             case 'A', 'a' -> { return ADENINA; }
             case 'C', 'c' -> { return CITOSINA; }
@@ -64,7 +64,7 @@ public enum BaseNitrogenada {
      * @param base base nitrogenada
      * @return letra que la representa: {@code 'A'}, {@code 'C'}, {@code 'G'}, {@code 'T'} o {@code 'U'}
      */
-    public static char toChar(BaseNitrogenada base) {
+    static char toChar(BaseNitrogenada base) {
         switch (base) {
             case ADENINA -> { return 'A'; }
             case CITOSINA -> { return 'C'; }
@@ -93,7 +93,7 @@ public enum BaseNitrogenada {
      * @throws Exception si se pide la complementaria de la timina en ARN,
      *                   o la del uracilo en ADN
      */
-    public BaseNitrogenada complementaria(AcidoNucleico tipo) throws Exception {
+    BaseNitrogenada complementaria(AcidoNucleico tipo) throws Exception {
         if ((this == TIMINA && tipo == AcidoNucleico.ARN) || (this == URACILO && tipo == AcidoNucleico.ADN)) {
             throw new Exception("La base " + this + " no forma parte del " + tipo);
         }

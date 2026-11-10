@@ -2,25 +2,16 @@ package es.upm.dit.fprg26.p2;
 
 import module java.base;
 
-import es.upm.dit.fprg26.p2.auxiliar.Comprobador;
-import es.upm.dit.fprg26.p2.auxiliar.DatosEjemplo;
-
 /**
  * Pruebas de la clase {@link Analisis}, con los datos de ejemplo de {@link DatosEjemplo}.
  * Añada sus propios casos de prueba en {@link #pruebasPropias()}.
  */
-public class PruebaAnalisis {
-
-    private PruebaAnalisis() {
-        // Solo contiene el método main: no se instancia
-    }
+class PruebaAnalisis {
 
     /**
      * Ejecuta las pruebas.
-     *
-     * @param args no se usa
      */
-    public static void main(String[] args) {
+    void main() {
         probarConstructorYAcceso();
         probarAnalisisNoValidos();
         probarDias();

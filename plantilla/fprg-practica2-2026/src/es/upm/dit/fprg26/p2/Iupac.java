@@ -22,22 +22,22 @@ package es.upm.dit.fprg26.p2;
  * de la clase, por ejemplo, {@code Iupac.esPurina('G')}.
  * </p>
  */
-public final class Iupac {
+final class Iupac {
 
     /** Símbolos que pueden aparecer en una lectura: las cuatro bases y la base indeterminada. */
-    public static final String SIMBOLOS_DE_LECTURA = "ACGTN";
+    static final String SIMBOLOS_DE_LECTURA = "ACGTN";
 
     /** Símbolos que pueden aparecer en el patrón de una sonda: los de las lecturas y los comodines. */
-    public static final String SIMBOLOS_DE_PATRON = "ACGTNRY";
+    static final String SIMBOLOS_DE_PATRON = "ACGTNRY";
 
     /** Base indeterminada (en una lectura) o comodín de cualquier base (en un patrón). */
-    public static final char INDETERMINADA = 'N';
+    static final char INDETERMINADA = 'N';
 
     /** Comodín de cualquier purina ({@code A} o {@code G}). */
-    public static final char PURINA = 'R';
+    static final char PURINA = 'R';
 
     /** Comodín de cualquier pirimidina ({@code C} o {@code T}). */
-    public static final char PIRIMIDINA = 'Y';
+    static final char PIRIMIDINA = 'Y';
 
     private Iupac() {
         // No se instancia: solo contiene métodos estáticos
@@ -50,7 +50,7 @@ public final class Iupac {
      * @return {@code true} si es {@code A}, {@code C}, {@code G}, {@code T} o {@code N}
      *         (en mayúsculas); {@code false} en otro caso
      */
-    public static boolean esSimboloDeLectura(char simbolo) {
+    static boolean esSimboloDeLectura(char simbolo) {
         return SIMBOLOS_DE_LECTURA.indexOf(simbolo) >= 0;
     }
 
@@ -61,7 +61,7 @@ public final class Iupac {
      * @return {@code true} si es {@code A}, {@code C}, {@code G}, {@code T}, {@code N},
      *         {@code R} o {@code Y} (en mayúsculas); {@code false} en otro caso
      */
-    public static boolean esSimboloDePatron(char simbolo) {
+    static boolean esSimboloDePatron(char simbolo) {
         return SIMBOLOS_DE_PATRON.indexOf(simbolo) >= 0;
     }
 
@@ -72,7 +72,7 @@ public final class Iupac {
      * @return {@code true} si es {@code A} o {@code G}; {@code false} en otro caso
      *         (también si es {@code N}, porque no se sabe qué base es)
      */
-    public static boolean esPurina(char base) {
+    static boolean esPurina(char base) {
         return base == 'A' || base == 'G';
     }
 
@@ -83,7 +83,7 @@ public final class Iupac {
      * @return {@code true} si es {@code C} o {@code T}; {@code false} en otro caso
      *         (también si es {@code N}, porque no se sabe qué base es)
      */
-    public static boolean esPirimidina(char base) {
+    static boolean esPirimidina(char base) {
         return base == 'C' || base == 'T';
     }
 
@@ -100,7 +100,7 @@ public final class Iupac {
      * @return símbolo complementario
      * @throws Exception si el carácter no es un símbolo de patrón ni de lectura
      */
-    public static char complementario(char simbolo) throws Exception {
+    static char complementario(char simbolo) throws Exception {
         switch (simbolo) {
             case INDETERMINADA -> { return INDETERMINADA; }
             case PURINA -> { return PIRIMIDINA; }

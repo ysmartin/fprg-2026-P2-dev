@@ -80,7 +80,7 @@ Las lecturas solo pueden contener `A`, `C`, `G`, `T` y `N`, y los patrones, adem
 
 ### Modelo del dominio
 
-El siguiente diagrama resume las clases de la práctica, con sus atributos, sus métodos y sus relaciones. En cada clase se indica qué métodos se proporcionan ya hechos y cuáles debe completar usted:
+El siguiente diagrama resume las clases de la práctica, con sus atributos, sus métodos y sus relaciones. En cada clase se indica qué métodos se proporcionan ya hechos y cuáles debe completar o modificar usted:
 
 ````mermaid
 classDiagram
@@ -88,25 +88,25 @@ direction LR
 
 class Iupac {
 <<utilidades>>
-+esSimboloDeLectura(char) boolean$
-+esSimboloDePatron(char) boolean$
-+esPurina(char) boolean$
-+esPirimidina(char) boolean$
-+complementario(char) char$
+esSimboloDeLectura(char) boolean$
+esSimboloDePatron(char) boolean$
+esPurina(char) boolean$
+esPirimidina(char) boolean$
+complementario(char) char$
 }
 
 class Lectura {
 -id: String
 -secuencia: String
 ……………Proporcionados……………()
-+Lectura(String, String)
-+getId() String
-+getSecuencia() String
-+getLongitud() int
-+getBase(int) char
-+toString() String
+Lectura(String, String)
+getId() String
+getSecuencia() String
+getLongitud() int
+getBase(int) char
+toString() String
 ……………A completar……………()
-+contarIndeterminadas() int
+contarIndeterminadas() int
 }
 
 class Muestra {
@@ -114,44 +114,45 @@ class Muestra {
 -fechaCaptura: LocalDate
 -lecturas: Lectura[]
 ……………Proporcionados……………()
-+Muestra(String, LocalDate, Lectura[])
-+getId() String
-+getFechaCaptura() LocalDate
-+getNumeroLecturas() int
-+getLectura(int) Lectura
-+getLecturas() Lectura[]
-+toString() String
+Muestra(String, LocalDate, Lectura[])
+getId() String
+getFechaCaptura() LocalDate
+getNumeroLecturas() int
+getLectura(int) Lectura
+getLecturas() Lectura[]
+toString() String
 }
 
 class Sonda {
 -nombre: String
 -patron: String
 ……………A completar……………()
-+Sonda(String, String)
-+getNombre() String
-+getPatron() String
-+getLongitud() int
-+encaja(char, char) boolean$
-+encajaEn(Lectura, int) boolean
-+buscarEn(Lectura) int
-+hibridaCon(Lectura) boolean
+Sonda(String, String)
+getNombre() String
+getPatron() String
+getLongitud() int
+encaja(char, char) boolean$
+encajaEn(Lectura, int) boolean
+hibridaCon(Lectura) boolean
+……………A modificar……………()
+encontrarEn(Lectura) int
 ……………Proporcionados……………()
-+toString() String
+toString() String
 }
 
 class Microarray {
 -nombre: String
 -sondas: Sonda[][]
 ……………Proporcionados……………()
-+Microarray(String, Sonda[][])
-+getNombre() String
-+getFilas() int
-+getColumnas() int
-+getSonda(int, int) Sonda
-+toString() String
+Microarray(String, Sonda[][])
+getNombre() String
+getFilas() int
+getColumnas() int
+getSonda(int, int) Sonda
+toString() String
 ……………A completar……………()
-+hibridar(Lectura) boolean[][]
-+hibridar(Muestra) boolean[][]
+hibridar(Lectura) boolean[][]
+hibridar(Muestra) boolean[][]
 }
 
 class Analisis {
@@ -160,15 +161,15 @@ class Analisis {
 -fechaAnalisis: LocalDate
 -iluminados: boolean[][]
 ……………A completar……………()
-+Analisis(Muestra, Microarray)
-+getMuestra() Muestra
-+getMicroarray() Microarray
-+getFechaAnalisis() LocalDate
-+getIluminados() boolean[][]
-+getDiasDesdeCaptura() long
-+contarIluminados() int
+Analisis(Muestra, Microarray)
+getMuestra() Muestra
+getMicroarray() Microarray
+getFechaAnalisis() LocalDate
+getIluminados() boolean[][]
+getDiasDesdeCaptura() long
+contarIluminados() int
 ……………Proporcionados……………()
-+toString() String
+toString() String
 }
 
 Muestra *-- Lectura : lecturas
@@ -192,7 +193,7 @@ A diferencia de la práctica 1, el código se organiza en **clases**, dentro del
 | `Sonda`, `Microarray`, `Analisis` | Las clases del reconocimiento de patrones | Completar los métodos que se indican en cada apartado |
 | `PruebaLectura`, `PruebaSonda`, `PruebaMicroarray`, `PruebaAnalisis` | Pruebas de cada clase, con una muestra de casos | Ejecutarlas y añadir sus propios casos de prueba |
 | `PruebaInteractiva` | Programa que abre la ventana del microarray virtual | Ejecutarlo al final, y añadir sus propios microarrays y muestras |
-| Paquete `auxiliar` | Datos de ejemplo, comprobaciones de las pruebas y ventana gráfica | Usarlo (**no es necesario entender el código de la ventana, ni mucho menos modificarlo**) |
+| Carpeta `auxiliar` (en el mismo paquete) | Datos de ejemplo (`DatosEjemplo`), comprobaciones de las pruebas (`Comprobador`) y ventana gráfica | Usarlo (**no es necesario entender el código de la ventana, ni mucho menos modificarlo**) |
 | Carpeta `doc` | Documentación de todo el proyecto, en HTML (generada con Javadoc) | Consultarla con el navegador |
 
 Para usar las clases de la biblioteca de Java, como `LocalDate`, las clases empiezan con una **importación de módulo**: `import module java.base;` importa de una vez todos los paquetes del módulo básico de Java (`java.util`, `java.time`, etc.).
@@ -226,7 +227,7 @@ En Eclipse debe seguir los siguientes pasos:
 - Descargue de GitHub pulsando sobre el botón _Code ⇾ Download ZIP_ el fichero zip que encontrará en la entrada _Práctica 2 - Main_.
 - Importe el proyecto con _File ➤ Import ➤ General ➤ Existing Projects into Workspace_ e indique la localización del fichero zip descargado usando la opción _Select archive file_.
 - El proyecto está configurado para Java 25 (_JavaSE-25_). Si Eclipse indica que no encuentra ese entorno, añada su JDK 25 en _Window ➤ Preferences ➤ Java ➤ Installed JREs_.
-- Todas las clases están en la carpeta _src_, en el paquete `es.upm.dit.fprg26.p2` (y el código auxiliar, en `es.upm.dit.fprg26.p2.auxiliar`).
+- Las clases de la práctica están en la carpeta _src_, en el paquete `es.upm.dit.fprg26.p2`. El código auxiliar está en la carpeta _auxiliar_, en el mismo paquete.
 - Para ejecutar un programa, pulse con el botón derecho sobre el fichero (por ejemplo, `PruebaSonda.java`) y elija _Run As ➤ Java Application_.
 
 ### 1. Explorar el proyecto
@@ -245,7 +246,7 @@ En Eclipse debe seguir los siguientes pasos:
 > [!IMPORTANT]
 > **Sus propios casos de prueba.** Cada clase de prueba (`PruebaSonda`, etc.) comprueba una **muestra** de casos y escribe `✓` o `✗` en cada comprobación, con el resultado esperado y el obtenido. Aunque todas sus comprobaciones sean correctas, eso no garantiza que su código lo sea. Por eso, cada clase de prueba tiene un método `pruebasPropias`, donde debe añadir sus propios casos. Puede usar el mismo método que las pruebas proporcionadas:
 > ```java
-> Comprobador.comprobar("buscarEn en una lectura sin la diana", -1, sonda.buscarEn(lectura));
+> Comprobador.comprobar("encontrarEn en una lectura sin la diana", -1, sonda.encontrarEn(lectura));
 > ```
 > Para comprobar que un constructor lanza una excepción, invóquelo dentro de un bloque `try`: si no la lanza, llame a `Comprobador.fallo(...)`; en el `catch`, a `Comprobador.acierto(...)` (vea `PruebaSonda`).
 
@@ -257,17 +258,19 @@ Ejecute `PruebaLectura` y corrija lo que sea necesario hasta que todas las compr
 
 ### 3. Completar la clase `Sonda`
 
-La clase `Sonda` representa una sonda del microarray: su nombre y el patrón de su diana, que puede contener comodines. Esta es la clase central de la práctica: contiene el algoritmo de reconocimiento de patrones.
+La clase `Sonda` representa una sonda del microarray: su nombre y el patrón de su diana, que puede contener comodines. Esta es la clase central de la práctica: contiene el algoritmo de reconocimiento de patrones. Se proporciona hecho el método `encontrarEn`, pero con una versión inicial que no tiene en cuenta los comodines: tendrá que modificarlo.
 
 **Pasos:**
 
-1. **Constructor**: compruebe que el nombre no es nulo ni está en blanco, y que el patrón no es nulo ni vacío y solo contiene símbolos de patrón (use `Iupac.esSimboloDePatron` con cada carácter). Si algún dato no es válido, lance una excepción con un mensaje que explique el motivo; si todos lo son, asigne los atributos. Tome como modelo el constructor de `Lectura`.
-2. **Métodos de acceso**: `getNombre`, `getPatron` y `getLongitud` (la longitud del patrón).
-3. **`encaja(char simbolo, char base)`**: indica si un símbolo del patrón encaja con una base de la lectura, según la tabla de los [patrones con comodines](#patrones-con-comodines). Primero, compruebe que el símbolo es un símbolo de patrón y la base, un símbolo de lectura (con `Iupac.esSimboloDePatron` e `Iupac.esSimboloDeLectura`); si alguno no lo es, lance una excepción. Después, use una sentencia `switch` con un caso para cada comodín y un caso `default` para las bases. Puede apoyarse en `Iupac.esPurina` e `Iupac.esPirimidina`. Es un método **estático**: no depende de ninguna sonda concreta, y se invoca con el nombre de la clase (`Sonda.encaja('R', 'G')`).
-4. **`encajaEn(Lectura lectura, int inicio)`**: indica si el patrón encaja con la lectura colocando su primer símbolo en la posición `inicio` de la lectura. Recorra el patrón con un bucle: el símbolo `i` del patrón se compara con la base `inicio + i` de la lectura, que puede obtener con `lectura.getBase(...)`. En cuanto un símbolo no encaje, el patrón no encaja.
+1. **Desarrolle el constructor**: compruebe que el nombre no es nulo ni está en blanco, y que el patrón no es nulo ni vacío y solo contiene símbolos de patrón (use `Iupac.esSimboloDePatron` con cada carácter). Si algún dato no es válido, lance una excepción con un mensaje que explique el motivo; si todos lo son, asigne los atributos. Tome como modelo el constructor de `Lectura`.
+2. **Desarrolle los métodos de acceso** `getNombre`, `getPatron` y `getLongitud` (la longitud del patrón).
+3. **Desarrolle `hibridaCon(Lectura lectura)`**: este método debe devolver si el patrón aparece en algún lugar de la lectura. Reutilice `encontrarEn`, que devuelve la primera posición de la lectura en la que encaja el patrón, o `-1` si no encaja en ninguna.
+4. **Pruebe la versión inicial de `encontrarEn`**. Se proporciona con una implementación muy sencilla, `lectura.getSecuencia().indexOf(patron)`: el método `indexOf` de `String` busca un texto dentro de otro, pero comparando los caracteres tal cual, así que no entiende los comodines. Ejecute `PruebaSonda`: las comprobaciones del grupo «encontrarEn, con patrones sin comodines» deberían aparecer con `✓`, y también las de `hibridaCon` con el Virus A; en cambio, fallarán casi todas las del grupo «encontrarEn, con patrones con comodines» (por ejemplo, no encuentra `CAGYT` en `GATTACAGTTTAGC`). Es normal: lo resolverá en los pasos siguientes.
+5. **Desarrolle `encaja(char simbolo, char base)`**: este método debe devolver si un símbolo del patrón encaja con una base de la lectura, según la tabla de los [patrones con comodines](#patrones-con-comodines). Primero, compruebe que el símbolo es un símbolo de patrón y la base, un símbolo de lectura (con `Iupac.esSimboloDePatron` e `Iupac.esSimboloDeLectura`); si alguno no lo es, lance una excepción. Después, use una sentencia `switch` con un caso para cada comodín y un caso `default` para las bases. Puede apoyarse en `Iupac.esPurina` e `Iupac.esPirimidina`. Es un método **estático**: no depende de ninguna sonda concreta, y se invoca con el nombre de la clase (`Sonda.encaja('R', 'G')`).
+6. **Desarrolle `encajaEn(Lectura lectura, int inicio)`**: este método debe devolver si el patrón encaja con la lectura colocando su primer símbolo en la posición `inicio` de la lectura. Recorra el patrón con un bucle: el símbolo `i` del patrón se compara (con `encaja`) con la base `inicio + i` de la lectura, que puede obtener con `lectura.getBase(...)`. En cuanto un símbolo no encaje, el patrón no encaja.
 
    `getBase` lanza una excepción si la posición está fuera de la lectura, así que el patrón no cabe en ella a partir de esa posición. Capture esa excepción con un bloque `try`/`catch`: en ese caso, `encajaEn` debe devolver `false`. El mismo bloque captura también las excepciones de `encaja`.
-5. **`buscarEn(Lectura lectura)`**: devuelve la primera posición de la lectura a partir de la cual encaja el patrón, o `-1` si no encaja en ninguna. Es el algoritmo de la **ventana deslizante**: se coloca el patrón al principio de la lectura y se va desplazando una posición cada vez, comprobando en cada una si encaja (con `encajaEn`). Por ejemplo, para buscar el patrón `TRC` en la lectura `GATACATGCA`:
+7. **Modifique `encontrarEn(Lectura lectura)`** para que tenga en cuenta los comodines: en lugar de `indexOf`, use el algoritmo de la **ventana deslizante**. Se coloca el patrón al principio de la lectura y se va desplazando una posición cada vez, comprobando en cada una si encaja (con `encajaEn`); el método devuelve la primera posición en la que encaja, o `-1` si no encaja en ninguna. Por ejemplo, para buscar el patrón `TRC` en la lectura `GATACATGCA`:
 
    ```
    GATACATGCA
@@ -277,11 +280,10 @@ La clase `Sonda` representa una sonda del microarray: su nombre y el patrón de 
    ```
 
    ¿Cuál es la última posición en la que tiene sentido colocar el patrón? Piense en un patrón de 3 símbolos y una lectura de 10 bases.
-6. **`hibridaCon(Lectura lectura)`**: indica si el patrón aparece en algún lugar de la lectura. Reutilice `buscarEn`.
-7. Ejecute `PruebaSonda` y corrija lo que sea necesario hasta que todas las comprobaciones aparezcan con `✓`. Después, añada sus propios casos de prueba: por ejemplo, patrones al principio y al final de la lectura, patrones que aparecen varias veces, lecturas con `N` y patrones más largos que la lectura.
+8. Ejecute `PruebaSonda` y corrija lo que sea necesario hasta que todas las comprobaciones aparezcan con `✓`. Después, añada sus propios casos de prueba: por ejemplo, patrones al principio y al final de la lectura, patrones que aparecen varias veces, lecturas con `N` y patrones más largos que la lectura.
 
 > [!TIP]
-> Antes de programar `buscarEn`, dibuje a mano una lectura y un patrón, y vaya desplazando el patrón posición a posición. Le ayudará a encontrar el límite del bucle, que es donde suelen estar los errores.
+> Antes de modificar `encontrarEn`, dibuje a mano una lectura y un patrón, y vaya desplazando el patrón posición a posición. Le ayudará a encontrar el límite del bucle, que es donde suelen estar los errores.
 
 ### 4. Completar la clase `Microarray`
 
@@ -289,8 +291,8 @@ La clase `Microarray` representa un chip con sondas en una cuadrícula: una matr
 
 **Pasos:**
 
-1. **`hibridar(Lectura lectura)`**: devuelve una matriz de `boolean` del mismo tamaño que la cuadrícula, con `true` en los puntos cuya sonda hibrida con la lectura. Cree la matriz con `new boolean[filas][columnas]` y recórrala con dos bucles anidados.
-2. **`hibridar(Muestra muestra)`**: hace lo mismo con todas las lecturas de la muestra. Un punto se ilumina si su sonda hibrida con **alguna** de las lecturas. Puede recorrer las lecturas con un bucle `for` mejorado (`for (Lectura lectura : muestra.getLecturas())`) y reutilizar el método anterior. Cuidado: un punto que ya se ha iluminado con una lectura no debe apagarse porque no hibride con la siguiente.
+1. **Desarrolle `hibridar(Lectura lectura)`**: este método debe devolver una matriz de `boolean` del mismo tamaño que la cuadrícula, con `true` en los puntos cuya sonda hibrida con la lectura. Cree la matriz con `new boolean[filas][columnas]` y recórrala con dos bucles anidados.
+2. **Desarrolle `hibridar(Muestra muestra)`**: este método debe hacer lo mismo con todas las lecturas de la muestra. Un punto se ilumina si su sonda hibrida con **alguna** de las lecturas. Puede recorrer las lecturas con un bucle `for` mejorado (`for (Lectura lectura : muestra.getLecturas())`) y reutilizar el método anterior. Cuidado: un punto que ya se ha iluminado con una lectura no debe apagarse porque no hibride con la siguiente.
 3. Ejecute `PruebaMicroarray` y corrija lo que sea necesario. Las matrices se escriben con `#` para los puntos iluminados y `.` para los apagados, una fila entre corchetes. Fíjese en la prueba con el chip de 2x4: si confunde filas y columnas, fallará. La última prueba usa un chip de 20x20 sondas: si su código es correcto, los puntos iluminados forman una palabra.
 
 ### 5. Completar la clase `Analisis`
@@ -299,15 +301,15 @@ La clase `Analisis` representa el resultado de analizar una muestra con un micro
 
 **Pasos:**
 
-1. **Constructor**: compruebe que ningún parámetro es nulo; si alguno lo es, lance una excepción. Después, asigne los atributos: la fecha del análisis es la fecha actual, que se obtiene con `LocalDate.now()`, y los puntos iluminados se calculan con `hibridar(Muestra)`.
-2. **Métodos de acceso**: `getMuestra`, `getMicroarray`, `getFechaAnalisis` y `getIluminados`.
-3. **`getDiasDesdeCaptura`**: devuelve cuántos días han pasado entre la captura de la muestra y el análisis. Use `ChronoUnit.DAYS.between(fechaInicial, fechaFinal)`, que tiene en cuenta los meses de distinta duración y los años bisiestos.
-4. **`contarIluminados`**: devuelve cuántos puntos del chip se han iluminado.
+1. **Desarrolle el constructor**: compruebe que ningún parámetro es nulo; si alguno lo es, lance una excepción. Después, asigne los atributos: la fecha del análisis es la fecha actual, que se obtiene con `LocalDate.now()`, y los puntos iluminados se calculan con `hibridar(Muestra)`.
+2. **Desarrolle los métodos de acceso** `getMuestra`, `getMicroarray`, `getFechaAnalisis` y `getIluminados`.
+3. **Desarrolle `getDiasDesdeCaptura`**: este método debe devolver cuántos días han pasado entre la captura de la muestra y el análisis. Use `ChronoUnit.DAYS.between(fechaInicial, fechaFinal)`, que tiene en cuenta los meses de distinta duración y los años bisiestos.
+4. **Desarrolle `contarIluminados`**: este método debe devolver cuántos puntos del chip se han iluminado.
 5. Ejecute `PruebaAnalisis` y corrija lo que sea necesario. Después, añada sus propios casos de prueba.
 
 ### 6. Probar el sistema completo
 
-Ejecute de nuevo `PruebaInteractiva`. Elija un microarray y una muestra (o escriba sus propias lecturas, separadas por espacios) y pulse _Analizar_: los puntos del chip cuyas sondas hibridan con alguna lectura se iluminarán, y debajo verá, para cada lectura, en qué posición encaja cada sonda (según su método `buscarEn`).
+Ejecute de nuevo `PruebaInteractiva`. Elija un microarray y una muestra (o escriba sus propias lecturas, separadas por espacios) y pulse _Analizar_: los puntos del chip cuyas sondas hibridan con alguna lectura se iluminarán, y debajo verá, para cada lectura, en qué posición encaja cada sonda (según su método `encontrarEn`).
 
 ![Ventana del microarray virtual tras analizar la muestra M3 con el panel de patógenos](img/ventana.png)
 
