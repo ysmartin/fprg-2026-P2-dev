@@ -81,10 +81,17 @@ final class DatosEjemplo {
     /** Número de filas y de columnas del chip de expresión. */
     static final int LADO_CHIP_DE_EXPRESION = 20;
 
+    /** Primera columna de la letra D en {@link #FORMA_MUESTRA_DE_EXPRESION} (la A ocupa las anteriores). */
+    static final int COLUMNA_D = 7;
+
+    /** Primera columna de la letra N en {@link #FORMA_MUESTRA_DE_EXPRESION} (la D ocupa las anteriores). */
+    static final int COLUMNA_N = 13;
+
     /**
      * Puntos del chip de expresión que debe iluminar la muestra de expresión ({@code #}):
-     * forman la palabra «ADN». Como no es simétrica, si se confunden las filas con las
-     * columnas, el dibujo sale traspuesto.
+     * forman la palabra «ADN». Cada letra pone a prueba una parte del reconocimiento de
+     * patrones (ver {@link #chipDeExpresion()}). Como la palabra no es simétrica, si se
+     * confunden las filas con las columnas, el dibujo sale traspuesto.
      */
     static final String[] FORMA_MUESTRA_DE_EXPRESION = {
         "....................",
@@ -114,6 +121,18 @@ final class DatosEjemplo {
      * {@code G400}), como los que miden qué genes están activos en un tejido. Algunas
      * sondas son degeneradas. En la interfaz gráfica, sus nombres y patrones no se escriben
      * en el chip: se muestran al pasar el ratón por encima de cada punto.
+     * <p>
+     * Con la muestra de expresión, cada letra de la palabra «ADN» se ilumina en una etapa
+     * del reconocimiento de patrones:
+     * </p>
+     * <ul>
+     *   <li>las sondas de la <strong>A</strong> no tienen comodines, y sus dianas aparecen tal
+     *       cual en las lecturas: basta con buscar el patrón con {@code indexOf};</li>
+     *   <li>las de la <strong>D</strong> tienen algún comodín, y sus dianas aparecen en las
+     *       lecturas en sentido directo;</li>
+     *   <li>las dianas de la <strong>N</strong> están en la otra hebra: aparecen en las lecturas
+     *       como su complementaria inversa.</li>
+     * </ul>
      *
      * @return chip de expresión
      * @throws Exception si alguno de los objetos no se puede crear
@@ -132,7 +151,8 @@ final class DatosEjemplo {
 
     /**
      * Devuelve una muestra para el chip de expresión, cuyas lecturas contienen las dianas de
-     * los puntos marcados en {@link #FORMA_MUESTRA_DE_EXPRESION} (dos dianas por lectura).
+     * los puntos marcados en {@link #FORMA_MUESTRA_DE_EXPRESION} (dos dianas por lectura). Las
+     * de la letra N están en la otra hebra (ver {@link #chipDeExpresion()}).
      *
      * @return muestra para el chip de expresión
      * @throws Exception si alguno de los objetos no se puede crear
@@ -144,8 +164,12 @@ final class DatosEjemplo {
         for (int fila = 0; fila < LADO_CHIP_DE_EXPRESION; fila++) {
             for (int columna = 0; columna < LADO_CHIP_DE_EXPRESION; columna++) {
                 if (FORMA_MUESTRA_DE_EXPRESION[fila].charAt(columna) == '#') {
+                    String diana = concretar(patrones[fila][columna], azar);
+                    if (columna >= COLUMNA_N) {
+                        diana = complementariaInversa(diana);
+                    }
                     dianas = Arrays.copyOf(dianas, dianas.length + 1);
-                    dianas[dianas.length - 1] = concretar(patrones[fila][columna], azar);
+                    dianas[dianas.length - 1] = diana;
                 }
             }
         }
@@ -248,7 +272,11 @@ final class DatosEjemplo {
         for (int fila = 0; fila < LADO_CHIP_DE_EXPRESION; fila++) {
             for (int columna = 0; columna < LADO_CHIP_DE_EXPRESION; columna++) {
                 char[] patron = relleno(azar, 14).toCharArray();
-                if (azar.nextInt(3) == 0) {
+                boolean conComodin = azar.nextInt(3) == 0;
+                if (FORMA_MUESTRA_DE_EXPRESION[fila].charAt(columna) == '#' && columna < COLUMNA_N) {
+                    conComodin = columna >= COLUMNA_D;   // la A, sin comodines; la D, con alguno
+                }
+                if (conComodin) {
                     patron[1 + azar.nextInt(12)] = "NRY".charAt(azar.nextInt(3));
                 }
                 patrones[fila][columna] = new String(patron);
@@ -263,6 +291,15 @@ final class DatosEjemplo {
             bases += "ACGT".charAt(azar.nextInt(4));
         }
         return bases;
+    }
+
+    /** Devuelve la complementaria inversa de una secuencia de bases concretas. */
+    private static String complementariaInversa(String secuencia) {
+        String inversa = "";
+        for (int i = secuencia.length() - 1; i >= 0; i--) {
+            inversa += "TGCA".charAt("ACGT".indexOf(secuencia.charAt(i)));
+        }
+        return inversa;
     }
 
     /** Sustituye cada comodín de un patrón por una base concreta que encaja con él. */

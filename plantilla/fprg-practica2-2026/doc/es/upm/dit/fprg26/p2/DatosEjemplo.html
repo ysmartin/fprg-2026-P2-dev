@@ -58,6 +58,8 @@ loadScripts(document, 'script');</script>
 <li><a href="#field-detail" tabindex="0">Field Details</a>
 <ol class="toc-list">
 <li><a href="#LADO_CHIP_DE_EXPRESION" tabindex="0">LADO_CHIP_DE_EXPRESION</a></li>
+<li><a href="#COLUMNA_D" tabindex="0">COLUMNA_D</a></li>
+<li><a href="#COLUMNA_N" tabindex="0">COLUMNA_N</a></li>
 <li><a href="#FORMA_MUESTRA_DE_EXPRESION" tabindex="0">FORMA_MUESTRA_DE_EXPRESION</a></li>
 </ol>
 </li>
@@ -117,6 +119,16 @@ saber qué datos ofrece cada método.
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Field</div>
 <div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>(package private) static final int</code></div>
+<div class="col-second even-row-color"><code><a href="#COLUMNA_D" class="member-name-link">COLUMNA_D</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Primera columna de la letra D en <a href="#FORMA_MUESTRA_DE_EXPRESION"><code>FORMA_MUESTRA_DE_EXPRESION</code></a> (la A ocupa las anteriores).</div>
+</div>
+<div class="col-first odd-row-color"><code>(package private) static final int</code></div>
+<div class="col-second odd-row-color"><code><a href="#COLUMNA_N" class="member-name-link">COLUMNA_N</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">Primera columna de la letra N en <a href="#FORMA_MUESTRA_DE_EXPRESION"><code>FORMA_MUESTRA_DE_EXPRESION</code></a> (la D ocupa las anteriores).</div>
+</div>
 <div class="col-first even-row-color"><code>(package private) static final <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</code></div>
 <div class="col-second even-row-color"><code><a href="#FORMA_MUESTRA_DE_EXPRESION" class="member-name-link">FORMA_MUESTRA_DE_EXPRESION</a></code></div>
 <div class="col-last even-row-color">
@@ -230,13 +242,48 @@ panel de patógenos y una para el chip de dianas de restricción.</div>
 </section>
 </li>
 <li>
+<section class="detail" id="COLUMNA_D">
+<h3>COLUMNA_D</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">COLUMNA_D</span></div>
+<div class="block">Primera columna de la letra D en <a href="#FORMA_MUESTRA_DE_EXPRESION"><code>FORMA_MUESTRA_DE_EXPRESION</code></a> (la A ocupa las anteriores).</div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="tag-list">
+<li><a href="../../../../../constant-values.html#es.upm.dit.fprg26.p2.DatosEjemplo.COLUMNA_D">Constant Field Values</a></li>
+</ul>
+</dd>
+</dl>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="COLUMNA_N">
+<h3>COLUMNA_N</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">COLUMNA_N</span></div>
+<div class="block">Primera columna de la letra N en <a href="#FORMA_MUESTRA_DE_EXPRESION"><code>FORMA_MUESTRA_DE_EXPRESION</code></a> (la D ocupa las anteriores).</div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="tag-list">
+<li><a href="../../../../../constant-values.html#es.upm.dit.fprg26.p2.DatosEjemplo.COLUMNA_N">Constant Field Values</a></li>
+</ul>
+</dd>
+</dl>
+</div>
+</section>
+</li>
+<li>
 <section class="detail" id="FORMA_MUESTRA_DE_EXPRESION">
 <h3>FORMA_MUESTRA_DE_EXPRESION</h3>
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name">FORMA_MUESTRA_DE_EXPRESION</span></div>
 <div class="block">Puntos del chip de expresión que debe iluminar la muestra de expresión (<code>#</code>):
-forman la palabra «ADN». Como no es simétrica, si se confunden las filas con las
-columnas, el dibujo sale traspuesto.</div>
+forman la palabra «ADN». Cada letra pone a prueba una parte del reconocimiento de
+patrones (ver <a href="#chipDeExpresion()"><code>chipDeExpresion()</code></a>). Como la palabra no es simétrica, si se
+confunden las filas con las columnas, el dibujo sale traspuesto.</div>
 </div>
 </section>
 </li>
@@ -314,7 +361,19 @@ reales. Las de la segunda fila son degeneradas: por ejemplo, HincII reconoce
 <div class="block">Devuelve un chip de expresión de 20x20 con 400 sondas sintéticas (<code>G001</code> a
 <code>G400</code>), como los que miden qué genes están activos en un tejido. Algunas
 sondas son degeneradas. En la interfaz gráfica, sus nombres y patrones no se escriben
-en el chip: se muestran al pasar el ratón por encima de cada punto.</div>
+en el chip: se muestran al pasar el ratón por encima de cada punto.
+<p>
+Con la muestra de expresión, cada letra de la palabra «ADN» se ilumina en una etapa
+del reconocimiento de patrones:
+</p>
+<ul>
+  <li>las sondas de la <strong>A</strong> no tienen comodines, y sus dianas aparecen tal
+      cual en las lecturas: basta con buscar el patrón con <code>indexOf</code>;</li>
+  <li>las de la <strong>D</strong> tienen algún comodín, y sus dianas aparecen en las
+      lecturas en sentido directo;</li>
+  <li>las dianas de la <strong>N</strong> están en la otra hebra: aparecen en las lecturas
+      como su complementaria inversa.</li>
+</ul></div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>chip de expresión</dd>
@@ -331,7 +390,8 @@ en el chip: se muestran al pasar el ratón por encima de cada punto.</div>
 <div class="member-signature"><span class="modifiers">static</span>&nbsp;<span class="return-type"><a href="Muestra.html" title="class in es.upm.dit.fprg26.p2">Muestra</a></span>&nbsp;<span class="element-name">muestraDeExpresion</span>()
                            throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
 <div class="block">Devuelve una muestra para el chip de expresión, cuyas lecturas contienen las dianas de
-los puntos marcados en <a href="#FORMA_MUESTRA_DE_EXPRESION"><code>FORMA_MUESTRA_DE_EXPRESION</code></a> (dos dianas por lectura).</div>
+los puntos marcados en <a href="#FORMA_MUESTRA_DE_EXPRESION"><code>FORMA_MUESTRA_DE_EXPRESION</code></a> (dos dianas por lectura). Las
+de la letra N están en la otra hebra (ver <a href="#chipDeExpresion()"><code>chipDeExpresion()</code></a>).</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>muestra para el chip de expresión</dd>
