@@ -77,7 +77,6 @@ loadScripts(document, 'script');</script>
 <li><a href="#encajaEn(es.upm.dit.fprg26.p2.Lectura,int)" tabindex="0">encajaEn(Lectura, int)</a></li>
 <li><a href="#encontrarEn(es.upm.dit.fprg26.p2.Lectura)" tabindex="0">encontrarEn(Lectura)</a></li>
 <li><a href="#hibridaCon(es.upm.dit.fprg26.p2.Lectura)" tabindex="0">hibridaCon(Lectura)</a></li>
-<li><a href="#contarLecturasQueHibridan(es.upm.dit.fprg26.p2.Muestra)" tabindex="0">contarLecturasQueHibridan(Muestra)</a></li>
 <li><a href="#toString()" tabindex="0">toString()</a></li>
 </ol>
 </li>
@@ -174,23 +173,17 @@ se busca en los dos sentidos (ver <a href="#encajaEn(es.upm.dit.fprg26.p2.Lectur
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>(package private) int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#contarLecturasQueHibridan(es.upm.dit.fprg26.p2.Muestra)" class="member-name-link">contarLecturasQueHibridan</a><wbr>(<a href="Muestra.html" title="class in es.upm.dit.fprg26.p2">Muestra</a>&nbsp;muestra)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Cuenta con cuántas lecturas de una muestra hibrida la sonda (en cualquiera de los dos
-sentidos; ver <a href="#hibridaCon(es.upm.dit.fprg26.p2.Lectura)"><code>hibridaCon(Lectura)</code></a>).</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>(package private) static boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#encaja(char,char)" class="member-name-link">encaja</a><wbr>(char&nbsp;simbolo,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>(package private) static boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#encaja(char,char)" class="member-name-link">encaja</a><wbr>(char&nbsp;simbolo,
  char&nbsp;base)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Indica si un símbolo de un patrón encaja con una base de una lectura, según las
 reglas descritas en la documentación de la clase.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>(package private) boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#encajaEn(es.upm.dit.fprg26.p2.Lectura,int)" class="member-name-link">encajaEn</a><wbr>(<a href="Lectura.html" title="class in es.upm.dit.fprg26.p2">Lectura</a>&nbsp;lectura,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>(package private) boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#encajaEn(es.upm.dit.fprg26.p2.Lectura,int)" class="member-name-link">encajaEn</a><wbr>(<a href="Lectura.html" title="class in es.upm.dit.fprg26.p2">Lectura</a>&nbsp;lectura,
  int&nbsp;inicio)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Indica si el patrón de la sonda encaja con una lectura a partir de una posición de la
 lectura, en cualquiera de los dos sentidos:
 
@@ -203,50 +196,50 @@ lectura, en cualquiera de los dos sentidos:
       la otra hebra.
 </div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>(package private) static boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#encajaInverso(char,char)" class="member-name-link">encajaInverso</a><wbr>(char&nbsp;simbolo,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>(package private) static boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#encajaInverso(char,char)" class="member-name-link">encajaInverso</a><wbr>(char&nbsp;simbolo,
  char&nbsp;base)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Indica si un símbolo de un patrón encaja con la base complementaria de una base de
 una lectura (la que tiene enfrente en la otra hebra; ver
 <a href="Lectura.html#complementaria(char)"><code>Lectura.complementaria(char)</code></a>), según las reglas de <a href="#encaja(char,char)"><code>encaja(char, char)</code></a>.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>(package private) int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#encontrarEn(es.upm.dit.fprg26.p2.Lectura)" class="member-name-link">encontrarEn</a><wbr>(<a href="Lectura.html" title="class in es.upm.dit.fprg26.p2">Lectura</a>&nbsp;lectura)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>(package private) int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#encontrarEn(es.upm.dit.fprg26.p2.Lectura)" class="member-name-link">encontrarEn</a><wbr>(<a href="Lectura.html" title="class in es.upm.dit.fprg26.p2">Lectura</a>&nbsp;lectura)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Busca la primera posición de una lectura a partir de la cual encaja el patrón de
 la sonda, teniendo en cuenta sus comodines y los dos sentidos (ver
 <a href="#encajaEn(es.upm.dit.fprg26.p2.Lectura,int)"><code>encajaEn(Lectura, int)</code></a>).</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>(package private) static boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#esSimboloValido(char)" class="member-name-link">esSimboloValido</a><wbr>(char&nbsp;simbolo)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>(package private) static boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#esSimboloValido(char)" class="member-name-link">esSimboloValido</a><wbr>(char&nbsp;simbolo)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Indica si un carácter puede aparecer en el patrón de una sonda.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>(package private) int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getLongitud()" class="member-name-link">getLongitud</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>(package private) int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getLongitud()" class="member-name-link">getLongitud</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Devuelve la longitud del patrón (su número de símbolos).</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>(package private) <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getNombre()" class="member-name-link">getNombre</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>(package private) <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getNombre()" class="member-name-link">getNombre</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Devuelve el nombre de la sonda.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>(package private) <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getPatron()" class="member-name-link">getPatron</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>(package private) <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getPatron()" class="member-name-link">getPatron</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Devuelve el patrón de la diana de la sonda.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>(package private) boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#hibridaCon(es.upm.dit.fprg26.p2.Lectura)" class="member-name-link">hibridaCon</a><wbr>(<a href="Lectura.html" title="class in es.upm.dit.fprg26.p2">Lectura</a>&nbsp;lectura)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>(package private) boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#hibridaCon(es.upm.dit.fprg26.p2.Lectura)" class="member-name-link">hibridaCon</a><wbr>(<a href="Lectura.html" title="class in es.upm.dit.fprg26.p2">Lectura</a>&nbsp;lectura)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Indica si la sonda hibrida con una lectura, es decir, si su patrón encaja con la
 lectura en alguna posición, en cualquiera de los dos sentidos.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Devuelve una descripción de la sonda: su nombre y su patrón.</div>
 </div>
 </div>
@@ -515,30 +508,6 @@ lectura en alguna posición, en cualquiera de los dos sentidos.</div>
 <dd><code>true</code> si el patrón aparece en la lectura; <code>false</code> en otro caso</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code> - si se produce algún error al buscar el patrón en la lectura</dd>
-</dl>
-</div>
-</section>
-</li>
-<li>
-<section class="detail" id="contarLecturasQueHibridan(es.upm.dit.fprg26.p2.Muestra)">
-<h3>contarLecturasQueHibridan</h3>
-<div class="horizontal-scroll">
-<div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name">contarLecturasQueHibridan</span><wbr><span class="parameters">(<a href="Muestra.html" title="class in es.upm.dit.fprg26.p2">Muestra</a>&nbsp;muestra)</span>
-                       throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
-<div class="block">Cuenta con cuántas lecturas de una muestra hibrida la sonda (en cualquiera de los dos
-sentidos; ver <a href="#hibridaCon(es.upm.dit.fprg26.p2.Lectura)"><code>hibridaCon(Lectura)</code></a>).
-<p>
-Por ejemplo, la sonda del Virus B de los datos de ejemplo (patrón
-<code>"TTGRCATCCAGT"</code>) hibrida con dos de las tres lecturas de la muestra M2.
-</p></div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>muestra</code> - muestra cuyas lecturas se analizan</dd>
-<dt>Returns:</dt>
-<dd>número de lecturas de la muestra con las que hibrida la sonda (0 si no
-        hibrida con ninguna)</dd>
-<dt>Throws:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code> - si se produce algún error al buscar el patrón en alguna lectura</dd>
 </dl>
 </div>
 </section>

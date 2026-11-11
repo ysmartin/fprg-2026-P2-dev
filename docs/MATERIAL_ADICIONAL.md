@@ -13,9 +13,9 @@ Este documento **no es para el alumnado**. Recoge dos ampliaciones opcionales de
 
 | | LLOC | Total acumulado | Frente a 2025-26 (90) |
 |---|---:|---:|---:|
-| Versión base | 55 | 55 | −39 % |
-| A1 · Todas las apariciones | +12 | 67 | −26 % |
-| A2 · Intensidades y sondas detectadas | +16 | 83 | −8 % |
+| Versión base | 50 | 50 | −44 % |
+| A1 · Todas las apariciones | +12 | 62 | −31 % |
+| A2 · Intensidades y sondas detectadas | +16 | 78 | −13 % |
 
 ---
 
@@ -43,7 +43,6 @@ En un microarray real, el brillo de cada punto es más intenso cuantos más frag
 
 ### Notas para el profesorado
 
-- `intensidades` generaliza a todo el chip el método `contarLecturasQueHibridan` de la versión base (apartado 6), pero recorriendo la muestra una vez por lectura con `hibridar(Lectura)` en lugar de una vez por sonda.
 - `intensidades` es un triple bucle (lecturas, filas y columnas) con un contador por posición de una matriz de `int`; `sondasDetectadas` ejercita el patrón «contar y después rellenar» un array, que se retomará en la P3 con colecciones.
 - Es la forma realista de leer un microarray: cada punto da una intensidad, aproximadamente proporcional al número de fragmentos marcados que se unen a su sonda, y la presencia se decide con un umbral. La versión base equivale a un umbral de una lectura.
 - La interfaz gráfica no muestra las intensidades (para eso tendría que invocar un método que no existe en la versión base). Si se quisiera, `PanelMicroarray` podría graduar el brillo de cada punto.

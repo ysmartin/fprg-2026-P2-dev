@@ -27,8 +27,7 @@
     - [3. Completar la clase `Microarray`](#3-completar-la-clase-microarray)
     - [4. Reconocer patrones con comodines](#4-reconocer-patrones-con-comodines)
     - [5. Buscar en las dos hebras](#5-buscar-en-las-dos-hebras)
-    - [6. Desarrollar un método a partir de su documentación](#6-desarrollar-un-método-a-partir-de-su-documentación)
-    - [7. Probar el sistema completo](#7-probar-el-sistema-completo)
+    - [6. Probar el sistema completo](#6-probar-el-sistema-completo)
     - [Exportar el proyecto](#exportar-el-proyecto)
   - [Evaluación](#evaluación)
 
@@ -150,7 +149,6 @@ encaja(char, char) boolean$
 encajaInverso(char, char) boolean$
 encajaEn(Lectura, int) boolean
 hibridaCon(Lectura) boolean
-contarLecturasQueHibridan(Muestra) int
 ……………A modificar……………()
 encontrarEn(Lectura) int
 ……………Proporcionados……………()
@@ -279,13 +277,10 @@ La clase `Microarray` representa un chip con sondas en una cuadrícula: una matr
 
    Con sondas y lecturas válidas, `hibridaCon` no debería lanzar nunca una excepción: si la lanza, hay un error en su código de `Sonda`, y el punto aparecerá apagado aunque la sonda encaje. Por eso, la ventana avisa de las excepciones que se produzcan, y `PruebaSonda` las muestra en sus comprobaciones.
 2. **Desarrolle `hibridar(Muestra muestra)`**: este método debe hacer lo mismo con todas las lecturas de la muestra. Un punto se ilumina si su sonda hibrida con **alguna** de las lecturas. Puede recorrer las lecturas con un bucle `for` mejorado (`for (Lectura lectura : muestra.getLecturas())`) y reutilizar `hibridar(Lectura)` con cada una. Cuidado: un punto que ya se ha iluminado con una lectura no debe apagarse porque no hibride con la siguiente.
-3. Ejecute `PruebaMicroarray`. Las matrices se escriben con `#` para los puntos iluminados y `.` para los apagados, una fila entre corchetes. Como su `Sonda` todavía usa la versión inicial de `encontrarEn`, solo algunas comprobaciones serán correctas; entre ellas debe estar la de la **letra A** del chip de expresión, un chip de 20x20 sondas cuyos puntos iluminados forman una palabra. Si no lo es, localice el error siguiendo las dependencias: compruebe primero `hibridaCon` (en `PruebaSonda`, las comprobaciones de `hibridaCon` con el Virus A, que no tiene comodines); después, la matriz que devuelve `hibridar(Lectura)` para una lectura que conozca; y por último, cómo acumula `hibridar(Muestra)` los resultados de varias lecturas.
-4. Ejecute `PruebaInteractiva`, elija el **chip de expresión** y analice con él la muestra M5. Es más parecido a un chip real: tiene tantas sondas que no se escriben sus nombres ni sus patrones; para ver los de una sonda, deje el ratón sobre su punto. De momento solo se ilumina una letra, la A: sus sondas no tienen comodines, y sus dianas aparecen tal cual en las lecturas. Las demás letras se iluminarán en los apartados siguientes.
+3. Ejecute `PruebaMicroarray`. Las matrices se escriben con `#` para los puntos iluminados y `.` para los apagados, una fila entre corchetes. Como su `Sonda` todavía usa la versión inicial de `encontrarEn`, solo algunas comprobaciones serán correctas; entre ellas debe estar la de la **letra A** del chip de cribado, un chip de 20x20 sondas cuyos puntos iluminados forman una palabra. Si no lo es, localice el error siguiendo las dependencias: compruebe primero `hibridaCon` (en `PruebaSonda`, las comprobaciones de `hibridaCon` con el Virus A, que no tiene comodines); después, la matriz que devuelve `hibridar(Lectura)` para una lectura que conozca; y por último, cómo acumula `hibridar(Muestra)` los resultados de varias lecturas.
+4. Ejecute `PruebaInteractiva`, elija el **chip de cribado**, que busca a la vez cientos de dianas en una muestra, y analice con él la muestra M5. Es más parecido a un chip real: tiene tantas sondas que no se escriben sus nombres ni sus patrones; para ver los de una sonda, deje el ratón sobre su punto. De momento solo se ilumina una letra, la A: sus sondas no tienen comodines, y sus dianas aparecen tal cual en las lecturas. Las demás letras se iluminarán en los apartados siguientes.
 
-   ![Ventana del microarray virtual con el chip de expresión cuando solo se ilumina la letra A](img/ventana-etapa-a.png)
-
-> [!NOTE]
-> En un chip de expresión real, la muestra se prepara a partir del ARN mensajero del tejido, y el brillo de cada punto indica cuánto se expresa el gen correspondiente. En nuestro chip, un punto iluminado solo significa que su patrón aparece en alguna de las lecturas (inventadas) de la muestra: que una secuencia esté en el ADN no indica que el gen esté activo.
+   ![Ventana del microarray virtual con el chip de cribado cuando solo se ilumina la letra A](img/ventana-etapa-a.png)
 
 ### 4. Reconocer patrones con comodines
 
@@ -307,7 +302,7 @@ En este apartado, la sonda aprenderá a reconocer patrones con comodines, de mom
 
    ¿Cuál es la última posición en la que tiene sentido colocar el patrón? Piense en un patrón de 3 símbolos y una lectura de 10 bases. Si el bucle se pasa, `encajaEn` lanzará su excepción.
 4. Ejecute `PruebaSonda`. Ahora deberían aparecer con `✓` todas las comprobaciones, salvo las de la otra hebra: los grupos «encajaInverso», «encajaEn, en sentido inverso» y «encontrarEn, con la diana en la otra hebra», y la de `hibridaCon` con la diana en la otra hebra.
-5. Ejecute `PruebaMicroarray`: ahora también debe ser correcta la comprobación de la **letra D**, cuyas sondas tienen comodines. Analice de nuevo la muestra M5 con el chip de expresión en `PruebaInteractiva`: se iluminan la A y la D.
+5. Ejecute `PruebaMicroarray`: ahora también debe ser correcta la comprobación de la **letra D**, cuyas sondas tienen comodines. Analice de nuevo la muestra M5 con el chip de cribado en `PruebaInteractiva`: se iluminan la A y la D.
 
 > [!TIP]
 > Antes de modificar `encontrarEn`, dibuje a mano una lectura y un patrón, y vaya desplazando el patrón posición a posición. Le ayudará a encontrar el límite del bucle, que es donde suelen estar los errores.
@@ -323,20 +318,11 @@ Las dianas de las sondas de la letra N están en la otra hebra (consulte la secc
 
    > **Pista**: el `return false` del primer bucle ya no sirve: aunque el patrón no encaje en sentido directo, todavía puede encajar en sentido inverso, así que el método no debe terminar. Sustitúyalo por `break`, que termina el bucle, pero no el método; y antes, anote en una variable `boolean` que el patrón no encaja en sentido directo. Entre los dos bucles, si el patrón encaja en sentido directo, devuelva `true`. El segundo bucle es como era el primero: en él sí puede devolver `false` en cuanto falle un símbolo.
 3. Ejecute `PruebaSonda` y `PruebaMicroarray`, y corrija lo que sea necesario hasta que todas las comprobaciones aparezcan con `✓`. Después, añada sus propios casos de prueba: por ejemplo, patrones al principio y al final de la lectura, patrones que aparecen varias veces, lecturas con `N`, patrones más largos que la lectura y dianas en la otra hebra.
-4. Analice de nuevo la muestra M5 con el chip de expresión: ahora se ilumina la palabra completa. Deje el ratón sobre algunos puntos de cada letra y compare sus patrones: ¿qué tienen en común los de la A? ¿Y los de la D?
+4. Analice de nuevo la muestra M5 con el chip de cribado: ahora se ilumina la palabra completa. Deje el ratón sobre algunos puntos de cada letra y compare sus patrones: ¿qué tienen en común los de la A? ¿Y los de la D?
 
-   ![Ventana del microarray virtual con el chip de expresión, mostrando los datos de una sonda al dejar el ratón sobre su punto](img/ventana-grande.png)
+   ![Ventana del microarray virtual con el chip de cribado, mostrando los datos de una sonda al dejar el ratón sobre su punto](img/ventana-grande.png)
 
-### 6. Desarrollar un método a partir de su documentación
-
-Hasta ahora, el enunciado le ha indicado paso a paso cómo desarrollar cada método. En este apartado, su única guía es la documentación.
-
-**Pasos:**
-
-1. **Desarrolle `contarLecturasQueHibridan(Muestra muestra)`**, en la clase `Sonda`, a partir de su comentario de documentación (en el código o en la carpeta `doc`).
-2. **Diseñe sus casos de prueba** y escríbalos en `pruebasPropias` de `PruebaSonda`: al menos uno en el que el resultado sea 0, y otro en el que la sonda hibride con varias lecturas, alguna de ellas con la diana en la otra hebra. Calcule a mano el resultado esperado de cada caso antes de ejecutarlo. Puede crear sus propias muestras (como fecha de captura, `DatosEjemplo.hace(1)` devuelve la de ayer) o usar las de ejemplo: `DatosEjemplo.muestras()` devuelve un array con las muestras en el mismo orden en que aparecen en la ventana (la de índice 2 es M2).
-
-### 7. Probar el sistema completo
+### 6. Probar el sistema completo
 
 Ejecute de nuevo `PruebaInteractiva`. Elija un microarray y una muestra (o escriba sus propias lecturas, separadas por espacios) y pulse _Analizar_: los puntos del chip cuyas sondas hibridan con alguna lectura se iluminarán, y debajo verá, para cada lectura, en qué posición encaja cada sonda (según su método `encontrarEn`).
 

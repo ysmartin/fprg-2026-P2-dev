@@ -33,7 +33,6 @@ METODOS = {
           '// solo encuentra el patrón si aparece tal cual en la lectura)',
           'return lectura.getSecuencia().indexOf(patron);']),
         ('boolean hibridaCon(Lectura lectura)', [TODO, 'return false;']),
-        ('int contarLecturasQueHibridan(Muestra muestra)', [TODO, 'return 0;']),
     ],
     'Microarray.java': [
         # Se da sin el try/catch: no compila hasta que el alumnado lo añade

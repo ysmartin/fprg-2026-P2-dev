@@ -50,16 +50,16 @@ class PruebaMicroarray {
             Comprobador.comprobar("R1 con el chip de dianas de restricción (2x4)",
                     new boolean[][] { { true, false, false, false }, { true, true, true, true } },
                     DatosEjemplo.chipDeDianasDeRestriccion().hibridar(muestras[5]));
-            boolean[][] esperados = aMatriz(DatosEjemplo.FORMA_MUESTRA_DE_EXPRESION);
-            boolean[][] obtenidos = DatosEjemplo.chipDeExpresion().hibridar(muestras[6]);
+            boolean[][] esperados = aMatriz(DatosEjemplo.FORMA_MUESTRA_DE_CRIBADO);
+            boolean[][] obtenidos = DatosEjemplo.chipDeCribado().hibridar(muestras[6]);
             int d = DatosEjemplo.COLUMNA_D;
             int n = DatosEjemplo.COLUMNA_N;
-            int lado = DatosEjemplo.LADO_CHIP_DE_EXPRESION;
-            Comprobador.comprobar("M5 con el chip de expresión de 20x20, letra A (sondas sin comodines)",
+            int lado = DatosEjemplo.LADO_CHIP_DE_CRIBADO;
+            Comprobador.comprobar("M5 con el chip de cribado de 20x20, letra A (sondas sin comodines)",
                     columnas(esperados, 0, d), columnas(obtenidos, 0, d));
-            Comprobador.comprobar("M5 con el chip de expresión de 20x20, letra D (sondas con comodines)",
+            Comprobador.comprobar("M5 con el chip de cribado de 20x20, letra D (sondas con comodines)",
                     columnas(esperados, d, n), columnas(obtenidos, d, n));
-            Comprobador.comprobar("M5 con el chip de expresión de 20x20, letra N (dianas en la otra hebra)",
+            Comprobador.comprobar("M5 con el chip de cribado de 20x20, letra N (dianas en la otra hebra)",
                     columnas(esperados, n, lado), columnas(obtenidos, n, lado));
         } catch (Exception e) {
             Comprobador.fallo("Se ha producido una excepción (en los datos de ejemplo o en hibridar): " + e);
