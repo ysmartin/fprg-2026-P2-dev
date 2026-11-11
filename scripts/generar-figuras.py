@@ -195,9 +195,17 @@ def formas_de_las_letras():
     ruta = os.path.join(RAIZ, 'solucion', 'fprg-practica2-2026', 'auxiliar', 'es', 'upm', 'dit', 'fprg26', 'p2',
                         'DatosEjemplo.java')
     with open(ruta, encoding='utf-8') as f:
-        filas = re.findall(r'"([.#]{20})"', f.read())
+        codigo = f.read()
+    filas = re.findall(r'"([.#]{2,})"', codigo)
+    columna_d = int(re.search(r'COLUMNA_D = (\d+);', codigo).group(1))
+    columna_n = int(re.search(r'COLUMNA_N = (\d+);', codigo).group(1))
     con_puntos = [f for f in filas if '#' in f]
-    return {'a': [f[1:6] for f in con_puntos], 'd': [f[7:12] for f in con_puntos], 'n': [f[13:18] for f in con_puntos]}
+    letras = {}
+    for letra, desde, hasta in [('a', 0, columna_d), ('d', columna_d, columna_n), ('n', columna_n, len(filas[0]))]:
+        # Las columnas de la letra: de la primera a la última con algún punto encendido
+        columnas = [c for c in range(desde, hasta) if any(f[c] == '#' for f in con_puntos)]
+        letras[letra] = [f[columnas[0]:columnas[-1] + 1] for f in con_puntos]
+    return letras
 
 
 def miniatura_letra(filas):

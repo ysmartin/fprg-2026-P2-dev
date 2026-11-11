@@ -109,7 +109,7 @@ class Microarray {
      * hibrida con la lectura, su punto no se ilumina.
      * </p>
      *
-     * @param lectura lectura que se analiza
+     * @param lectura lectura que se analiza (puede asumir que nunca es {@code null})
      * @return matriz del mismo tamaño que la cuadrícula, con {@code true} en los puntos
      *         cuya sonda hibrida con la lectura
      */
@@ -131,7 +131,7 @@ class Microarray {
      * Analiza todas las lecturas de una muestra: un punto del chip se ilumina si su
      * sonda hibrida con <em>alguna</em> de las lecturas.
      *
-     * @param muestra muestra que se analiza
+     * @param muestra muestra que se analiza (puede asumir que nunca es {@code null})
      * @return matriz del mismo tamaño que la cuadrícula, con {@code true} en los puntos
      *         cuya sonda hibrida con al menos una lectura de la muestra
      */
@@ -155,7 +155,7 @@ class Microarray {
      * punto del chip, con cuántas lecturas hibrida su sonda (cuanto mayor es el número, más
      * intenso es el brillo del punto).
      *
-     * @param muestra muestra que se analiza
+     * @param muestra muestra que se analiza (puede asumir que nunca es {@code null})
      * @return matriz del mismo tamaño que la cuadrícula, con el número de lecturas de la
      *         muestra que hibridan con la sonda de cada punto
      */

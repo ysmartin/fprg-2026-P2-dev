@@ -35,7 +35,7 @@ echo "== plantilla derivada de la solución"
 cp -r "$RAIZ/scripts" "$RAIZ/solucion" "$TMP/"
 mkdir -p "$TMP/plantilla"
 python3 "$TMP/scripts/derivar-plantilla.py" >/dev/null
-if diff -r -q -x doc "$TMP/plantilla/fprg-practica2-2026" "$RAIZ/plantilla/fprg-practica2-2026" >/dev/null; then
+if diff -r -q -x doc -x bin "$TMP/plantilla/fprg-practica2-2026" "$RAIZ/plantilla/fprg-practica2-2026" >/dev/null; then
     echo "   la plantilla está al día"
 else
     echo "   ✗ la plantilla no está al día (ejecute scripts/derivar-plantilla.py)"; fallos=$((fallos + 1))
@@ -45,10 +45,10 @@ fi
 comprobar() {
     local nombre="$1" es_solucion="$2" proyecto="${3:-$RAIZ/$1/fprg-practica2-2026}" pruebas="$PRUEBAS ${4:-}"
     echo "== $nombre"
-    local fuentes
-    fuentes=$(find "$proyecto/src" "$proyecto/auxiliar" -name '*.java')
-    # shellcheck disable=SC2086
-    if ! "${BIN}javac" -Xlint:all -Werror -encoding UTF-8 -d "$TMP/clases-$nombre" $fuentes; then
+    # Se compila desde la carpeta del proyecto, con rutas relativas (sin espacios)
+    # shellcheck disable=SC2046
+    if ! (cd "$proyecto" && "${BIN}javac" -Xlint:all -Werror -encoding UTF-8 -d "$TMP/clases-$nombre" \
+            $(find src auxiliar -name '*.java')); then
         echo "   ✗ no compila sin avisos con javac"; fallos=$((fallos + 1)); return
     fi
     if [ -n "${ECJ_JAR:-}" ]; then
@@ -90,9 +90,9 @@ comprobar solucion si "$SOLUCION" PruebaProfesorado
 
 # La plantilla no compila hasta que el alumnado añade el try/catch de hibridar(Lectura)
 echo "== plantilla, tal como se entrega"
-errores=$("${BIN}javac" -encoding UTF-8 -d "$TMP/clases-plantilla-original" \
-    $(find "$RAIZ/plantilla/fprg-practica2-2026/src" "$RAIZ/plantilla/fprg-practica2-2026/auxiliar" -name '*.java') 2>&1 \
-    | grep 'error:' || true)
+# shellcheck disable=SC2046
+errores=$(cd "$RAIZ/plantilla/fprg-practica2-2026" && "${BIN}javac" -encoding UTF-8 -d "$TMP/clases-plantilla-original" \
+    $(find src auxiliar -name '*.java') 2>&1 | grep 'error:' || true)
 if [ "$(echo "$errores" | grep -c 'Microarray.java.*unreported exception')" -eq 1 ] && [ "$(echo "$errores" | grep -c 'error:')" -eq 1 ]; then
     echo "   no compila solo por la excepción sin capturar de hibridar(Lectura), como se espera"
 else

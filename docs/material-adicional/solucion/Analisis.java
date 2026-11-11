@@ -35,7 +35,9 @@ class Analisis {
      *
      * @param muestra muestra que se analiza; no puede ser nula
      * @param microarray microarray con el que se analiza; no puede ser nulo
-     * @throws Exception si la muestra o el microarray son nulos
+     * @throws Exception si la muestra o el microarray son nulos, o si
+     *         {@link Microarray#hibridar(Muestra)} no devuelve una matriz del mismo tamaño que
+     *         la cuadrícula del microarray (por ejemplo, si devuelve {@code null})
      */
     Analisis(Muestra muestra, Microarray microarray) throws Exception {
         if (muestra == null || microarray == null) {
@@ -45,6 +47,19 @@ class Analisis {
         this.microarray = microarray;
         this.fechaAnalisis = LocalDate.now();
         this.iluminados = microarray.hibridar(muestra);
+        if (iluminados == null) {
+            throw new Exception("Microarray.hibridar(Muestra) devuelve null, y no la matriz de puntos iluminados");
+        }
+        if (iluminados.length != microarray.getFilas()) {
+            throw new Exception("Microarray.hibridar(Muestra) devuelve una matriz de " + iluminados.length
+                    + " filas, pero el microarray tiene " + microarray.getFilas());
+        }
+        for (boolean[] fila : iluminados) {
+            if (fila == null || fila.length != microarray.getColumnas()) {
+                throw new Exception("Alguna fila de la matriz que devuelve Microarray.hibridar(Muestra) no tiene "
+                        + microarray.getColumnas() + " columnas, como el microarray");
+            }
+        }
     }
 
     /**
@@ -157,9 +172,6 @@ class Analisis {
                 + "Fecha del análisis: " + fechaAnalisis + " (días desde la captura: " + getDiasDesdeCaptura()
                 + ")\n"
                 + "Puntos iluminados: " + contarIluminados() + "\n";
-        if (iluminados == null) {
-            return texto + "(no hay matriz de puntos iluminados)\n";
-        }
         for (boolean[] fila : iluminados) {
             for (boolean iluminado : fila) {
                 if (iluminado) {

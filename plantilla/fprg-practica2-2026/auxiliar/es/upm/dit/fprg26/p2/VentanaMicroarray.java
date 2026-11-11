@@ -27,6 +27,7 @@ class VentanaMicroarray {
     private JComboBox<String> selectorMicroarray;
     private JComboBox<String> selectorMuestra;
     private JTextField campoLecturas;
+    private JLabel etiquetaFecha;
     private PanelMicroarray panel;
     private JSplitPane division;
     private JTextArea detalle;
@@ -87,7 +88,8 @@ class VentanaMicroarray {
         colocar(controles, c, 0, 0, new JLabel("Microarray:"));
         colocar(controles, c, 1, 0, selectorMicroarray);
         colocar(controles, c, 2, 0, new JLabel("Fecha del análisis:"));
-        colocar(controles, c, 3, 0, new JLabel(LocalDate.now() + " (hoy)"));
+        etiquetaFecha = new JLabel();
+        colocar(controles, c, 3, 0, etiquetaFecha);
         colocar(controles, c, 0, 1, new JLabel("Muestra:"));
         colocar(controles, c, 1, 1, selectorMuestra);
         colocar(controles, c, 2, 1, new JLabel("Lecturas:"));
@@ -140,21 +142,18 @@ class VentanaMicroarray {
     }
 
     private void mostrarChipSinAnalizar() {
+        actualizarFecha();
         panel.mostrar(microarrays[selectorMicroarray.getSelectedIndex()], null);
         detalle.setText(avisoChipGrande() + "Elija una muestra y pulse «Analizar».");
         ajustarDivision();
     }
 
     private void analizar() {
+        actualizarFecha();
         Microarray microarray = microarrays[selectorMicroarray.getSelectedIndex()];
         panel.mostrar(microarray, null);
         try {
             Muestra muestra = muestraElegida();
-            String aviso = comprobarDimensiones(microarray, microarray.hibridar(muestra));
-            if (aviso != null) {
-                detalle.setText(aviso);
-                return;
-            }
             Analisis analisis = new Analisis(muestra, microarray);
             panel.mostrar(microarray, analisis.getIluminados());
             detalle.setText(avisoChipGrande() + describir(analisis, muestra, microarray));
@@ -175,10 +174,12 @@ class VentanaMicroarray {
         if (indice < muestras.length) {
             return muestras[indice];
         }
-        String[] textos = campoLecturas.getText().trim().toUpperCase().split("[\\s,;]+");
-        if (textos.length == 0 || textos[0].isEmpty()) {
+        // Las lecturas pueden ir separadas por espacios, comas o puntos y coma
+        String texto = campoLecturas.getText().toUpperCase().replaceAll("[\\s,;]+", " ").trim();
+        if (texto.isEmpty()) {
             throw new Exception("Escriba al menos una lectura en el campo «Lecturas».");
         }
+        String[] textos = texto.split(" ");
         Lectura[] lecturas = new Lectura[textos.length];
         for (int i = 0; i < textos.length; i++) {
             lecturas[i] = new Lectura("A mano " + (i + 1), textos[i]);
@@ -194,29 +195,16 @@ class VentanaMicroarray {
         }
     }
 
+    /** La fecha del análisis es la de hoy: se actualiza por si la ventana sigue abierta al cambiar el día. */
+    private void actualizarFecha() {
+        etiquetaFecha.setText(LocalDate.now() + " (hoy)");
+    }
+
     private String avisoChipGrande() {
         if (!panel.esCompacto()) {
             return "";
         }
         return "(Este chip es grande: deje el ratón sobre un punto para ver su sonda.)\n\n";
-    }
-
-    private static String comprobarDimensiones(Microarray microarray, boolean[][] iluminados) {
-        if (iluminados == null) {
-            return "El análisis estará disponible cuando complete Microarray.hibridar(Muestra), en el apartado 3.\n"
-                    + "(De momento, hibridar(Muestra) devuelve null.)";
-        }
-        if (iluminados.length != microarray.getFilas()) {
-            return "AVISO: hibridar(Muestra) devuelve una matriz de " + iluminados.length
-                    + " filas, pero el chip tiene " + microarray.getFilas();
-        }
-        for (boolean[] fila : iluminados) {
-            if (fila == null || fila.length != microarray.getColumnas()) {
-                return "AVISO: alguna fila de la matriz que devuelve hibridar(Muestra) no tiene "
-                        + microarray.getColumnas() + " columnas, como el chip";
-            }
-        }
-        return null;
     }
 
     private static String describir(Analisis analisis, Muestra muestra, Microarray microarray) {

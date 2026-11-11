@@ -175,7 +175,9 @@ un bloque <code>try</code> y se llama a <a href="#fallo(java.lang.String)"><code
  <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;obtenido)</span></div>
 <div class="block">Compara un resultado con el esperado y escribe el resultado de la comprobación.
 Sirve para cualquier tipo de valor, incluidos <code>String</code>, números, <code>char</code>,
-<code>boolean</code> y arrays (de una o de dos dimensiones).</div>
+<code>boolean</code> y arrays (de una o de dos dimensiones). Los números enteros se comparan
+por su valor, aunque sean de tipos distintos: por ejemplo, <code>3</code> y <code>3L</code>
+(<code>int</code> y <code>long</code>) son iguales.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>descripcion</code> - qué se comprueba (por ejemplo, la invocación que se ha hecho)</dd>

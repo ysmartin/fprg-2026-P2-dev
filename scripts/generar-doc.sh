@@ -16,6 +16,11 @@ BIN="${JAVA_HOME:+$JAVA_HOME/bin/}"
 
 generar() {
     local proyecto="$RAIZ/$1/fprg-practica2-2026" destino="$2"
+    # Solo se borra una carpeta de Javadoc anterior (con su element-list), nunca otra cosa
+    if [ -e "$destino" ] && [ ! -f "$destino/element-list" ]; then
+        echo "$destino existe y no es una carpeta de Javadoc: no se borra" >&2
+        exit 1
+    fi
     rm -rf "$destino"
     "${BIN}javadoc" -quiet -notimestamp --no-fonts -Xdoclint:all,-missing \
         -encoding UTF-8 -docencoding UTF-8 -charset UTF-8 \
@@ -25,9 +30,12 @@ generar() {
         es.upm.dit.fprg26.p2
 }
 
-if [ $# -eq 2 ]; then
+if [ $# -eq 2 ] && { [ "$1" = plantilla ] || [ "$1" = solucion ]; }; then
     generar "$1" "$2"
-else
+elif [ $# -eq 0 ]; then
     generar plantilla "$RAIZ/plantilla/fprg-practica2-2026/doc"
     generar solucion "$RAIZ/solucion/fprg-practica2-2026/doc"
+else
+    echo "Uso: $0  |  $0 plantilla|solucion DIR" >&2
+    exit 1
 fi

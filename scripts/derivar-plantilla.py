@@ -69,7 +69,9 @@ def sustituir_cuerpo(lineas, cabecera, cuerpo):
 def main():
     if os.path.exists(PLANTILLA):
         shutil.rmtree(PLANTILLA)
-    shutil.copytree(SOLUCION, PLANTILLA)
+    # Sin bin/ (las clases compiladas de la solución, si se ha abierto en Eclipse) ni doc/,
+    # que se regenera con scripts/generar-doc.sh
+    shutil.copytree(SOLUCION, PLANTILLA, ignore=shutil.ignore_patterns('bin', 'doc', '*.class'))
     proyecto = os.path.join(PLANTILLA, '.project')
     with open(proyecto, encoding='utf-8') as f:
         texto = f.read()

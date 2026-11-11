@@ -294,10 +294,10 @@ final class DatosEjemplo {
     }
 
     /** Devuelve la complementaria inversa de una secuencia de bases concretas. */
-    private static String complementariaInversa(String secuencia) {
+    private static String complementariaInversa(String secuencia) throws Exception {
         String inversa = "";
         for (int i = secuencia.length() - 1; i >= 0; i--) {
-            inversa += "TGCA".charAt("ACGT".indexOf(secuencia.charAt(i)));
+            inversa += Lectura.complementaria(secuencia.charAt(i));
         }
         return inversa;
     }

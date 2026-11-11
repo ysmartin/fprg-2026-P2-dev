@@ -52,7 +52,7 @@ class PruebaAmpliaciones {
             Comprobador.comprobar("sondasDetectadas (chip de prueba)", new String[] { "Exacta", "Con N", "Con Y y R" },
                     new Analisis(DatosEjemplo.muestraDePrueba(), DatosEjemplo.chipDePrueba()).sondasDetectadas());
         } catch (Exception e) {
-            Comprobador.fallo("No debería lanzarse ninguna excepción: " + e.getMessage());
+            Comprobador.fallo("No debería lanzarse ninguna excepción: " + e);
         }
     }
 }

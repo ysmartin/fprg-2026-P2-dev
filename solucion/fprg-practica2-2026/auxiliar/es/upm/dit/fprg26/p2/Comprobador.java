@@ -42,14 +42,16 @@ final class Comprobador {
     /**
      * Compara un resultado con el esperado y escribe el resultado de la comprobación.
      * Sirve para cualquier tipo de valor, incluidos {@code String}, números, {@code char},
-     * {@code boolean} y arrays (de una o de dos dimensiones).
+     * {@code boolean} y arrays (de una o de dos dimensiones). Los números enteros se comparan
+     * por su valor, aunque sean de tipos distintos: por ejemplo, {@code 3} y {@code 3L}
+     * ({@code int} y {@code long}) son iguales.
      *
      * @param descripcion qué se comprueba (por ejemplo, la invocación que se ha hecho)
      * @param esperado resultado esperado
      * @param obtenido resultado obtenido
      */
     static void comprobar(String descripcion, Object esperado, Object obtenido) {
-        if (Objects.deepEquals(esperado, obtenido)) {
+        if (Objects.deepEquals(esperado, obtenido) || sonEnterosIguales(esperado, obtenido)) {
             acierto(descripcion + " = " + formatear(obtenido));
         } else if (esperado instanceof boolean[][] matrizEsperada && obtenido instanceof boolean[][] matrizObtenida
                 && esGrande(matrizEsperada)) {
@@ -87,6 +89,15 @@ final class Comprobador {
     static void resumen() {
         IO.println();
         IO.println("Resumen: " + correctas + " de " + realizadas + " comprobaciones correctas");
+    }
+
+    private static boolean sonEnterosIguales(Object esperado, Object obtenido) {
+        return esEntero(esperado) && esEntero(obtenido)
+                && ((Number) esperado).longValue() == ((Number) obtenido).longValue();
+    }
+
+    private static boolean esEntero(Object valor) {
+        return valor instanceof Integer || valor instanceof Long || valor instanceof Short || valor instanceof Byte;
     }
 
     private static String formatear(Object valor) {
