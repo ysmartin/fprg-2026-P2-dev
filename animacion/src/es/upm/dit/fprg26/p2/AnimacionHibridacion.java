@@ -44,30 +44,30 @@ final class AnimacionHibridacion {
      * @throws Exception si alguna sonda no se puede crear
      */
     static Microarray chip() throws Exception {
-        return new Microarray("Chip de ejemplo", new Sonda[][] {
-            { new Sonda("S1", "TRC"), new Sonda("S2", "GTA") },
-            { new Sonda("S3", "CYT"), new Sonda("S4", "CGC") }
+        return new Microarray("chip", new Sonda[][] {
+            { new Sonda("s1", "TRC"), new Sonda("s2", "GTA") },
+            { new Sonda("s3", "CYT"), new Sonda("s4", "CGC") }
         });
     }
 
     /**
      * Devuelve la muestra de la animación. Con el chip de {@link #chip()}:
      * <ul>
-     *   <li>L1 (la lectura de los ejemplos del enunciado) ilumina S1 (TRC encaja en sentido
-     *       directo en la posición 2, la R con una A) y S2 (GTA encaja en sentido inverso en la
+     *   <li>l1 (la lectura de los ejemplos del enunciado) ilumina s1 (TRC encaja en sentido
+     *       directo en la posición 2, la R con una A) y s2 (GTA encaja en sentido inverso en la
      *       posición 2);</li>
-     *   <li>L2 ilumina S3 (CYT encaja en la posición 0, la Y con una C); S1 y S2 no hibridan
-     *       con L2, pero siguen iluminados;</li>
-     *   <li>S4 no hibrida con ninguna lectura.</li>
+     *   <li>l2 ilumina s3 (CYT encaja en la posición 0, la Y con una C); s1 y s2 no hibridan
+     *       con l2, pero siguen iluminados;</li>
+     *   <li>s4 no hibrida con ninguna lectura.</li>
      * </ul>
      *
      * @return muestra de dos lecturas
      * @throws Exception si la muestra no se puede crear
      */
     static Muestra muestra() throws Exception {
-        return new Muestra("M", LocalDate.now(), new Lectura[] {
-            new Lectura("L1", "GATACATGCA"),
-            new Lectura("L2", "CCTAGTTCGA")
+        return new Muestra("m1", LocalDate.now(), new Lectura[] {
+            new Lectura("l1", "GATACATGCA"),
+            new Lectura("l2", "CCTAGTTCGA")
         });
     }
 

@@ -2,6 +2,7 @@ package es.upm.dit.fprg26.p2;
 
 import module java.base;
 
+import es.upm.dit.fprg26.p2.AnimacionFotograma.Argumento;
 import es.upm.dit.fprg26.p2.AnimacionFotograma.Casilla;
 import es.upm.dit.fprg26.p2.AnimacionFotograma.Llamada;
 import es.upm.dit.fprg26.p2.AnimacionFotograma.Variable;
@@ -124,14 +125,22 @@ final class AnimacionTraza {
 
     /** Una llamada en curso, con sus variables locales (que pueden cambiar). */
     private static final class LlamadaEnCurso {
+        private final String receptor;
         private final String metodo;
+        private final List<Argumento> argumentos;
+        /** La llamada como se escribiría en Java (por ejemplo, "s1.encajaEn(l1, 2)"). */
+        private final String texto;
         private final Map<String, Object> variables = new LinkedHashMap<>();
+        private final Map<String, String> tipos = new HashMap<>();
         private String devuelve;
         /** Elemento que se resalta en sus matrices (fila y columna), o null. */
         private int[] marca;
 
-        LlamadaEnCurso(String metodo) {
+        LlamadaEnCurso(String receptor, String metodo, List<Argumento> argumentos) {
+            this.receptor = receptor;
             this.metodo = metodo;
+            this.argumentos = argumentos;
+            this.texto = new Llamada(receptor, metodo, argumentos, List.of(), null).texto();
         }
     }
 
@@ -161,9 +170,10 @@ final class AnimacionTraza {
     // ------------------------------------------------------------------------------------
 
     private void analizar(Muestra muestra) throws Exception {
-        fotograma(GENERAL, 450, "Se analiza la muestra " + muestra.getId() + ", de " + muestra.getNumeroLecturas()
-                + " lecturas, con un microarray de " + microarray.getFilas() + "x" + microarray.getColumnas()
-                + " sondas: se invoca hibridar(" + muestra.getId() + ")");
+        fotograma(GENERAL, 450, "Se analiza la muestra " + codigo(muestra.getId()) + ", de " + muestra.getNumeroLecturas()
+                + " lecturas, con el microarray " + codigo(microarray.getNombre()) + ", de " + microarray.getFilas() + "x"
+                + microarray.getColumnas() + " sondas: se invoca "
+                + codigo(microarray.getNombre() + ".hibridar(" + muestra.getId() + ")"));
         boolean[][] iluminados = hibridar(muestra);
         luces = iluminados;
         boolean[][] apagados = new boolean[iluminados.length][iluminados[0].length];
@@ -183,22 +193,25 @@ final class AnimacionTraza {
 
     /** Reproduce Microarray.hibridar(Muestra). */
     private boolean[][] hibridar(Muestra muestra) throws Exception {
-        entrar("hibridar(" + muestra.getId() + ")");
+        String llamada = entrar(microarray.getNombre(), "hibridar", argumento("Muestra", muestra.getId()));
         boolean[][] iluminados = new boolean[microarray.getFilas()][microarray.getColumnas()];
-        variable("iluminados", iluminados);
-        fotograma(GENERAL, "hibridar(" + muestra.getId() + ") crea la matriz iluminados, del tamaño del chip ("
-                + microarray.getFilas() + "x" + microarray.getColumnas() + "), con todos los puntos apagados (false)");
+        variable("boolean[][]", "iluminados", iluminados);
+        fotograma(GENERAL, codigo(llamada) + " crea la matriz " + codigo("iluminados") + ", del tamaño del chip ("
+                + microarray.getFilas() + "x" + microarray.getColumnas() + "), con todos los puntos apagados ("
+                + codigo(false) + ")");
         Lectura[] lecturas = muestra.getLecturas();
         for (int k = 0; k < lecturas.length; k++) {
             indiceLectura = k;
             lectura = lecturas[k];
             quitarVariable("conLectura");      // se declara dentro del bucle
-            variable("lectura", lectura.getId());
-            fotograma(GENERAL, "Vuelta " + (k + 1) + " del bucle for-each: lectura = " + lectura.getId()
-                    + ". Para saber qué sondas hibridan con ella, se invoca hibridar(" + lectura.getId() + ")");
+            variable("Lectura", "lectura", lectura.getId());
+            fotograma(GENERAL, "Vuelta " + (k + 1) + " del bucle for-each: " + codigo("lectura = " + lectura.getId())
+                    + ". Para saber qué sondas hibridan con ella, se invoca "
+                    + codigo(microarray.getNombre() + ".hibridar(" + lectura.getId() + ")"));
             boolean[][] conLectura = hibridar(lectura);
-            variable("conLectura", conLectura);
-            fotograma(GENERAL, "hibridar(" + lectura.getId() + ") ha devuelto su matriz, que se guarda en conLectura");
+            variable("boolean[][]", "conLectura", conLectura);
+            fotograma(GENERAL, codigo(microarray.getNombre() + ".hibridar(" + lectura.getId() + ")")
+                    + " ha devuelto su matriz, que se guarda en " + codigo("conLectura"));
             boolean[][] antes = AnimacionFotograma.copiar(iluminados);
             for (int fila = 0; fila < microarray.getFilas(); fila++) {
                 for (int columna = 0; columna < microarray.getColumnas(); columna++) {
@@ -213,9 +226,9 @@ final class AnimacionTraza {
         lectura = null;
         quitarVariable("lectura");
         quitarVariable("conLectura");
-        comprobar(Arrays.deepEquals(iluminados, microarray.hibridar(muestra)), "hibridar(" + muestra.getId() + ")");
+        comprobar(Arrays.deepEquals(iluminados, microarray.hibridar(muestra)), llamada);
         devolver("iluminados");
-        fotograma(GENERAL, "No quedan más lecturas: hibridar(" + muestra.getId() + ") termina y devuelve iluminados");
+        fotograma(GENERAL, "No quedan más lecturas: " + codigo(llamada) + " termina y devuelve " + codigo("iluminados"));
         salir();
         return iluminados;
     }
@@ -223,15 +236,15 @@ final class AnimacionTraza {
     /** Reproduce Microarray.hibridar(Lectura). */
     private boolean[][] hibridar(Lectura lectura) throws Exception {
         String id = lectura.getId();
-        entrar("hibridar(" + id + ")");
+        String llamada = entrar(microarray.getNombre(), "hibridar", argumento("Lectura", id));
         boolean[][] iluminados = new boolean[microarray.getFilas()][microarray.getColumnas()];
-        variable("iluminados", iluminados);
-        fotograma(GENERAL, "hibridar(" + id + ") crea su propia matriz iluminados, con todos los puntos apagados, "
-                + "y recorre el chip fila a fila con dos bucles anidados");
+        variable("boolean[][]", "iluminados", iluminados);
+        fotograma(GENERAL, codigo(llamada) + " crea su propia matriz " + codigo("iluminados")
+                + ", con todos los puntos apagados, y recorre el chip fila a fila con dos bucles anidados");
         for (int fila = 0; fila < microarray.getFilas(); fila++) {
-            variable("fila", fila);
+            variable("int", "fila", fila);
             for (int columna = 0; columna < microarray.getColumnas(); columna++) {
-                variable("columna", columna);
+                variable("int", "columna", columna);
                 filaSonda = fila;
                 columnaSonda = columna;
                 pila.getLast().marca = new int[] { fila, columna };
@@ -243,7 +256,8 @@ final class AnimacionTraza {
                 int profundidad = pila.size();
                 try {
                     hibrida = hibridaCon(sonda, lectura);
-                    porque = " devuelve " + hibrida + " (encontrarEn ha devuelto " + posicionEncontrada + ")";
+                    porque = " devuelve " + codigo(hibrida) + " (" + codigo("encontrarEn") + " ha devuelto "
+                            + codigo(posicionEncontrada) + ")";
                 } catch (Exception e) {
                     // Como en la solución: si no se puede comprobar la sonda, su punto no se ilumina
                     hibrida = false;
@@ -251,8 +265,8 @@ final class AnimacionTraza {
                     pila.subList(profundidad, pila.size()).clear();
                 }
                 iluminados[fila][columna] = hibrida;
-                fotograma(SONDA, sonda.getNombre() + ".hibridaCon(" + id + ")" + porque + ": iluminados[" + fila + "]["
-                        + columna + "] = " + hibrida);
+                fotograma(SONDA, codigo(sonda.getNombre() + ".hibridaCon(" + id + ")") + porque + ": "
+                        + codigo("iluminados[" + fila + "][" + columna + "] = " + hibrida));
             }
             quitarVariable("columna");
         }
@@ -263,22 +277,23 @@ final class AnimacionTraza {
         sonda = null;
         detalle = Detalle.PASO_A_PASO;
         vaciarVentana();
-        comprobar(Arrays.deepEquals(iluminados, microarray.hibridar(lectura)), "hibridar(" + id + ")");
+        comprobar(Arrays.deepEquals(iluminados, microarray.hibridar(lectura)), llamada);
         devolver("iluminados");
-        fotograma(GENERAL, "Se han comprobado todas las sondas: hibridar(" + id + ") termina y devuelve su matriz iluminados");
+        fotograma(GENERAL, "Se han comprobado todas las sondas: " + codigo(llamada) + " termina y devuelve su matriz "
+                + codigo("iluminados"));
         salir();
         return iluminados;
     }
 
     /** Reproduce Sonda.hibridaCon(Lectura). */
     private boolean hibridaCon(Sonda sonda, Lectura lectura) throws Exception {
-        entrar(sonda.getNombre() + ".hibridaCon(" + lectura.getId() + ")");
-        fotograma(POSICION, "fila = " + filaSonda + ", columna = " + columnaSonda + ": ¿hibrida la sonda "
-                + sonda.getNombre() + ", de patrón " + sonda.getPatron() + ", con la lectura " + lectura.getId()
-                + "? hibridaCon busca el patrón con encontrarEn");
+        String llamada = entrar(sonda.getNombre(), "hibridaCon", argumento("Lectura", lectura.getId()));
+        fotograma(POSICION, codigo("fila = " + filaSonda) + ", " + codigo("columna = " + columnaSonda)
+                + ": ¿hibrida la sonda " + codigo(sonda.getNombre()) + ", de patrón " + sonda.getPatron() + ", con la lectura "
+                + codigo(lectura.getId()) + "? " + codigo("hibridaCon") + " busca el patrón con " + codigo("encontrarEn"));
         int posicion = encontrarEn(sonda, lectura);
         boolean resultado = posicion >= 0;
-        comprobar(resultado == sonda.hibridaCon(lectura), sonda.getNombre() + ".hibridaCon(" + lectura.getId() + ")");
+        comprobar(resultado == sonda.hibridaCon(lectura), llamada);
         devolver(resultado);
         salir();
         return resultado;
@@ -286,19 +301,19 @@ final class AnimacionTraza {
 
     /** Reproduce Sonda.encontrarEn(Lectura). */
     private int encontrarEn(Sonda sonda, Lectura lectura) throws Exception {
-        String llamada = sonda.getNombre() + ".encontrarEn(" + lectura.getId() + ")";
-        entrar(llamada);
+        String llamada = entrar(sonda.getNombre(), "encontrarEn", argumento("Lectura", lectura.getId()));
         int ultima = lectura.getLongitud() - sonda.getLongitud();
         ultimoInicio = ultima;
-        fotograma(SUBPASO, "encontrarEn desliza el patrón por la lectura: prueba con inicio desde 0 hasta "
+        fotograma(SUBPASO, codigo("encontrarEn") + " desliza el patrón por la lectura: prueba con " + codigo("inicio")
+                + " desde 0 hasta "
                 + lectura.getLongitud() + " − " + sonda.getLongitud() + " = " + ultima
                 + ", la última posición en la que cabe el patrón");
         for (int inicio = 0; inicio <= ultima; inicio++) {
-            variable("inicio", inicio);
+            variable("int", "inicio", inicio);
             if (encajaEn(sonda, lectura, inicio)) {
                 devolver(inicio);
-                fotograma(POSICION, "encajaEn ha devuelto true: encontrarEn termina y devuelve " + inicio
-                        + ", sin probar más posiciones");
+                fotograma(POSICION, codigo("encajaEn") + " ha devuelto " + codigo(true) + ": " + codigo("encontrarEn")
+                        + " termina y devuelve " + codigo(inicio) + ", sin probar más posiciones");
                 comprobar(inicio == sonda.encontrarEn(lectura), llamada);
                 posicionEncontrada = inicio;
                 ultimoInicio = -1;
@@ -311,7 +326,7 @@ final class AnimacionTraza {
         notaDirecto = sonda.getPatron() + " no encaja en ninguna posición, en ningún sentido";
         devolver(-1);
         fotograma(POSICION, "El patrón " + sonda.getPatron() + " no encaja en ninguna posición, en ningún sentido: "
-                + "encontrarEn devuelve -1");
+                + codigo("encontrarEn") + " devuelve " + codigo(-1));
         comprobar(sonda.encontrarEn(lectura) == -1, llamada);
         posicionEncontrada = -1;
         salir();
@@ -321,8 +336,8 @@ final class AnimacionTraza {
     /** Reproduce Sonda.encajaEn(Lectura, int). */
     private boolean encajaEn(Sonda sonda, Lectura lectura, int inicio) throws Exception {
         String patron = sonda.getPatron();
-        String llamada = sonda.getNombre() + ".encajaEn(" + lectura.getId() + ", " + inicio + ")";
-        entrar(llamada);
+        String llamada = entrar(sonda.getNombre(), "encajaEn", argumento("Lectura", lectura.getId()),
+                argumento("int", inicio));
         if (inicio < 0 || inicio + patron.length() > lectura.getLongitud()) {
             throw new Exception("El patrón no cabe en la lectura a partir de la posición " + inicio);
         }
@@ -331,18 +346,18 @@ final class AnimacionTraza {
         inverso = null;
         notaDirecto = null;
         notaInverso = null;
-        fotograma(COMPARACION, llamada + ": se coloca el patrón a partir de la posición " + inicio + " (cabe, porque "
+        fotograma(COMPARACION, codigo(llamada) + ": se coloca el patrón a partir de la posición " + inicio + " (cabe, porque "
                 + inicio + " + " + patron.length() + " ≤ " + lectura.getLongitud() + ")");
 
         boolean encajaDirecto = true;
-        variable("directo", true);
+        variable("boolean", "directo", true);
         for (int i = 0; i < patron.length(); i++) {
-            variable("i", i);
+            variable("int", "i", i);
             char simbolo = patron.charAt(i);
             char base = lectura.getBase(inicio + i);
             if (!compararDirecto(i, simbolo, base)) {
                 encajaDirecto = false;
-                variable("directo", false);
+                variable("boolean", "directo", false);
                 notaDirecto = explicacion(simbolo, base, false);
                 break;
             }
@@ -351,17 +366,18 @@ final class AnimacionTraza {
         if (encajaDirecto) {
             notaDirecto = parejas(patron, lectura, inicio, false) + ": encaja";
             devolver(true);
-            fotograma(POSICION, "Encajan todos los símbolos en sentido directo: " + llamada + " devuelve true");
+            fotograma(POSICION, "Encajan todos los símbolos en sentido directo: " + codigo(llamada) + " devuelve "
+                    + codigo(true));
             comprobar(sonda.encajaEn(lectura, inicio), llamada);
             salir();
             return true;
         }
 
         inverso = pendientes(patron.length());
-        fotograma(COMPARACION, "No encaja en sentido directo (directo = false): se prueba en sentido inverso, "
+        fotograma(COMPARACION, "No encaja en sentido directo (" + codigo("directo = false") + "): se prueba en sentido inverso, "
                 + "con el patrón de derecha a izquierda frente a las complementarias de la lectura");
         for (int i = 0; i < patron.length(); i++) {
-            variable("i", i);
+            variable("int", "i", i);
             char simbolo = patron.charAt(patron.length() - 1 - i);
             char base = lectura.getBase(inicio + i);
             if (!compararInverso(i, simbolo, base, patron.length())) {
@@ -369,8 +385,8 @@ final class AnimacionTraza {
                         + " (complementaria de " + base + ")";
                 devolver(false);
                 boolean quedan = inicio < lectura.getLongitud() - patron.length();
-                fotograma(POSICION, "Tampoco encaja en sentido inverso: " + llamada + " devuelve false"
-                        + (quedan ? ", y encontrarEn prueba la posición siguiente" : ""));
+                fotograma(POSICION, "Tampoco encaja en sentido inverso: " + codigo(llamada) + " devuelve " + codigo(false)
+                        + (quedan ? ", y " + codigo("encontrarEn") + " prueba la posición siguiente" : ""));
                 comprobar(!sonda.encajaEn(lectura, inicio), llamada);
                 salir();
                 return false;
@@ -379,8 +395,8 @@ final class AnimacionTraza {
         quitarVariable("i");
         notaInverso = parejas(patron, lectura, inicio, true) + ": encaja";
         devolver(true);
-        fotograma(POSICION, "Encajan todos los símbolos en sentido inverso: " + llamada
-                + " devuelve true (la lectura contiene la diana en la otra hebra)");
+        fotograma(POSICION, "Encajan todos los símbolos en sentido inverso: " + codigo(llamada) + " devuelve "
+                + codigo(true) + " (la lectura contiene la diana en la otra hebra)");
         comprobar(sonda.encajaEn(lectura, inicio), llamada);
         salir();
         return true;
@@ -389,14 +405,14 @@ final class AnimacionTraza {
     /** Compara en sentido directo el símbolo i del patrón con su base (Sonda.encaja). */
     private boolean compararDirecto(int i, char simbolo, char base) throws Exception {
         directo[i] = Casilla.COMPARANDO;
-        fotograma(SUBPASO, "Sentido directo, i = " + i + ": el símbolo " + i + " del patrón (" + simbolo
+        fotograma(SUBPASO, "Sentido directo, " + codigo("i = " + i) + ": el símbolo " + i + " del patrón (" + simbolo
                 + ") se compara con la base " + inicio + " + " + i + " = " + (inicio + i) + " de la lectura (" + base + ")");
-        String llamada = "encaja(" + texto(simbolo) + ", " + texto(base) + ")";
-        entrar(llamada);
+        String llamada = entrar(null, "encaja", argumento("char", simbolo), argumento("char", base));
         boolean resultado = Sonda.encaja(simbolo, base);
         devolver(resultado);
         directo[i] = resultado ? Casilla.ENCAJA : Casilla.NO_ENCAJA;
-        fotograma(COMPARACION, llamada + " devuelve " + resultado + ": " + explicacion(simbolo, base, resultado));
+        fotograma(COMPARACION, codigo(llamada) + " devuelve " + codigo(resultado) + ": "
+                + explicacion(simbolo, base, resultado));
         salir();
         return resultado;
     }
@@ -407,18 +423,17 @@ final class AnimacionTraza {
      */
     private boolean compararInverso(int i, char simbolo, char base, int n) throws Exception {
         inverso[i] = Casilla.COMPARANDO;
-        fotograma(SUBPASO, "Sentido inverso, i = " + i + ": el símbolo " + n + " − 1 − " + i + " = " + (n - 1 - i)
+        fotograma(SUBPASO, "Sentido inverso, " + codigo("i = " + i) + ": el símbolo " + n + " − 1 − " + i + " = " + (n - 1 - i)
                 + " del patrón (" + simbolo + ") se compara con la complementaria de la base " + (inicio + i)
                 + " de la lectura (" + base + ")");
-        String llamada = "encajaInverso(" + texto(simbolo) + ", " + texto(base) + ")";
-        entrar(llamada);
+        String llamada = entrar(null, "encajaInverso", argumento("char", simbolo), argumento("char", base));
         char complementaria = Lectura.complementaria(base);
-        entrar("encaja(" + texto(simbolo) + ", " + texto(complementaria) + ")");
+        entrar(null, "encaja", argumento("char", simbolo), argumento("char", complementaria));
         boolean resultado = Sonda.encaja(simbolo, complementaria);
         devolver(resultado);
         pila.get(pila.size() - 2).devuelve = texto(resultado);
         inverso[i] = resultado ? Casilla.ENCAJA : Casilla.NO_ENCAJA;
-        fotograma(COMPARACION, llamada + " devuelve " + resultado + ": la complementaria de " + base + " es "
+        fotograma(COMPARACION, codigo(llamada) + " devuelve " + codigo(resultado) + ": la complementaria de " + base + " es "
                 + complementaria + ", y " + explicacion(simbolo, complementaria, resultado));
         salir();
         salir();
@@ -462,23 +477,26 @@ final class AnimacionTraza {
                 mantenidos[fila][columna] = antes[fila][columna] && !conLectura[fila][columna];
             }
         }
-        String texto = cuantos(nuevos) == 0 ? "Ningún punto nuevo de conLectura está a true: iluminados no cambia"
-                : "Se iluminan en iluminados los puntos que están a true en conLectura (" + puntos(nuevos, "y") + ")";
+        String texto = cuantos(nuevos) == 0
+                ? "Ningún punto nuevo de " + codigo("conLectura") + " está a " + codigo(true) + ": " + codigo("iluminados")
+                        + " no cambia"
+                : "Se iluminan en " + codigo("iluminados") + " los puntos que están a " + codigo(true) + " en "
+                        + codigo("conLectura") + " (" + puntos(nuevos, "y") + ")";
         if (cuantos(mantenidos) > 0) {
             boolean uno = cuantos(mantenidos) == 1;
             texto += "; " + puntos(mantenidos, "y") + (uno ? " sigue iluminado, aunque no hibrida" : " siguen iluminados, "
-                    + "aunque no hibridan") + " con " + lectura.getId() + ": un punto iluminado no se apaga";
+                    + "aunque no hibridan") + " con " + codigo(lectura.getId()) + ": un punto iluminado no se apaga";
         }
         return texto;
     }
 
-    /** Nombres de las sondas de los puntos a true de una matriz: por ejemplo, "S1, S2 y S3". */
+    /** Nombres de las sondas de los puntos a true de una matriz, como código: por ejemplo, "`s1`, `s2` y `s3`". */
     private String puntos(boolean[][] matriz, String conjuncion) throws Exception {
         List<String> nombres = new ArrayList<>();
         for (int fila = 0; fila < matriz.length; fila++) {
             for (int columna = 0; columna < matriz[fila].length; columna++) {
                 if (matriz[fila][columna]) {
-                    nombres.add(microarray.getSonda(fila, columna).getNombre());
+                    nombres.add(codigo(microarray.getSonda(fila, columna).getNombre()));
                 }
             }
         }
@@ -498,6 +516,11 @@ final class AnimacionTraza {
             }
         }
         return total;
+    }
+
+    /** Marca un fragmento de código en un mensaje, para que se escriba en letra monoespaciada. */
+    private static String codigo(Object texto) {
+        return "`" + texto + "`";
     }
 
     private static String texto(Object valor) {
@@ -527,16 +550,29 @@ final class AnimacionTraza {
     // Pila, variables y fotogramas
     // ------------------------------------------------------------------------------------
 
-    private void entrar(String metodo) {
-        pila.add(new LlamadaEnCurso(metodo));
+    /**
+     * Entra en una llamada.
+     *
+     * @param receptor variable del objeto sobre el que se invoca el método, o null
+     * @return la llamada como se escribiría en Java (por ejemplo, "s1.encajaEn(l1, 2)")
+     */
+    private String entrar(String receptor, String metodo, Argumento... argumentos) {
+        LlamadaEnCurso llamada = new LlamadaEnCurso(receptor, metodo, List.of(argumentos));
+        pila.add(llamada);
+        return llamada.texto;
+    }
+
+    private static Argumento argumento(String tipo, Object valor) {
+        return new Argumento(tipo, texto(valor));
     }
 
     private void salir() {
         pila.removeLast();
     }
 
-    private void variable(String nombre, Object valor) {
+    private void variable(String tipo, String nombre, Object valor) {
         pila.getLast().variables.put(nombre, valor);
+        pila.getLast().tipos.put(nombre, tipo);
     }
 
     private void quitarVariable(String nombre) {
@@ -569,7 +605,7 @@ final class AnimacionTraza {
         for (int nivel = 0; nivel < pila.size(); nivel++) {
             LlamadaEnCurso llamada = pila.get(nivel);
             // Las variables se resaltan si cambian dentro de la misma llamada
-            Llamada anterior = nivel < pilaAnterior.size() && pilaAnterior.get(nivel).metodo().equals(llamada.metodo)
+            Llamada anterior = nivel < pilaAnterior.size() && pilaAnterior.get(nivel).texto().equals(llamada.texto)
                     ? pilaAnterior.get(nivel) : null;
             List<Variable> variables = new ArrayList<>();
             for (Map.Entry<String, Object> variable : llamada.variables.entrySet()) {
@@ -579,9 +615,10 @@ final class AnimacionTraza {
                         .noneMatch(v -> v.nombre().equals(variable.getKey()) && Objects.equals(v.valor(), valor)
                                 && Arrays.deepEquals(v.matriz(), matriz));
                 int[] marca = matriz != null && llamada.marca != null ? llamada.marca : new int[] { -1, -1 };
-                variables.add(new Variable(variable.getKey(), valor, matriz, marca[0], marca[1], cambiada));
+                variables.add(new Variable(llamada.tipos.get(variable.getKey()), variable.getKey(), valor, matriz, marca[0],
+                        marca[1], cambiada));
             }
-            llamadas.add(new Llamada(llamada.metodo, variables, llamada.devuelve));
+            llamadas.add(new Llamada(llamada.receptor, llamada.metodo, llamada.argumentos, variables, llamada.devuelve));
         }
         pilaAnterior = llamadas;
         Ventana ventana = new Ventana(lectura == null ? null : lectura.getSecuencia(),

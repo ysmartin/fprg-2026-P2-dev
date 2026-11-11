@@ -5,6 +5,7 @@ import module java.desktop;
 
 import java.util.List;
 
+import es.upm.dit.fprg26.p2.AnimacionFotograma.Argumento;
 import es.upm.dit.fprg26.p2.AnimacionFotograma.Casilla;
 import es.upm.dit.fprg26.p2.AnimacionFotograma.Llamada;
 import es.upm.dit.fprg26.p2.AnimacionFotograma.Variable;
@@ -44,6 +45,7 @@ final class AnimacionLienzo {
     private static final Color TEXTO = new Color(0x1f2328);
     private static final Color SECUNDARIO = new Color(0x57606a);
     private static final Color TENUE = new Color(0xafb8c1);
+    private static final Color TIPO = new Color(0x8c959f);
     private static final Color GRIS_CLARO = new Color(0xeaeef2);
     private static final Color CASILLA = new Color(0xf6f8fa);
     private static final Color CASILLA_BORDE = new Color(0x8c959f);
@@ -172,7 +174,7 @@ final class AnimacionLienzo {
     // ------------------------------------------------------------------------------------
 
     private void dibujarMuestra(Graphics2D g, AnimacionFotograma fotograma) throws Exception {
-        panel(g, ZONA_MUESTRA, "Muestra " + muestra.getId(), muestra.getNumeroLecturas() + " lecturas");
+        panel(g, ZONA_MUESTRA, "Muestra `" + muestra.getId() + "`", muestra.getNumeroLecturas() + " lecturas");
         int paso = Math.min(PASO_LECTURAS, (ZONA_MUESTRA.y + ZONA_MUESTRA.height - Y_LECTURAS - 6)
                 / muestra.getNumeroLecturas());
         int lado = Math.min(LADO, paso - 8);
@@ -180,6 +182,7 @@ final class AnimacionLienzo {
             Lectura lectura = muestra.getLectura(k);
             int y = Y_LECTURAS + k * paso;
             boolean actual = k == fotograma.lectura();
+            boolean inactiva = fotograma.lectura() >= 0 && !actual;   // mientras se analiza otra
             if (actual) {
                 RoundRectangle2D resalte = new RoundRectangle2D.Double(ZONA_MUESTRA.x + 8, y - 4,
                         X_CASILLAS + (lectura.getLongitud() - 1) * PASO + LADO + 6 - ZONA_MUESTRA.x - 8, lado + 8, 12, 12);
@@ -189,12 +192,16 @@ final class AnimacionLienzo {
                 g.setStroke(new BasicStroke(1.5f));
                 g.draw(resalte);
             }
-            Font fuente = fuente(SANS, Font.BOLD, 15);
+            Font fuente = fuente(MONO, Font.BOLD, 15);
             texto(g, lectura.getId(), X_CASILLAS - 14 - ancho(g, lectura.getId(), fuente), y + lado / 2 + 5, fuente,
-                    actual ? AZUL : TEXTO);
+                    actual ? AZUL : inactiva ? TENUE : TEXTO);
             for (int p = 0; p < lectura.getLongitud(); p++) {
-                base(g, X_CASILLAS + p * PASO + (LADO - lado) / 2, y, lado, lectura.getBase(p), CASILLA, CASILLA_BORDE,
-                        actual ? TEXTO : SECUNDARIO);
+                int x = X_CASILLAS + p * PASO + (LADO - lado) / 2;
+                if (inactiva) {
+                    base(g, x, y, lado, lectura.getBase(p), PANEL, GRIS_CLARO, TENUE);
+                } else {
+                    base(g, x, y, lado, lectura.getBase(p), CASILLA, CASILLA_BORDE, TEXTO);
+                }
             }
         }
     }
@@ -214,7 +221,7 @@ final class AnimacionLienzo {
         int altoChip = filas * altoTarjeta + (filas - 1) * separacion;
         int y0 = Math.clamp((Y_DIRECTO + Y_INVERSO + LADO) / 2 - altoChip / 2, ZONA_CHIP.y + 44,
                 ZONA_CHIP.y + ZONA_CHIP.height - 12 - altoChip);
-        panel(g, new Rectangle(ZONA_CHIP.x, y0 - 44, ZONA_CHIP.width, altoChip + 56), "Microarray",
+        panel(g, new Rectangle(ZONA_CHIP.x, y0 - 44, ZONA_CHIP.width, altoChip + 56), "Microarray `" + microarray.getNombre() + "`",
                 filas + "x" + columnas);
         for (int fila = 0; fila < filas; fila++) {
             for (int columna = 0; columna < columnas; columna++) {
@@ -230,7 +237,7 @@ final class AnimacionLienzo {
                 g.setStroke(new BasicStroke(actual ? 3f : 1.5f));
                 g.draw(tarjeta);
                 // Nombre y posición en el chip
-                Font nombre = fuente(SANS, Font.BOLD, 14);
+                Font nombre = fuente(MONO, Font.BOLD, 14);
                 texto(g, sonda.getNombre(), x + 10, y + 20, nombre, actual ? AZUL : TEXTO);
                 texto(g, "[" + fila + "][" + columna + "]", x + 14 + ancho(g, sonda.getNombre(), nombre), y + 20,
                         fuente(MONO, Font.PLAIN, 11), TENUE);
@@ -297,8 +304,8 @@ final class AnimacionLienzo {
     private void dibujarVentana(Graphics2D g, AnimacionFotograma fotograma) throws Exception {
         Ventana ventana = fotograma.ventana();
         String detalle = ventana.lectura() == null ? null
-                : ventana.patron() == null ? "lectura " + ventana.idLectura()
-                : "sonda " + ventana.nombreSonda() + " · lectura " + ventana.idLectura();
+                : ventana.patron() == null ? "lectura `" + ventana.idLectura() + "`"
+                : "sonda `" + ventana.nombreSonda() + "` · lectura `" + ventana.idLectura() + "`";
         panel(g, ZONA_VENTANA, "Ventana deslizante", detalle);
         if (fotograma.avanceRapido() != null) {
             etiquetaAvanceRapido(g, fotograma.avanceRapido());
@@ -330,7 +337,7 @@ final class AnimacionLienzo {
         // Etiquetas de las filas
         Font etiqueta = fuente(SANS, Font.PLAIN, 13);
         etiquetaFila(g, "posición", Y_POSICIONES - 5, fuente(SANS, Font.PLAIN, 12), SECUNDARIO);
-        etiquetaFila(g, "lectura " + ventana.idLectura(), Y_LECTURA + LADO / 2, fuente(SANS, Font.BOLD, 13), AZUL);
+        etiquetaFila(g, "lectura `" + ventana.idLectura() + "`", Y_LECTURA + LADO / 2, fuente(SANS, Font.BOLD, 13), AZUL);
         etiquetaFila(g, "complementarias", Y_COMPLEMENTARIAS + LADO / 2, etiqueta, hayInverso ? AZUL : TENUE);
         if (hayVentana) {
             etiquetaFila(g, "sentido directo", Y_DIRECTO + LADO / 2, etiqueta, TEXTO);
@@ -453,7 +460,8 @@ final class AnimacionLienzo {
     }
 
     private void etiquetaFila(Graphics2D g, String texto, int centro, Font fuente, Color color) {
-        texto(g, texto, X_CASILLAS - 14 - ancho(g, texto, fuente), centro + 5, fuente, color);
+        int ancho = textoMixto(g, texto, 0, 0, fuente, color, false);
+        textoMixto(g, texto, X_CASILLAS - 14 - ancho, centro + 5, fuente, color, true);
     }
 
     private void etiquetaAvanceRapido(Graphics2D g, String aviso) {
@@ -492,8 +500,7 @@ final class AnimacionLienzo {
             texto(g, "(ninguna llamada en curso)", ZONA_PILA.x + 16, ZONA_PILA.y + 70, fuente(SANS, Font.ITALIC, 15), TENUE);
             return;
         }
-        Font metodo = fuente(MONO, Font.PLAIN, 14);
-        Font metodoActual = fuente(MONO, Font.BOLD, 14);
+        Font fuenteDevuelve = fuente(MONO, Font.BOLD, 14);
         int altoMetodo = 28;
         int xMax = ZONA_PILA.x + ZONA_PILA.width - 14;
         int y = ZONA_PILA.y + 46;
@@ -501,8 +508,15 @@ final class AnimacionLienzo {
         for (int nivel = 0; nivel < pila.size(); nivel++) {
             Llamada llamada = pila.get(nivel);
             boolean actual = nivel == pila.size() - 1;
-            int x = ZONA_PILA.x + 18 + nivel * 14;
-            int altoVariables = variables(g, llamada.variables(), x + 4, y + altoMetodo, xMax, false);
+            int x = ZONA_PILA.x + 18 + nivel * 12;
+            int anchoLlamada = llamada(g, llamada, x, 0, actual, false);
+            // Lo que devuelve, en la misma línea si cabe; si no, al principio de la siguiente
+            String devuelve = llamada.devuelve();
+            boolean devuelveEnLinea = devuelve != null
+                    && x + anchoLlamada + 10 + anchoDevuelve(g, devuelve, fuenteDevuelve) <= xMax;
+            String devuelveAparte = devuelve != null && !devuelveEnLinea ? devuelve : null;
+            // Las variables y lo que devuelve van a la derecha del conector de la llamada siguiente
+            int altoVariables = variables(g, llamada.variables(), devuelveAparte, x + 12, y + altoMetodo, xMax, false);
             if (actual) {
                 g.setColor(AZUL_CLARO);
                 g.fill(new RoundRectangle2D.Double(ZONA_PILA.x + 8, y + 1, ZONA_PILA.width - 16,
@@ -513,45 +527,100 @@ final class AnimacionLienzo {
                 // Conector con la llamada que la ha invocado
                 g.setColor(TENUE);
                 g.setStroke(new BasicStroke(1.5f));
-                g.draw(new Line2D.Double(x - 10, centroAnterior + 8, x - 10, centro));
-                g.draw(new Line2D.Double(x - 10, centro, x - 3, centro));
+                g.draw(new Line2D.Double(x - 9, centroAnterior + 8, x - 9, centro));
+                g.draw(new Line2D.Double(x - 9, centro, x - 3, centro));
             }
-            Font fuenteMetodo = actual ? metodoActual : metodo;
-            texto(g, llamada.metodo(), x, centro + 5, fuenteMetodo, actual ? TEXTO : SECUNDARIO);
-            if (llamada.devuelve() != null) {
-                Color color = switch (llamada.devuelve()) {
-                    case "true" -> VERDE;
-                    case "false", "-1" -> ROJO;
-                    default -> AZUL;
-                };
-                int xf = x + ancho(g, llamada.metodo(), fuenteMetodo) + 10;
-                flecha(g, xf, centro, 16, color);
-                texto(g, llamada.devuelve(), xf + 22, centro + 5, metodoActual, color);
+            llamada(g, llamada, x, centro + 5, actual, true);
+            if (devuelveEnLinea) {
+                devuelve(g, devuelve, x + anchoLlamada + 10, centro, fuenteDevuelve);
             }
-            variables(g, llamada.variables(), x + 4, y + altoMetodo, xMax, true);
+            variables(g, llamada.variables(), devuelveAparte, x + 12, y + altoMetodo, xMax, true);
             centroAnterior = centro;
             y += altoMetodo + altoVariables;
         }
     }
 
     /**
-     * Dibuja (o solo mide) las variables de una llamada, en una o más líneas.
+     * Dibuja (o solo mide) una llamada, con los tipos de sus parámetros en gris: por ejemplo,
+     * s1.encajaEn(Lectura l1, int 0).
+     *
+     * @return ancho que ocupa
+     */
+    private static int llamada(Graphics2D g, Llamada llamada, int x0, int y, boolean actual, boolean dibujar) {
+        Font fuente = fuente(MONO, actual ? Font.BOLD : Font.PLAIN, 14);
+        Font fuenteTipo = fuente(MONO, Font.PLAIN, 14);
+        Color color = actual ? TEXTO : SECUNDARIO;
+        List<String> trozos = new ArrayList<>();
+        List<Boolean> sonTipos = new ArrayList<>();
+        trozos.add((llamada.receptor() == null ? "" : llamada.receptor() + ".") + llamada.metodo() + "(");
+        sonTipos.add(false);
+        for (int i = 0; i < llamada.argumentos().size(); i++) {
+            Argumento argumento = llamada.argumentos().get(i);
+            trozos.add(argumento.tipo() + " ");
+            sonTipos.add(true);
+            trozos.add(argumento.valor() + (i < llamada.argumentos().size() - 1 ? ", " : ""));
+            sonTipos.add(false);
+        }
+        trozos.add(")");
+        sonTipos.add(false);
+        int x = x0;
+        for (int i = 0; i < trozos.size(); i++) {
+            Font f = sonTipos.get(i) ? fuenteTipo : fuente;
+            if (dibujar) {
+                texto(g, trozos.get(i), x, y, f, sonTipos.get(i) ? TIPO : color);
+            }
+            x += ancho(g, trozos.get(i), f);
+        }
+        return x - x0;
+    }
+
+    private static Color colorDevuelve(String devuelve) {
+        return switch (devuelve) {
+            case "true" -> VERDE;
+            case "false", "-1" -> ROJO;
+            default -> AZUL;
+        };
+    }
+
+    private static int anchoDevuelve(Graphics2D g, String devuelve, Font fuente) {
+        return 22 + ancho(g, devuelve, fuente);
+    }
+
+    /** Dibuja una flecha y el valor que devuelve una llamada. */
+    private static void devuelve(Graphics2D g, String devuelve, int x, int centro, Font fuente) {
+        flecha(g, x, centro, 16, colorDevuelve(devuelve));
+        texto(g, devuelve, x + 22, centro + 5, fuente, colorDevuelve(devuelve));
+    }
+
+    /**
+     * Dibuja (o solo mide) las variables de una llamada, con su tipo en gris, en una o más
+     * líneas; delante, si se indica, lo que devuelve la llamada.
      *
      * @return alto que ocupan
      */
-    private int variables(Graphics2D g, List<Variable> variables, int x0, int y0, int xMax, boolean dibujar) {
-        if (variables.isEmpty()) {
+    private int variables(Graphics2D g, List<Variable> variables, String devuelve, int x0, int y0, int xMax,
+            boolean dibujar) {
+        if (variables.isEmpty() && devuelve == null) {
             return 0;
         }
+        Font tipo = fuente(MONO, Font.PLAIN, 13);
         Font nombre = fuente(MONO, Font.PLAIN, 13);
         Font valor = fuente(MONO, Font.BOLD, 13);
         int altoLinea = 26;
         int x = x0;
         int y = y0;
+        if (devuelve != null) {
+            Font fuenteDevuelve = fuente(MONO, Font.BOLD, 14);
+            if (dibujar) {
+                devuelve(g, devuelve, x, y + altoLinea / 2 - 2, fuenteDevuelve);
+            }
+            x += anchoDevuelve(g, devuelve, fuenteDevuelve) + 16;
+        }
         for (Variable v : variables) {
+            String declaracion = v.tipo() + " ";
             String etiqueta = v.matriz() != null ? v.nombre() + " " : v.nombre() + " = ";
             int anchoValor = v.matriz() != null ? anchoMiniMatriz(v.matriz(), altoLinea - 6) : ancho(g, v.valor(), valor);
-            int anchoVariable = ancho(g, etiqueta, nombre) + anchoValor;
+            int anchoVariable = ancho(g, declaracion, tipo) + ancho(g, etiqueta, nombre) + anchoValor;
             if (x > x0 && x + anchoVariable > xMax) {
                 x = x0;
                 y += altoLinea;
@@ -567,8 +636,11 @@ final class AnimacionLienzo {
                     g.setStroke(new BasicStroke(1f));
                     g.draw(resalte);
                 }
-                texto(g, etiqueta, x, centro + 5, nombre, SECUNDARIO);
-                int xv = x + ancho(g, etiqueta, nombre);
+                int xv = x;
+                texto(g, declaracion, xv, centro + 5, tipo, TIPO);
+                xv += ancho(g, declaracion, tipo);
+                texto(g, etiqueta, xv, centro + 5, nombre, SECUNDARIO);
+                xv += ancho(g, etiqueta, nombre);
                 if (v.matriz() != null) {
                     miniMatriz(g, v, xv, centro, altoLinea - 6);
                 } else {
@@ -645,26 +717,55 @@ final class AnimacionLienzo {
         int altoLinea = lineas.size() > 1 ? 19 : 0;
         int y = ZONA_MENSAJE.y + ZONA_MENSAJE.height / 2 + 6 - altoLinea * (lineas.size() - 1) / 2;
         for (String linea : lineas) {
-            texto(g, linea, ZONA_MENSAJE.x + 22, y, fuente, TEXTO);
+            textoMixto(g, linea, ZONA_MENSAJE.x + 22, y, fuente, TEXTO, true);
             y += altoLinea;
         }
     }
 
-    /** Parte un texto en líneas que no superen un ancho. */
+    /**
+     * Parte un texto en líneas que no superen un ancho. Si un fragmento de código (entre `)
+     * queda partido, se cierra al final de una línea y se vuelve a abrir en la siguiente.
+     */
     private static List<String> partir(Graphics2D g, String texto, Font fuente, int anchoMaximo) {
         List<String> lineas = new ArrayList<>();
-        StringBuilder linea = new StringBuilder();
+        String linea = "";
+        boolean enCodigo = false;       // si la línea en curso empieza dentro de un fragmento de código
         for (String palabra : texto.split(" ")) {
             String prueba = linea.isEmpty() ? palabra : linea + " " + palabra;
-            if (!linea.isEmpty() && ancho(g, prueba, fuente) > anchoMaximo) {
-                lineas.add(linea.toString());
-                linea = new StringBuilder(palabra);
+            String inicio = enCodigo ? "`" : "";
+            if (!linea.isEmpty() && textoMixto(g, inicio + prueba, 0, 0, fuente, TEXTO, false) > anchoMaximo) {
+                boolean abierto = enCodigo ^ (linea.chars().filter(c -> c == '`').count() % 2 == 1);
+                lineas.add(inicio + linea + (abierto ? "`" : ""));
+                enCodigo = abierto;
+                linea = palabra;
             } else {
-                linea = new StringBuilder(prueba);
+                linea = prueba;
             }
         }
-        lineas.add(linea.toString());
+        lineas.add((enCodigo ? "`" : "") + linea);
         return lineas;
+    }
+
+    /**
+     * Dibuja (o solo mide) un texto en el que los fragmentos entre ` son código, que se escribe
+     * en letra monoespaciada (así se distinguen, por ejemplo, la l minúscula y el 1).
+     *
+     * @return ancho del texto
+     */
+    private static int textoMixto(Graphics2D g, String texto, double x, double y, Font fuente, Color color,
+            boolean dibujar) {
+        // La letra monoespaciada se ve más grande que la otra con el mismo tamaño
+        Font codigo = fuente(MONO, fuente.getStyle(), (int) Math.round(fuente.getSize() * 0.93));
+        String[] partes = texto.split("`", -1);
+        double xi = x;
+        for (int i = 0; i < partes.length; i++) {
+            Font f = i % 2 == 1 ? codigo : fuente;
+            if (dibujar) {
+                texto(g, partes[i], xi, y, f, color);
+            }
+            xi += f.getStringBounds(partes[i], g.getFontRenderContext()).getWidth();
+        }
+        return (int) Math.ceil(xi - x);
     }
 
     // ------------------------------------------------------------------------------------
@@ -793,10 +894,10 @@ final class AnimacionLienzo {
         g.setStroke(new BasicStroke(1.5f));
         g.draw(fondo);
         Font fuenteTitulo = fuente(SANS, Font.BOLD, 15);
-        texto(g, titulo, zona.x + 16, zona.y + 26, fuenteTitulo, TEXTO);
+        int anchoTitulo = textoMixto(g, titulo, zona.x + 16, zona.y + 26, fuenteTitulo, TEXTO, true);
         if (detalle != null) {
-            texto(g, detalle, zona.x + 16 + ancho(g, titulo, fuenteTitulo) + 10, zona.y + 26, fuente(SANS, Font.PLAIN, 14),
-                    SECUNDARIO);
+            textoMixto(g, detalle, zona.x + 16 + anchoTitulo + 10, zona.y + 26, fuente(SANS, Font.PLAIN, 14), SECUNDARIO,
+                    true);
         }
     }
 

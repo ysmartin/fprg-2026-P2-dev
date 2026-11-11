@@ -31,23 +31,51 @@ record AnimacionFotograma(List<Llamada> pila, int filaSonda, int columnaSonda, b
     }
 
     /**
-     * Una llamada de la pila, con sus variables locales.
+     * Una llamada de la pila, con sus argumentos y sus variables locales.
      *
-     * @param metodo llamada tal como se muestra, con los valores de sus argumentos (por ejemplo,
-     *               "S1.encajaEn(L1, 2)")
+     * @param receptor variable del objeto sobre el que se invoca el método (por ejemplo, "s1"),
+     *                 o null si se invoca sin él (los métodos estáticos de Sonda, desde la
+     *                 propia clase)
+     * @param metodo nombre del método
+     * @param argumentos argumentos de la llamada, con su tipo
      * @param variables variables locales de la llamada, en el orden en que se declaran
      * @param devuelve valor que devuelve la llamada, si está terminando, o null
      */
-    record Llamada(String metodo, List<Variable> variables, String devuelve) {
-        /** Crea una llamada, con una copia de sus variables. */
+    record Llamada(String receptor, String metodo, List<Argumento> argumentos, List<Variable> variables,
+            String devuelve) {
+        /** Crea una llamada, con copias de sus argumentos y sus variables. */
         Llamada {
+            argumentos = List.copyOf(argumentos);
             variables = List.copyOf(variables);
         }
+
+        /**
+         * Devuelve la llamada como se escribiría en Java, sin los tipos.
+         *
+         * @return llamada, por ejemplo, "s1.encajaEn(l1, 2)"
+         */
+        String texto() {
+            StringJoiner valores = new StringJoiner(", ", (receptor == null ? "" : receptor + ".") + metodo + "(", ")");
+            for (Argumento argumento : argumentos) {
+                valores.add(argumento.valor());
+            }
+            return valores.toString();
+        }
+    }
+
+    /**
+     * Un argumento de una llamada.
+     *
+     * @param tipo tipo del parámetro (por ejemplo, "Lectura" o "int")
+     * @param valor valor del argumento, tal como se escribe (por ejemplo, "l1" o "2")
+     */
+    record Argumento(String tipo, String valor) {
     }
 
     /**
      * Una variable local de una llamada.
      *
+     * @param tipo tipo de la variable (por ejemplo, "int" o "boolean[][]")
      * @param nombre nombre de la variable
      * @param valor valor, tal como se escribe (si no es una matriz)
      * @param matriz valor, si es una matriz de boolean (se dibuja como una cuadrícula), o null
@@ -57,8 +85,8 @@ record AnimacionFotograma(List<Llamada> pila, int filaSonda, int columnaSonda, b
      * @param cambiada si la variable ha cambiado (o se ha declarado) desde el fotograma
      *                 anterior, dentro de la misma llamada (como en el depurador de Eclipse)
      */
-    record Variable(String nombre, String valor, boolean[][] matriz, int filaMarcada, int columnaMarcada,
-            boolean cambiada) {
+    record Variable(String tipo, String nombre, String valor, boolean[][] matriz, int filaMarcada,
+            int columnaMarcada, boolean cambiada) {
         /** Crea una variable, con una copia de la matriz. */
         Variable {
             matriz = copiar(matriz);
