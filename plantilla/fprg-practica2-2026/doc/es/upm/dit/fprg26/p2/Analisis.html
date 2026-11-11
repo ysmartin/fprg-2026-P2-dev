@@ -254,11 +254,15 @@ a la de captura de la muestra, porque <a href="Muestra.html" title="class in es.
 <h3>getIluminados</h3>
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="return-type">boolean[][]</span>&nbsp;<span class="element-name">getIluminados</span>()</div>
-<div class="block">Devuelve los puntos del chip que se han iluminado.</div>
+<div class="block">Devuelve los puntos del chip que se han iluminado.
+<p>
+Devuelve una copia de la matriz (copiando también cada fila): modificarla no cambia el
+resultado del análisis.
+</p></div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>matriz del mismo tamaño que la cuadrícula del microarray, con <code>true</code>
-        en los puntos iluminados</dd>
+<dd>copia de la matriz del mismo tamaño que la cuadrícula del microarray, con
+        <code>true</code> en los puntos iluminados</dd>
 </dl>
 </div>
 </section>

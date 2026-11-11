@@ -76,12 +76,20 @@ class Analisis {
 
     /**
      * Devuelve los puntos del chip que se han iluminado.
+     * <p>
+     * Devuelve una copia de la matriz (copiando también cada fila): modificarla no cambia el
+     * resultado del análisis.
+     * </p>
      *
-     * @return matriz del mismo tamaño que la cuadrícula del microarray, con {@code true}
-     *         en los puntos iluminados
+     * @return copia de la matriz del mismo tamaño que la cuadrícula del microarray, con
+     *         {@code true} en los puntos iluminados
      */
     boolean[][] getIluminados() {
-        return iluminados;
+        boolean[][] copia = new boolean[iluminados.length][];
+        for (int fila = 0; fila < iluminados.length; fila++) {
+            copia[fila] = Arrays.copyOf(iluminados[fila], iluminados[fila].length);
+        }
+        return copia;
     }
 
     /**

@@ -133,6 +133,13 @@ final class DatosEjemplo {
      *   <li>las dianas de la <strong>N</strong> están en la otra hebra: aparecen en las lecturas
      *       como su complementaria inversa.</li>
      * </ul>
+     * <p>
+     * En un chip de expresión real, la muestra se prepara a partir del ARN mensajero del
+     * tejido, y el brillo de cada punto indica cuánto se expresa el gen correspondiente. En
+     * este chip, un punto iluminado solo significa que su patrón aparece en alguna de las
+     * lecturas (sintéticas) de la muestra: que una secuencia esté en el ADN no indica que el
+     * gen esté activo.
+     * </p>
      *
      * @return chip de expresión
      * @throws Exception si alguno de los objetos no se puede crear

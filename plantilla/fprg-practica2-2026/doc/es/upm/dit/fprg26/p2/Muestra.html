@@ -90,6 +90,12 @@ loadScripts(document, 'script');</script>
 <p>
 La fecha de captura se representa con <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/time/LocalDate.html" title="class or interface in java.time" class="external-link"><code>LocalDate</code></a>, la clase de la biblioteca
 de Java para fechas sin hora (por ejemplo, <code>LocalDate.of(2026, 11, 10)</code>).
+</p>
+<p>
+Una muestra no se puede modificar una vez creada. Como un array sí se puede modificar,
+el constructor guarda una copia del array de lecturas que recibe, y
+<a href="#getLecturas()"><code>getLecturas()</code></a> devuelve otra copia: así, nadie puede cambiar desde fuera las
+lecturas de la muestra.
 </p></div>
 </div>
 </section>
@@ -263,10 +269,13 @@ su número de lecturas.</div>
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="return-type"><a href="Lectura.html" title="class in es.upm.dit.fprg26.p2">Lectura</a>[]</span>&nbsp;<span class="element-name">getLecturas</span>()</div>
 <div class="block">Devuelve todas las lecturas de la muestra, por ejemplo, para recorrerlas con un
-bucle <code>for</code> mejorado: <code>for (Lectura lectura : muestra.getLecturas())</code>.</div>
+bucle <code>for</code> mejorado: <code>for (Lectura lectura : muestra.getLecturas())</code>.
+<p>
+Devuelve una copia del array: modificarla no cambia la muestra.
+</p></div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>array con las lecturas de la muestra</dd>
+<dd>copia del array con las lecturas de la muestra</dd>
 </dl>
 </div>
 </section>

@@ -9,6 +9,12 @@ import module java.base;
  * La fecha de captura se representa con {@link LocalDate}, la clase de la biblioteca
  * de Java para fechas sin hora (por ejemplo, {@code LocalDate.of(2026, 11, 10)}).
  * </p>
+ * <p>
+ * Una muestra no se puede modificar una vez creada. Como un array sí se puede modificar,
+ * el constructor guarda una copia del array de lecturas que recibe, y
+ * {@link #getLecturas()} devuelve otra copia: así, nadie puede cambiar desde fuera las
+ * lecturas de la muestra.
+ * </p>
  */
 class Muestra {
 
@@ -50,7 +56,8 @@ class Muestra {
         }
         this.id = id;
         this.fechaCaptura = fechaCaptura;
-        this.lecturas = lecturas;
+        // Se guarda una copia: si quien creó la muestra modifica después su array, la muestra no cambia
+        this.lecturas = Arrays.copyOf(lecturas, lecturas.length);
     }
 
     /**
@@ -98,11 +105,14 @@ class Muestra {
     /**
      * Devuelve todas las lecturas de la muestra, por ejemplo, para recorrerlas con un
      * bucle {@code for} mejorado: {@code for (Lectura lectura : muestra.getLecturas())}.
+     * <p>
+     * Devuelve una copia del array: modificarla no cambia la muestra.
+     * </p>
      *
-     * @return array con las lecturas de la muestra
+     * @return copia del array con las lecturas de la muestra
      */
     Lectura[] getLecturas() {
-        return lecturas;
+        return Arrays.copyOf(lecturas, lecturas.length);
     }
 
     /**

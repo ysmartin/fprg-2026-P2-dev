@@ -1,5 +1,7 @@
 package es.upm.dit.fprg26.p2;
 
+import module java.base;
+
 /**
  * Un microarray: un chip con sondas fijadas en una cuadrícula de filas y columnas
  * (una matriz de {@link Sonda}).
@@ -47,7 +49,12 @@ class Microarray {
             }
         }
         this.nombre = nombre;
-        this.sondas = sondas;
+        // Se guarda una copia de cada fila: si quien creó el microarray modifica después su
+        // matriz, el microarray no cambia
+        this.sondas = new Sonda[sondas.length][];
+        for (int fila = 0; fila < sondas.length; fila++) {
+            this.sondas[fila] = Arrays.copyOf(sondas[fila], sondas[fila].length);
+        }
     }
 
     /**

@@ -73,7 +73,10 @@ class VentanaMicroarray {
         JButton botonAnalizar = new JButton("Analizar");
 
         selectorMicroarray.addActionListener(_ -> mostrarChipSinAnalizar());
-        selectorMuestra.addActionListener(_ -> actualizarCampoLecturas());
+        selectorMuestra.addActionListener(_ -> {
+            actualizarCampoLecturas();
+            mostrarChipSinAnalizar();
+        });
         botonAnalizar.addActionListener(_ -> analizar());
         campoLecturas.addActionListener(_ -> analizar());
 
@@ -147,17 +150,23 @@ class VentanaMicroarray {
         panel.mostrar(microarray, null);
         try {
             Muestra muestra = muestraElegida();
+            String aviso = comprobarDimensiones(microarray, microarray.hibridar(muestra));
+            if (aviso != null) {
+                detalle.setText(aviso);
+                return;
+            }
             Analisis analisis = new Analisis(muestra, microarray);
-            boolean[][] iluminados = analisis.getIluminados();
-            String aviso = comprobarDimensiones(microarray, iluminados);
-            panel.mostrar(microarray, aviso == null ? iluminados : null);
-            detalle.setText(avisoChipGrande() + describir(analisis, muestra, microarray, aviso));
+            panel.mostrar(microarray, analisis.getIluminados());
+            detalle.setText(avisoChipGrande() + describir(analisis, muestra, microarray));
             detalle.setCaretPosition(0);
         } catch (RuntimeException e) {
             detalle.setText("Su código ha producido un error inesperado:\n" + e
                     + "\nen " + (e.getStackTrace().length > 0 ? e.getStackTrace()[0] : "(desconocido)"));
         } catch (Exception e) {
             detalle.setText("No se ha podido hacer el análisis:\n" + e.getMessage());
+        } catch (Error e) {
+            detalle.setText("Su proyecto todavía tiene errores de compilación (o se ha producido un error grave):\n"
+                    + e.getMessage());
         }
     }
 
@@ -194,26 +203,24 @@ class VentanaMicroarray {
 
     private static String comprobarDimensiones(Microarray microarray, boolean[][] iluminados) {
         if (iluminados == null) {
-            return "getIluminados() devuelve null: ¿está completo el constructor de Analisis?";
+            return "El análisis estará disponible cuando complete Microarray.hibridar(Muestra), en el apartado 3.\n"
+                    + "(De momento, hibridar(Muestra) devuelve null.)";
         }
         if (iluminados.length != microarray.getFilas()) {
-            return "La matriz de puntos iluminados tiene " + iluminados.length + " filas, pero el chip tiene "
-                    + microarray.getFilas();
+            return "AVISO: hibridar(Muestra) devuelve una matriz de " + iluminados.length
+                    + " filas, pero el chip tiene " + microarray.getFilas();
         }
         for (boolean[] fila : iluminados) {
             if (fila == null || fila.length != microarray.getColumnas()) {
-                return "Alguna fila de la matriz de puntos iluminados no tiene " + microarray.getColumnas()
-                        + " columnas, como el chip";
+                return "AVISO: alguna fila de la matriz que devuelve hibridar(Muestra) no tiene "
+                        + microarray.getColumnas() + " columnas, como el chip";
             }
         }
         return null;
     }
 
-    private static String describir(Analisis analisis, Muestra muestra, Microarray microarray, String aviso) {
+    private static String describir(Analisis analisis, Muestra muestra, Microarray microarray) {
         StringBuilder texto = new StringBuilder();
-        if (aviso != null) {
-            texto.append("AVISO: ").append(aviso).append("\n\n");
-        }
         texto.append("Muestra: ").append(muestra).append('\n');
         texto.append("Microarray: ").append(microarray).append('\n');
         texto.append("Fecha del análisis: ").append(analisis.getFechaAnalisis())
@@ -221,6 +228,7 @@ class VentanaMicroarray {
         texto.append("Puntos iluminados: ").append(analisis.contarIluminados())
                 .append(" de ").append(microarray.getFilas() * microarray.getColumnas()).append("\n\n");
         texto.append("Dónde encaja cada sonda en cada lectura (según encontrarEn):\n");
+        int excepciones = 0;
         for (Lectura lectura : muestra.getLecturas()) {
             String secuencia = lectura.getSecuencia();
             int indeterminadas = secuencia.length() - secuencia.replace("N", "").length();
@@ -236,8 +244,9 @@ class VentanaMicroarray {
                         posicion = sonda.encontrarEn(lectura);
                     } catch (Exception e) {
                         alguna = true;
+                        excepciones++;
                         texto.append("(").append(sonda.getNombre()).append(": encontrarEn lanza una excepción: ")
-                                .append(e.getMessage()).append(")\n");
+                                .append(e instanceof RuntimeException ? e.toString() : e.getMessage()).append(")\n");
                         continue;
                     }
                     if (posicion >= 0) {
@@ -251,6 +260,13 @@ class VentanaMicroarray {
             if (!alguna) {
                 texto.append("(no encaja ninguna sonda)\n");
             }
+        }
+        if (excepciones > 0) {
+            return "AVISO: encontrarEn ha lanzado " + excepciones + (excepciones == 1 ? " excepción" : " excepciones")
+                    + " (las verá más abajo).\n"
+                    + "Con sondas y lecturas válidas no debería lanzar ninguna: revise su código.\n"
+                    + "Los puntos de esas sondas aparecen apagados porque hibridar(Lectura) captura las\n"
+                    + "excepciones, pero eso no significa que la sonda no encaje.\n\n" + texto;
         }
         return texto.toString();
     }

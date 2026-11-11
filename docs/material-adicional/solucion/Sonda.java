@@ -296,6 +296,29 @@ class Sonda {
     }
 
     /**
+     * Cuenta con cuántas lecturas de una muestra hibrida la sonda (en cualquiera de los dos
+     * sentidos; ver {@link #hibridaCon(Lectura)}).
+     * <p>
+     * Por ejemplo, la sonda del Virus B de los datos de ejemplo (patrón
+     * {@code "TTGRCATCCAGT"}) hibrida con dos de las tres lecturas de la muestra M2.
+     * </p>
+     *
+     * @param muestra muestra cuyas lecturas se analizan
+     * @return número de lecturas de la muestra con las que hibrida la sonda (0 si no
+     *         hibrida con ninguna)
+     * @throws Exception si se produce algún error al buscar el patrón en alguna lectura
+     */
+    int contarLecturasQueHibridan(Muestra muestra) throws Exception {
+        int lecturas = 0;
+        for (Lectura lectura : muestra.getLecturas()) {
+            if (hibridaCon(lectura)) {
+                lecturas++;
+            }
+        }
+        return lecturas;
+    }
+
+    /**
      * Devuelve una descripción de la sonda: su nombre y su patrón.
      *
      * @return descripción de la sonda, por ejemplo, {@code "Virus B [GATRCA]"}
