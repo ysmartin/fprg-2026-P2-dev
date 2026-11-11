@@ -104,7 +104,7 @@ class Muestra {
 
     /**
      * Devuelve todas las lecturas de la muestra, por ejemplo, para recorrerlas con un
-     * bucle {@code for} mejorado: {@code for (Lectura lectura : muestra.getLecturas())}.
+     * bucle for-each: {@code for (Lectura lectura : muestra.getLecturas())}.
      * <p>
      * Devuelve una copia del array: modificarla no cambia la muestra.
      * </p>
