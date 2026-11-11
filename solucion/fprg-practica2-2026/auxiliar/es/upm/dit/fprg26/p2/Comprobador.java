@@ -3,8 +3,8 @@ package es.upm.dit.fprg26.p2;
 import module java.base;
 
 /**
- * Comprobaciones para las pruebas: compara el resultado obtenido con el esperado y
- * escribe en la consola {@code ✓} (correcto) o {@code ✗} (incorrecto, con los dos valores).
+ * Comprobaciones para las pruebas: compara el resultado obtenido con el esperado y escribe en
+ * la consola ✓ (correcto) o ✗ (incorrecto, con los dos valores).
  * <p>
  * Ejemplo de uso, en una clase de prueba:
  * </p>
@@ -15,9 +15,9 @@ import module java.base;
  * Comprobador.resumen();
  * </pre>
  * <p>
- * Para comprobar que un constructor o un método lanza una excepción, se invoca dentro de
- * un bloque {@code try} y se llama a {@link #fallo(String)} si no la lanza, o a
- * {@link #acierto(String)} en el {@code catch}.
+ * Para comprobar que un constructor o un método lanza una excepción, se invoca dentro de un
+ * bloque try y se llama a {@link #fallo(String)} si no la lanza, o a {@link #acierto(String)}
+ * en el catch.
  * </p>
  */
 final class Comprobador {
@@ -40,11 +40,10 @@ final class Comprobador {
     }
 
     /**
-     * Compara un resultado con el esperado y escribe el resultado de la comprobación.
-     * Sirve para cualquier tipo de valor, incluidos {@code String}, números, {@code char},
-     * {@code boolean} y arrays (de una o de dos dimensiones). Los números enteros se comparan
-     * por su valor, aunque sean de tipos distintos: por ejemplo, {@code 3} y {@code 3L}
-     * ({@code int} y {@code long}) son iguales.
+     * Compara un resultado con el esperado y escribe el resultado de la comprobación. Sirve
+     * para cualquier tipo de valor, incluidos String, números, char, boolean y arrays (de una
+     * o de dos dimensiones). Los números enteros se comparan por su valor, aunque sean de
+     * tipos distintos: por ejemplo, 3 y 3L (int y long) son iguales.
      *
      * @param descripcion qué se comprueba (por ejemplo, la invocación que se ha hecho)
      * @param esperado resultado esperado

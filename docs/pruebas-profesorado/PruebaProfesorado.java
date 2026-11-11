@@ -5,7 +5,7 @@ package es.upm.dit.fprg26.p2;
  * <p>
  * Comprueban que las clases proporcionadas no permiten modificar su estado desde fuera
  * (copias de los arrays) y que {@link Analisis} rechaza una matriz de puntos iluminados
- * incorrecta. {@code scripts/verificar.sh} las añade a la solución y las ejecuta.
+ * incorrecta. scripts/verificar.sh las añade a la solución y las ejecuta.
  * </p>
  */
 class PruebaProfesorado {

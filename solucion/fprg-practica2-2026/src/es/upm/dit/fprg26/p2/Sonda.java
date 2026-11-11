@@ -15,15 +15,14 @@ package es.upm.dit.fprg26.p2;
  * variantes de un patógeno que se diferencian en una posición conocida:
  * </p>
  * <ul>
- *   <li>{@code N} encaja con cualquier base de la lectura, incluida una {@code N}.</li>
- *   <li>{@code R} encaja con cualquier purina ({@code A} o {@code G}).</li>
- *   <li>{@code Y} encaja con cualquier pirimidina ({@code C} o {@code T}).</li>
- *   <li>{@code A}, {@code C}, {@code G} y {@code T} solo encajan con la misma base.</li>
+ *   <li>El comodín N encaja con cualquier base de la lectura, incluida una N.</li>
+ *   <li>El comodín R encaja con cualquier purina (A o G).</li>
+ *   <li>El comodín Y encaja con cualquier pirimidina (C o T).</li>
+ *   <li>Las bases A, C, G y T solo encajan con la misma base.</li>
  * </ul>
  * <p>
- * Una base indeterminada ({@code N}) de la lectura solo encaja con el comodín {@code N}
- * del patrón: como no se sabe qué base es, no puede asegurarse que coincida con ninguna
- * otra.
+ * Una base indeterminada (N) de la lectura solo encaja con el comodín N del patrón: como no
+ * se sabe qué base es, no puede asegurarse que coincida con ninguna otra.
  * </p>
  * <p>
  * Además, una lectura puede proceder de cualquiera de las dos hebras del ADN de la muestra.
@@ -37,7 +36,7 @@ class Sonda {
     /** Nombre de la sonda (por ejemplo, el del patógeno o el gen que detecta). */
     private final String nombre;
 
-    /** Símbolos que pueden aparecer en un patrón: los de las lecturas y los comodines {@code R} e {@code Y}. */
+    /** Símbolos que pueden aparecer en un patrón: los de las lecturas y los comodines R e Y. */
     static final String SIMBOLOS = "ACGTNRY";
 
     /** Patrón de la diana de la sonda, con los símbolos de {@link #SIMBOLOS}. */
@@ -47,9 +46,8 @@ class Sonda {
      * Crea una sonda.
      *
      * @param nombre nombre de la sonda; no puede ser nulo ni estar en blanco
-     * @param patron patrón de la diana; no puede ser nulo ni vacío, y solo puede contener
-     *               los símbolos {@code A}, {@code C}, {@code G}, {@code T}, {@code N},
-     *               {@code R} e {@code Y} (ver {@link #esSimboloValido(char)})
+     * @param patron patrón de la diana; no puede ser nulo ni vacío, y solo puede contener los
+     *               símbolos A, C, G, T, N, R e Y (ver {@link #esSimboloValido(char)})
      * @throws Exception si el nombre o el patrón no son válidos
      */
     Sonda(String nombre, String patron) throws Exception {
@@ -73,8 +71,7 @@ class Sonda {
      * Indica si un carácter puede aparecer en el patrón de una sonda.
      *
      * @param simbolo carácter que se comprueba
-     * @return {@code true} si es {@code A}, {@code C}, {@code G}, {@code T}, {@code N},
-     *         {@code R} o {@code Y} (en mayúsculas); {@code false} en otro caso
+     * @return true si es A, C, G, T, N, R o Y (en mayúsculas); false en otro caso
      */
     static boolean esSimboloValido(char simbolo) {
         return SIMBOLOS.indexOf(simbolo) >= 0;
@@ -111,14 +108,13 @@ class Sonda {
      * Indica si un símbolo de un patrón encaja con una base de una lectura, según las
      * reglas descritas en la documentación de la clase.
      * <p>
-     * Por ejemplo, {@code encaja('R', 'G')} y {@code encaja('N', 'N')} devuelven
-     * {@code true}; {@code encaja('R', 'C')} y {@code encaja('A', 'N')}, {@code false}.
+     * Por ejemplo, encaja('R', 'G') y encaja('N', 'N') devuelven true; encaja('R', 'C') y
+     * encaja('A', 'N'), false.
      * </p>
      *
-     * @param simbolo símbolo del patrón ({@code A}, {@code C}, {@code G}, {@code T},
-     *                {@code N}, {@code R} o {@code Y})
-     * @param base base de la lectura ({@code A}, {@code C}, {@code G}, {@code T} o {@code N})
-     * @return {@code true} si el símbolo encaja con la base; {@code false} en otro caso
+     * @param simbolo símbolo del patrón (A, C, G, T, N, R o Y)
+     * @param base base de la lectura (A, C, G, T o N)
+     * @return true si el símbolo encaja con la base; false en otro caso
      * @throws Exception si el símbolo no es un símbolo de patrón (ver
      *                   {@link #esSimboloValido(char)}) o la base no es un símbolo de lectura
      *                   (ver {@link Lectura#esSimboloValido(char)})
@@ -141,17 +137,14 @@ class Sonda {
      * una lectura (la que tiene enfrente en la otra hebra; ver
      * {@link Lectura#complementaria(char)}), según las reglas de {@link #encaja(char, char)}.
      * <p>
-     * Por ejemplo, {@code encajaInverso('A', 'T')} y {@code encajaInverso('R', 'C')} devuelven
-     * {@code true} (la complementaria de {@code T} es {@code A}, y la de {@code C} es
-     * {@code G}, que es una purina); {@code encajaInverso('A', 'A')} y
-     * {@code encajaInverso('A', 'N')}, {@code false}.
+     * Por ejemplo, encajaInverso('A', 'T') y encajaInverso('R', 'C') devuelven true (la
+     * complementaria de T es A, y la de C es G, que es una purina); encajaInverso('A', 'A') y
+     * encajaInverso('A', 'N'), false.
      * </p>
      *
-     * @param simbolo símbolo del patrón ({@code A}, {@code C}, {@code G}, {@code T},
-     *                {@code N}, {@code R} o {@code Y})
-     * @param base base de la lectura ({@code A}, {@code C}, {@code G}, {@code T} o {@code N})
-     * @return {@code true} si el símbolo encaja con la complementaria de la base;
-     *         {@code false} en otro caso
+     * @param simbolo símbolo del patrón (A, C, G, T, N, R o Y)
+     * @param base base de la lectura (A, C, G, T o N)
+     * @return true si el símbolo encaja con la complementaria de la base; false en otro caso
      * @throws Exception si el símbolo no es un símbolo de patrón o la base no es un
      *                   símbolo de lectura
      */
@@ -172,20 +165,19 @@ class Sonda {
      *       la otra hebra.</li>
      * </ul>
      * <p>
-     * Por ejemplo, el patrón {@code "TRC"} encaja en sentido directo con la lectura
-     * {@code "GATACA"} a partir de la posición 2 ({@code T} con {@code T}, {@code R} con
-     * {@code A}, {@code C} con {@code C}), pero no a partir de la posición 0. Y el patrón
-     * {@code "CAGCT"} encaja en sentido inverso con la lectura {@code "GATTAGCTGTTAGC"} a
-     * partir de la posición 4: leído de derecha a izquierda ({@code TCGAC}), encaja con las
-     * complementarias de {@code AGCTG} ({@code TCGAC}).
+     * Por ejemplo, el patrón "TRC" encaja en sentido directo con la lectura "GATACA" a partir
+     * de la posición 2 (T con T, R con A, C con C), pero no a partir de la posición 0. Y el
+     * patrón "CAGCT" encaja en sentido inverso con la lectura "GATTAGCTGTTAGC" a partir de la
+     * posición 4: leído de derecha a izquierda (TCGAC), encaja con las complementarias de
+     * AGCTG (TCGAC).
      * </p>
      *
-     * @param lectura lectura en la que se busca el patrón (puede asumir que nunca es {@code null})
+     * @param lectura lectura en la que se busca el patrón (puede asumir que nunca es null)
      * @param inicio posición de la lectura en la que empieza la comparación
-     * @return {@code true} si el patrón encaja con la lectura a partir de esa posición, en
-     *         sentido directo o inverso; {@code false} en otro caso
+     * @return true si el patrón encaja con la lectura a partir de esa posición, en sentido
+     *         directo o inverso; false en otro caso
      * @throws Exception si el patrón no cabe en la lectura a partir de esa posición (porque
-     *                   {@code inicio} es negativa o porque el patrón se saldría por el final)
+     *                   `inicio` es negativa o porque el patrón se saldría por el final)
      */
     boolean encajaEn(Lectura lectura, int inicio) throws Exception {
         if (inicio < 0 || inicio + patron.length() > lectura.getLongitud()) {
@@ -215,12 +207,11 @@ class Sonda {
      * la sonda, teniendo en cuenta sus comodines y los dos sentidos (ver
      * {@link #encajaEn(Lectura, int)}).
      * <p>
-     * Por ejemplo, el patrón {@code "TRC"} se encuentra en la lectura {@code "GATACATGCA"}
-     * en la posición 2 (también encaja en la 6, y en sentido inverso en la 7, pero se
-     * devuelve la primera).
+     * Por ejemplo, el patrón "TRC" se encuentra en la lectura "GATACATGCA" en la posición 2
+     * (también encaja en la 6, y en sentido inverso en la 7, pero se devuelve la primera).
      * </p>
      *
-     * @param lectura lectura en la que se busca el patrón (puede asumir que nunca es {@code null})
+     * @param lectura lectura en la que se busca el patrón (puede asumir que nunca es null)
      * @return primera posición de la lectura en la que encaja el patrón, o -1 si no
      *         encaja en ninguna
      * @throws Exception si se produce algún error al comparar el patrón con la lectura (no
@@ -239,8 +230,8 @@ class Sonda {
      * Indica si la sonda hibrida con una lectura, es decir, si su patrón encaja con la
      * lectura en alguna posición, en cualquiera de los dos sentidos.
      *
-     * @param lectura lectura que se analiza (puede asumir que nunca es {@code null})
-     * @return {@code true} si el patrón aparece en la lectura; {@code false} en otro caso
+     * @param lectura lectura que se analiza (puede asumir que nunca es null)
+     * @return true si el patrón aparece en la lectura; false en otro caso
      * @throws Exception si se produce algún error al buscar el patrón en la lectura
      */
     boolean hibridaCon(Lectura lectura) throws Exception {
@@ -250,7 +241,7 @@ class Sonda {
     /**
      * Devuelve una descripción de la sonda: su nombre y su patrón.
      *
-     * @return descripción de la sonda, por ejemplo, {@code "Virus B [GATRCA]"}
+     * @return descripción de la sonda, por ejemplo, "Virus B [GATRCA]"
      */
     @Override
     public String toString() {

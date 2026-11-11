@@ -109,15 +109,14 @@ código de ambigüedad de la IUPAC, que sirven, por ejemplo, para detectar a la 
 variantes de un patógeno que se diferencian en una posición conocida:
 </p>
 <ul>
-  <li><code>N</code> encaja con cualquier base de la lectura, incluida una <code>N</code>.</li>
-  <li><code>R</code> encaja con cualquier purina (<code>A</code> o <code>G</code>).</li>
-  <li><code>Y</code> encaja con cualquier pirimidina (<code>C</code> o <code>T</code>).</li>
-  <li><code>A</code>, <code>C</code>, <code>G</code> y <code>T</code> solo encajan con la misma base.</li>
+  <li>El comodín N encaja con cualquier base de la lectura, incluida una N.</li>
+  <li>El comodín R encaja con cualquier purina (A o G).</li>
+  <li>El comodín Y encaja con cualquier pirimidina (C o T).</li>
+  <li>Las bases A, C, G y T solo encajan con la misma base.</li>
 </ul>
 <p>
-Una base indeterminada (<code>N</code>) de la lectura solo encaja con el comodín <code>N</code>
-del patrón: como no se sabe qué base es, no puede asegurarse que coincida con ninguna
-otra.
+Una base indeterminada (N) de la lectura solo encaja con el comodín N del patrón: como no
+se sabe qué base es, no puede asegurarse que coincida con ninguna otra.
 </p>
 <p>
 Además, una lectura puede proceder de cualquiera de las dos hebras del ADN de la muestra.
@@ -141,7 +140,7 @@ se busca en los dos sentidos (ver <a href="#encajaEn(es.upm.dit.fprg26.p2.Lectur
 <div class="col-first even-row-color"><code>(package private) static final <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color"><code><a href="#SIMBOLOS" class="member-name-link">SIMBOLOS</a></code></div>
 <div class="col-last even-row-color">
-<div class="block">Símbolos que pueden aparecer en un patrón: los de las lecturas y los comodines <code>R</code> e <code>Y</code>.</div>
+<div class="block">Símbolos que pueden aparecer en un patrón: los de las lecturas y los comodines R e Y.</div>
 </div>
 </div>
 </section>
@@ -264,7 +263,7 @@ lectura en alguna posición, en cualquiera de los dos sentidos.</div>
 <h3>SIMBOLOS</h3>
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">SIMBOLOS</span></div>
-<div class="block">Símbolos que pueden aparecer en un patrón: los de las lecturas y los comodines <code>R</code> e <code>Y</code>.</div>
+<div class="block">Símbolos que pueden aparecer en un patrón: los de las lecturas y los comodines R e Y.</div>
 <dl class="notes">
 <dt>See Also:</dt>
 <dd>
@@ -295,9 +294,8 @@ throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>nombre</code> - nombre de la sonda; no puede ser nulo ni estar en blanco</dd>
-<dd><code>patron</code> - patrón de la diana; no puede ser nulo ni vacío, y solo puede contener
-              los símbolos <code>A</code>, <code>C</code>, <code>G</code>, <code>T</code>, <code>N</code>,
-              <code>R</code> e <code>Y</code> (ver <a href="#esSimboloValido(char)"><code>esSimboloValido(char)</code></a>)</dd>
+<dd><code>patron</code> - patrón de la diana; no puede ser nulo ni vacío, y solo puede contener los
+              símbolos A, C, G, T, N, R e Y (ver <a href="#esSimboloValido(char)"><code>esSimboloValido(char)</code></a>)</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code> - si el nombre o el patrón no son válidos</dd>
 </dl>
@@ -322,8 +320,7 @@ throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/
 <dt>Parameters:</dt>
 <dd><code>simbolo</code> - carácter que se comprueba</dd>
 <dt>Returns:</dt>
-<dd><code>true</code> si es <code>A</code>, <code>C</code>, <code>G</code>, <code>T</code>, <code>N</code>,
-        <code>R</code> o <code>Y</code> (en mayúsculas); <code>false</code> en otro caso</dd>
+<dd>true si es A, C, G, T, N, R o Y (en mayúsculas); false en otro caso</dd>
 </dl>
 </div>
 </section>
@@ -377,16 +374,15 @@ throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/
 <div class="block">Indica si un símbolo de un patrón encaja con una base de una lectura, según las
 reglas descritas en la documentación de la clase.
 <p>
-Por ejemplo, <code>encaja('R', 'G')</code> y <code>encaja('N', 'N')</code> devuelven
-<code>true</code>; <code>encaja('R', 'C')</code> y <code>encaja('A', 'N')</code>, <code>false</code>.
+Por ejemplo, encaja('R', 'G') y encaja('N', 'N') devuelven true; encaja('R', 'C') y
+encaja('A', 'N'), false.
 </p></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>simbolo</code> - símbolo del patrón (<code>A</code>, <code>C</code>, <code>G</code>, <code>T</code>,
-               <code>N</code>, <code>R</code> o <code>Y</code>)</dd>
-<dd><code>base</code> - base de la lectura (<code>A</code>, <code>C</code>, <code>G</code>, <code>T</code> o <code>N</code>)</dd>
+<dd><code>simbolo</code> - símbolo del patrón (A, C, G, T, N, R o Y)</dd>
+<dd><code>base</code> - base de la lectura (A, C, G, T o N)</dd>
 <dt>Returns:</dt>
-<dd><code>true</code> si el símbolo encaja con la base; <code>false</code> en otro caso</dd>
+<dd>true si el símbolo encaja con la base; false en otro caso</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code> - si el símbolo no es un símbolo de patrón (ver
                   <a href="#esSimboloValido(char)"><code>esSimboloValido(char)</code></a>) o la base no es un símbolo de lectura
@@ -406,19 +402,16 @@ Por ejemplo, <code>encaja('R', 'G')</code> y <code>encaja('N', 'N')</code> devue
 una lectura (la que tiene enfrente en la otra hebra; ver
 <a href="Lectura.html#complementaria(char)"><code>Lectura.complementaria(char)</code></a>), según las reglas de <a href="#encaja(char,char)"><code>encaja(char, char)</code></a>.
 <p>
-Por ejemplo, <code>encajaInverso('A', 'T')</code> y <code>encajaInverso('R', 'C')</code> devuelven
-<code>true</code> (la complementaria de <code>T</code> es <code>A</code>, y la de <code>C</code> es
-<code>G</code>, que es una purina); <code>encajaInverso('A', 'A')</code> y
-<code>encajaInverso('A', 'N')</code>, <code>false</code>.
+Por ejemplo, encajaInverso('A', 'T') y encajaInverso('R', 'C') devuelven true (la
+complementaria de T es A, y la de C es G, que es una purina); encajaInverso('A', 'A') y
+encajaInverso('A', 'N'), false.
 </p></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>simbolo</code> - símbolo del patrón (<code>A</code>, <code>C</code>, <code>G</code>, <code>T</code>,
-               <code>N</code>, <code>R</code> o <code>Y</code>)</dd>
-<dd><code>base</code> - base de la lectura (<code>A</code>, <code>C</code>, <code>G</code>, <code>T</code> o <code>N</code>)</dd>
+<dd><code>simbolo</code> - símbolo del patrón (A, C, G, T, N, R o Y)</dd>
+<dd><code>base</code> - base de la lectura (A, C, G, T o N)</dd>
 <dt>Returns:</dt>
-<dd><code>true</code> si el símbolo encaja con la complementaria de la base;
-        <code>false</code> en otro caso</dd>
+<dd>true si el símbolo encaja con la complementaria de la base; false en otro caso</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code> - si el símbolo no es un símbolo de patrón o la base no es un
                   símbolo de lectura</dd>
@@ -445,23 +438,22 @@ lectura, en cualquiera de los dos sentidos:
       la otra hebra.</li>
 </ul>
 <p>
-Por ejemplo, el patrón <code>"TRC"</code> encaja en sentido directo con la lectura
-<code>"GATACA"</code> a partir de la posición 2 (<code>T</code> con <code>T</code>, <code>R</code> con
-<code>A</code>, <code>C</code> con <code>C</code>), pero no a partir de la posición 0. Y el patrón
-<code>"CAGCT"</code> encaja en sentido inverso con la lectura <code>"GATTAGCTGTTAGC"</code> a
-partir de la posición 4: leído de derecha a izquierda (<code>TCGAC</code>), encaja con las
-complementarias de <code>AGCTG</code> (<code>TCGAC</code>).
+Por ejemplo, el patrón "TRC" encaja en sentido directo con la lectura "GATACA" a partir
+de la posición 2 (T con T, R con A, C con C), pero no a partir de la posición 0. Y el
+patrón "CAGCT" encaja en sentido inverso con la lectura "GATTAGCTGTTAGC" a partir de la
+posición 4: leído de derecha a izquierda (TCGAC), encaja con las complementarias de
+AGCTG (TCGAC).
 </p></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>lectura</code> - lectura en la que se busca el patrón (puede asumir que nunca es <code>null</code>)</dd>
+<dd><code>lectura</code> - lectura en la que se busca el patrón (puede asumir que nunca es null)</dd>
 <dd><code>inicio</code> - posición de la lectura en la que empieza la comparación</dd>
 <dt>Returns:</dt>
-<dd><code>true</code> si el patrón encaja con la lectura a partir de esa posición, en
-        sentido directo o inverso; <code>false</code> en otro caso</dd>
+<dd>true si el patrón encaja con la lectura a partir de esa posición, en sentido
+        directo o inverso; false en otro caso</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code> - si el patrón no cabe en la lectura a partir de esa posición (porque
-                  <code>inicio</code> es negativa o porque el patrón se saldría por el final)</dd>
+                  `inicio` es negativa o porque el patrón se saldría por el final)</dd>
 </dl>
 </div>
 </section>
@@ -476,13 +468,12 @@ complementarias de <code>AGCTG</code> (<code>TCGAC</code>).
 la sonda, teniendo en cuenta sus comodines y los dos sentidos (ver
 <a href="#encajaEn(es.upm.dit.fprg26.p2.Lectura,int)"><code>encajaEn(Lectura, int)</code></a>).
 <p>
-Por ejemplo, el patrón <code>"TRC"</code> se encuentra en la lectura <code>"GATACATGCA"</code>
-en la posición 2 (también encaja en la 6, y en sentido inverso en la 7, pero se
-devuelve la primera).
+Por ejemplo, el patrón "TRC" se encuentra en la lectura "GATACATGCA" en la posición 2
+(también encaja en la 6, y en sentido inverso en la 7, pero se devuelve la primera).
 </p></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>lectura</code> - lectura en la que se busca el patrón (puede asumir que nunca es <code>null</code>)</dd>
+<dd><code>lectura</code> - lectura en la que se busca el patrón (puede asumir que nunca es null)</dd>
 <dt>Returns:</dt>
 <dd>primera posición de la lectura en la que encaja el patrón, o -1 si no
         encaja en ninguna</dd>
@@ -503,9 +494,9 @@ devuelve la primera).
 lectura en alguna posición, en cualquiera de los dos sentidos.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>lectura</code> - lectura que se analiza (puede asumir que nunca es <code>null</code>)</dd>
+<dd><code>lectura</code> - lectura que se analiza (puede asumir que nunca es null)</dd>
 <dt>Returns:</dt>
-<dd><code>true</code> si el patrón aparece en la lectura; <code>false</code> en otro caso</dd>
+<dd>true si el patrón aparece en la lectura; false en otro caso</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code> - si se produce algún error al buscar el patrón en la lectura</dd>
 </dl>
@@ -522,7 +513,7 @@ lectura en alguna posición, en cualquiera de los dos sentidos.</div>
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>
 <dt>Returns:</dt>
-<dd>descripción de la sonda, por ejemplo, <code>"Virus B [GATRCA]"</code></dd>
+<dd>descripción de la sonda, por ejemplo, "Virus B [GATRCA]"</dd>
 </dl>
 </div>
 </section>

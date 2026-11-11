@@ -6,8 +6,8 @@ import module java.base;
  * Una muestra biológica secuenciada: su identificador, la fecha en que se capturó
  * (dato de procedencia) y las lecturas que obtuvo el secuenciador a partir de ella.
  * <p>
- * La fecha de captura se representa con {@link LocalDate}, la clase de la biblioteca
- * de Java para fechas sin hora (por ejemplo, {@code LocalDate.of(2026, 11, 10)}).
+ * La fecha de captura se representa con {@link LocalDate}, la clase de la biblioteca de Java
+ * para fechas sin hora (por ejemplo, LocalDate.of(2026, 11, 10)).
  * </p>
  * <p>
  * Una muestra no se puede modificar una vez creada. Como un array sí se puede modificar,
@@ -103,8 +103,8 @@ class Muestra {
     }
 
     /**
-     * Devuelve todas las lecturas de la muestra, por ejemplo, para recorrerlas con un
-     * bucle for-each: {@code for (Lectura lectura : muestra.getLecturas())}.
+     * Devuelve todas las lecturas de la muestra, por ejemplo, para recorrerlas con un bucle
+     * for-each: for (Lectura lectura : muestra.getLecturas()).
      * <p>
      * Devuelve una copia del array: modificarla no cambia la muestra.
      * </p>
@@ -119,7 +119,8 @@ class Muestra {
      * Devuelve una descripción de la muestra: su identificador, su fecha de captura y
      * su número de lecturas.
      *
-     * @return descripción de la muestra, por ejemplo, {@code "M1 (capturada el 2026-11-02, 3 lecturas)"}
+     * @return descripción de la muestra, por ejemplo,
+     *         "M1 (capturada el 2026-11-02, 3 lecturas)"
      */
     @Override
     public String toString() {

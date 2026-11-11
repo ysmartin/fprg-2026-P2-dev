@@ -158,8 +158,8 @@ resultado.</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Devuelve un resumen del análisis: la muestra, el microarray, las fechas y el chip,
-con <code>#</code> en los puntos iluminados y <code>.</code> en el resto.</div>
+<div class="block">Devuelve un resumen del análisis: la muestra, el microarray, las fechas y el chip, con
+`#` en los puntos iluminados y `.` en el resto.</div>
 </div>
 </div>
 </div>
@@ -189,8 +189,8 @@ con <code>#</code> en los puntos iluminados y <code>.</code> en el resto.</div>
 de la muestra con el chip (ver <a href="Microarray.html#hibridar(es.upm.dit.fprg26.p2.Muestra)"><code>Microarray.hibridar(Muestra)</code></a>) y guarda el
 resultado.
 <p>
-La fecha del análisis es la fecha actual, <code>LocalDate.now()</code>. No puede ser anterior
-a la de captura de la muestra, porque <a href="Muestra.html" title="class in es.upm.dit.fprg26.p2"><code>Muestra</code></a> no admite fechas de captura futuras.
+La fecha del análisis es la fecha actual, LocalDate.now(). No puede ser anterior a la
+de captura de la muestra, porque <a href="Muestra.html" title="class in es.upm.dit.fprg26.p2"><code>Muestra</code></a> no admite fechas de captura futuras.
 </p></div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -198,8 +198,8 @@ a la de captura de la muestra, porque <a href="Muestra.html" title="class in es.
 <dd><code>microarray</code> - microarray con el que se analiza; no puede ser nulo</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code> - si la muestra o el microarray son nulos, o si
-        <a href="Microarray.html#hibridar(es.upm.dit.fprg26.p2.Muestra)"><code>Microarray.hibridar(Muestra)</code></a> no devuelve una matriz del mismo tamaño que
-        la cuadrícula del microarray (por ejemplo, si devuelve <code>null</code>)</dd>
+        <a href="Microarray.html#hibridar(es.upm.dit.fprg26.p2.Muestra)"><code>Microarray.hibridar(Muestra)</code></a> no devuelve una matriz del mismo tamaño
+        que la cuadrícula del microarray (por ejemplo, si devuelve null)</dd>
 </dl>
 </div>
 </section>
@@ -263,8 +263,8 @@ resultado del análisis.
 </p></div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>copia de la matriz del mismo tamaño que la cuadrícula del microarray, con
-        <code>true</code> en los puntos iluminados</dd>
+<dd>copia de la matriz del mismo tamaño que la cuadrícula del microarray, con true
+        en los puntos iluminados</dd>
 </dl>
 </div>
 </section>
@@ -277,8 +277,7 @@ resultado del análisis.
 <div class="block">Devuelve el número de días transcurridos entre la captura de la muestra y el análisis.
 <p>
 Por ejemplo, si la muestra se capturó el 2026-10-30 y se analiza el 2026-11-02,
-devuelve 3. Puede calcularse con
-<code>ChronoUnit.DAYS.between(fechaInicial, fechaFinal)</code>.
+devuelve 3. Puede calcularse con ChronoUnit.DAYS.between(fechaInicial, fechaFinal).
 </p></div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -305,8 +304,8 @@ devuelve 3. Puede calcularse con
 <h3>toString</h3>
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">toString</span>()</div>
-<div class="block">Devuelve un resumen del análisis: la muestra, el microarray, las fechas y el chip,
-con <code>#</code> en los puntos iluminados y <code>.</code> en el resto.</div>
+<div class="block">Devuelve un resumen del análisis: la muestra, el microarray, las fechas y el chip, con
+`#` en los puntos iluminados y `.` en el resto.</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>

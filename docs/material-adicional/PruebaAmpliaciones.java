@@ -1,8 +1,8 @@
 package es.upm.dit.fprg26.p2;
 
 /**
- * Pruebas de las ampliaciones A1 (todas las apariciones) y A2 (intensidades y sondas detectadas).
- * Se añade a la carpeta {@code src} del proyecto, en el paquete {@code es.upm.dit.fprg26.p2},
+ * Pruebas de las ampliaciones A1 (todas las apariciones) y A2 (intensidades y sondas
+ * detectadas). Se añade a la carpeta src del proyecto, en el paquete es.upm.dit.fprg26.p2,
  * cuando se trabajan las ampliaciones.
  */
 class PruebaAmpliaciones {

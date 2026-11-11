@@ -27,11 +27,11 @@ final class DatosEjemplo {
 
     /**
      * Devuelve un chip de prueba de 1x3 con tres sondas que se diferencian en sus comodines:
-     * {@code GATTACA} (exacta), {@code GANTACA} (con {@code N}) y {@code GAYTRCA}
-     * (con {@code Y} y {@code R}).
+     * GATTACA (exacta), GANTACA (con N) y GAYTRCA (con Y y R).
      *
      * @return chip de prueba
-     * @throws Exception si alguno de los objetos no se puede crear (con su clase {@code Sonda} incompleta)
+     * @throws Exception si alguno de los objetos no se puede crear (con su clase Sonda
+     *                   incompleta)
      */
     static Microarray chipDePrueba() throws Exception {
         return new Microarray("Chip de prueba", new Sonda[][] {
@@ -63,8 +63,8 @@ final class DatosEjemplo {
 
     /**
      * Devuelve un chip de 2x4 con las secuencias que reconocen ocho enzimas de restricción
-     * reales. Las de la segunda fila son degeneradas: por ejemplo, HincII reconoce
-     * {@code GTYRAC} ({@code GTCGAC}, {@code GTTAAC}, {@code GTCAAC} y {@code GTTGAC}).
+     * reales. Las de la segunda fila son degeneradas: por ejemplo, HincII reconoce GTYRAC
+     * (GTCGAC, GTTAAC, GTCAAC y GTTGAC).
      *
      * @return chip de dianas de restricción
      * @throws Exception si alguno de los objetos no se puede crear
@@ -88,10 +88,10 @@ final class DatosEjemplo {
     static final int COLUMNA_N = 13;
 
     /**
-     * Puntos del chip de cribado que debe iluminar la muestra de cribado ({@code #}):
-     * forman la palabra «ADN». Cada letra pone a prueba una parte del reconocimiento de
-     * patrones (ver {@link #chipDeCribado()}). Como la palabra no es simétrica, si se
-     * confunden las filas con las columnas, el dibujo sale traspuesto.
+     * Puntos del chip de cribado que debe iluminar la muestra de cribado (`#`): forman la
+     * palabra «ADN». Cada letra pone a prueba una parte del reconocimiento de patrones (ver
+     * {@link #chipDeCribado()}). Como la palabra no es simétrica, si se confunden las filas
+     * con las columnas, el dibujo sale traspuesto.
      */
     static final String[] FORMA_MUESTRA_DE_CRIBADO = {
         "....................",
@@ -117,17 +117,18 @@ final class DatosEjemplo {
     };
 
     /**
-     * Devuelve un chip de cribado de 20x20 con 400 sondas sintéticas ({@code S001} a
-     * {@code S400}), como los que buscan a la vez cientos de dianas en una muestra (por
-     * ejemplo, de distintos microorganismos). Algunas sondas son degeneradas. En la interfaz gráfica, sus nombres y patrones no se escriben
-     * en el chip: se muestran al pasar el ratón por encima de cada punto.
+     * Devuelve un chip de cribado de 20x20 con 400 sondas sintéticas (S001 a S400), como los
+     * que buscan a la vez cientos de dianas en una muestra (por ejemplo, de distintos
+     * microorganismos). Algunas sondas son degeneradas. En la interfaz gráfica, sus nombres y
+     * patrones no se escriben en el chip: se muestran al pasar el ratón por encima de cada
+     * punto.
      * <p>
      * Con la muestra de cribado, cada letra de la palabra «ADN» se ilumina en una etapa
      * del reconocimiento de patrones:
      * </p>
      * <ul>
-     *   <li>las sondas de la <strong>A</strong> no tienen comodines, y sus dianas aparecen tal
-     *       cual en las lecturas: basta con buscar el patrón con {@code indexOf};</li>
+     *   <li>las sondas de la <strong>A</strong> no tienen comodines, y sus dianas aparecen
+     *       tal cual en las lecturas: basta con buscar el patrón con indexOf;</li>
      *   <li>las de la <strong>D</strong> tienen algún comodín, y sus dianas aparecen en las
      *       lecturas en sentido directo;</li>
      *   <li>las dianas de la <strong>N</strong> están en la otra hebra: aparecen en las lecturas
@@ -193,9 +194,9 @@ final class DatosEjemplo {
     }
 
     /**
-     * Devuelve la muestra de prueba para el chip de prueba, con tres lecturas:
-     * {@code GATTACA} (encaja con las tres sondas), {@code GANTACA} (su {@code N} solo encaja
-     * con la {@code N} de la sonda {@code GANTACA}) y una lectura que contiene {@code GACTGCA} (solo con {@code GAYTRCA}).
+     * Devuelve la muestra de prueba para el chip de prueba, con tres lecturas: GATTACA
+     * (encaja con las tres sondas), GANTACA (su N solo encaja con la N de la sonda GANTACA) y
+     * una lectura que contiene GACTGCA (solo con GAYTRCA).
      *
      * @return muestra de prueba
      * @throws Exception si alguno de los objetos no se puede crear
@@ -214,9 +215,9 @@ final class DatosEjemplo {
      * <ul>
      *   <li>M1: Virus A y control positivo.</li>
      *   <li>M2: las dos variantes del Virus B, la cepa 1 de la Bacteria E y control positivo.</li>
-     *   <li>M3: lecturas con bases indeterminadas ({@code N}): la diana del Virus A tiene una
-     *       {@code N} y no se detecta; la de la Bacteria D tiene la {@code N} en la posición
-     *       del comodín y sí se detecta. También Parásito G y control positivo.</li>
+     *   <li>M3: lecturas con bases indeterminadas (N): la diana del Virus A tiene una N y no
+     *       se detecta; la de la Bacteria D tiene la N en la posición del comodín y sí se
+     *       detecta. También Parásito G y control positivo.</li>
      *   <li>M4: sin patógenos; solo el control positivo.</li>
      *   <li>R1: fragmento con dianas de EcoRI, HincII, AvaI, BanI y Hpy188I.</li>
      *   <li>M5: muestra para el chip de cribado (ver {@link #muestraDeCribado()}).</li>

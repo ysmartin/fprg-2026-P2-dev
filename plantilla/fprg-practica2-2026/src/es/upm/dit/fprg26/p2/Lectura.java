@@ -4,9 +4,9 @@ package es.upm.dit.fprg26.p2;
  * Una lectura: un fragmento de ADN de una muestra, tal como lo ha leído el secuenciador
  * (en un fichero FASTQ, la primera y la segunda línea de cada registro).
  * <p>
- * La secuencia solo puede contener los símbolos {@code A}, {@code C}, {@code G},
- * {@code T} y {@code N} (en mayúsculas). La {@code N} indica que el secuenciador no ha
- * podido determinar la base de esa posición. Las posiciones se numeran desde 0.
+ * La secuencia solo puede contener los símbolos A, C, G, T y N (en mayúsculas). La N indica
+ * que el secuenciador no ha podido determinar la base de esa posición. Las posiciones se
+ * numeran desde 0.
  * </p>
  * <p>
  * Una lectura no se puede modificar una vez creada.
@@ -17,18 +17,18 @@ class Lectura {
     /** Símbolos que pueden aparecer en una lectura: las cuatro bases y la base indeterminada. */
     static final String SIMBOLOS = "ACGTN";
 
-    /** Identificador de la lectura (en un fichero FASTQ, lo que sigue a la {@code @} de la cabecera). */
+    /** Identificador de la lectura (en un fichero FASTQ, lo que sigue a la `@` de la cabecera). */
     private final String id;
 
-    /** Secuencia de bases leídas, por ejemplo, {@code "GATTACANGATTACA"}. */
+    /** Secuencia de bases leídas, por ejemplo, "GATTACANGATTACA". */
     private final String secuencia;
 
     /**
      * Crea una lectura a partir de su identificador y su secuencia.
      *
      * @param id identificador de la lectura; no puede ser nulo ni estar en blanco
-     * @param secuencia secuencia de bases leídas; no puede ser nula ni vacía, y solo
-     *                  puede contener {@code A}, {@code C}, {@code G}, {@code T} y {@code N}
+     * @param secuencia secuencia de bases leídas; no puede ser nula ni vacía, y solo puede
+     *                  contener A, C, G, T y N
      * @throws Exception si el identificador o la secuencia no son válidos
      */
     Lectura(String id, String secuencia) throws Exception {
@@ -79,7 +79,7 @@ class Lectura {
      * Devuelve la base que ocupa una posición de la lectura.
      *
      * @param posicion posición de la base, empezando a contar en 0
-     * @return base de esa posición ({@code A}, {@code C}, {@code G}, {@code T} o {@code N})
+     * @return base de esa posición (A, C, G, T o N)
      * @throws Exception si la posición está fuera de la lectura
      */
     char getBase(int posicion) throws Exception {
@@ -94,22 +94,21 @@ class Lectura {
      * Indica si un carácter puede aparecer en una lectura.
      *
      * @param simbolo carácter que se comprueba
-     * @return {@code true} si es {@code A}, {@code C}, {@code G}, {@code T} o {@code N}
-     *         (en mayúsculas); {@code false} en otro caso
+     * @return true si es A, C, G, T o N (en mayúsculas); false en otro caso
      */
     static boolean esSimboloValido(char simbolo) {
         return SIMBOLOS.indexOf(simbolo) >= 0;
     }
 
     /**
-     * Devuelve la base complementaria de una base de una lectura: la que tiene enfrente en
-     * la otra hebra del ADN. La {@code A} se empareja con la {@code T}, y la {@code C} con la
-     * {@code G}; la complementaria de una base indeterminada ({@code N}) también es {@code N}.
+     * Devuelve la base complementaria de una base de una lectura: la que tiene enfrente en la
+     * otra hebra del ADN. La A se empareja con la T, y la C con la G; la complementaria de
+     * una base indeterminada (N) también es N.
      * <p>
-     * Por ejemplo, {@code Lectura.complementaria('G')} devuelve {@code 'C'}.
+     * Por ejemplo, Lectura.complementaria('G') devuelve 'C'.
      * </p>
      *
-     * @param base base de una lectura ({@code A}, {@code C}, {@code G}, {@code T} o {@code N})
+     * @param base base de una lectura (A, C, G, T o N)
      * @return base complementaria
      * @throws Exception si el carácter no es un símbolo de lectura
      */
@@ -126,10 +125,10 @@ class Lectura {
     }
 
     /**
-     * Devuelve la lectura con el formato de las dos primeras líneas de un registro FASTQ:
-     * la cabecera ({@code @} seguida del identificador) y la secuencia.
+     * Devuelve la lectura con el formato de las dos primeras líneas de un registro FASTQ: la
+     * cabecera (`@` seguida del identificador) y la secuencia.
      *
-     * @return representación de la lectura, por ejemplo, {@code "@L1\nGATTACA"}
+     * @return representación de la lectura, por ejemplo, "@L1\nGATTACA"
      */
     @Override
     public String toString() {

@@ -78,8 +78,8 @@ loadScripts(document, 'script');</script>
 <div class="horizontal-scroll">
 <div class="type-signature"><span class="modifiers">final class </span><span class="element-name type-name-label">Comprobador</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">Comprobaciones para las pruebas: compara el resultado obtenido con el esperado y
-escribe en la consola <code>✓</code> (correcto) o <code>✗</code> (incorrecto, con los dos valores).
+<div class="block">Comprobaciones para las pruebas: compara el resultado obtenido con el esperado y escribe en
+la consola ✓ (correcto) o ✗ (incorrecto, con los dos valores).
 <p>
 Ejemplo de uso, en una clase de prueba:
 </p>
@@ -90,9 +90,9 @@ Comprobador.comprobar("encontrarEn(\"GATACA\")", 2, sonda.encontrarEn(lectura));
 Comprobador.resumen();
 </pre>
 <p>
-Para comprobar que un constructor o un método lanza una excepción, se invoca dentro de
-un bloque <code>try</code> y se llama a <a href="#fallo(java.lang.String)"><code>fallo(String)</code></a> si no la lanza, o a
-<a href="#acierto(java.lang.String)"><code>acierto(String)</code></a> en el <code>catch</code>.
+Para comprobar que un constructor o un método lanza una excepción, se invoca dentro de un
+bloque try y se llama a <a href="#fallo(java.lang.String)"><code>fallo(String)</code></a> si no la lanza, o a <a href="#acierto(java.lang.String)"><code>acierto(String)</code></a>
+en el catch.
 </p></div>
 </div>
 </section>
@@ -173,11 +173,10 @@ un bloque <code>try</code> y se llama a <a href="#fallo(java.lang.String)"><code
 <div class="member-signature"><span class="modifiers">static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">comprobar</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;descripcion,
  <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;esperado,
  <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;obtenido)</span></div>
-<div class="block">Compara un resultado con el esperado y escribe el resultado de la comprobación.
-Sirve para cualquier tipo de valor, incluidos <code>String</code>, números, <code>char</code>,
-<code>boolean</code> y arrays (de una o de dos dimensiones). Los números enteros se comparan
-por su valor, aunque sean de tipos distintos: por ejemplo, <code>3</code> y <code>3L</code>
-(<code>int</code> y <code>long</code>) son iguales.</div>
+<div class="block">Compara un resultado con el esperado y escribe el resultado de la comprobación. Sirve
+para cualquier tipo de valor, incluidos String, números, char, boolean y arrays (de una
+o de dos dimensiones). Los números enteros se comparan por su valor, aunque sean de
+tipos distintos: por ejemplo, 3 y 3L (int y long) son iguales.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>descripcion</code> - qué se comprueba (por ejemplo, la invocación que se ha hecho)</dd>

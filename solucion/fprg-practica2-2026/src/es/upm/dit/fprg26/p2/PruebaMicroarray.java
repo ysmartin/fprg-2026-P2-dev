@@ -1,10 +1,10 @@
 package es.upm.dit.fprg26.p2;
 
 /**
- * Pruebas de los métodos {@code hibridar} de la clase {@link Microarray}, con los datos
- * de ejemplo de {@link DatosEjemplo}. Los resultados se escriben con {@code #} para los
- * puntos iluminados y {@code .} para los apagados, una fila entre corchetes. Añada sus
- * propios casos de prueba en {@link #pruebasPropias()}.
+ * Pruebas de los métodos hibridar de la clase {@link Microarray}, con los datos de ejemplo de
+ * {@link DatosEjemplo}. Los resultados se escriben con `#` para los puntos iluminados y `.`
+ * para los apagados, una fila entre corchetes. Añada sus propios casos de prueba en
+ * {@link #pruebasPropias()}.
  */
 class PruebaMicroarray {
 
@@ -86,9 +86,9 @@ class PruebaMicroarray {
     }
 
     /**
-     * Devuelve las columnas de una matriz desde {@code desde} (incluida) hasta {@code hasta}
-     * (excluida). Si alguna fila es nula o no llega hasta {@code hasta}, se copia tal como
-     * esté (nula o más corta), para que la comprobación falle sin lanzar una excepción.
+     * Devuelve las columnas de una matriz desde `desde` (incluida) hasta `hasta` (excluida).
+     * Si alguna fila es nula o no llega hasta `hasta`, se copia tal como esté (nula o más
+     * corta), para que la comprobación falle sin lanzar una excepción.
      */
     private static boolean[][] columnas(boolean[][] matriz, int desde, int hasta) {
         if (matriz == null) {
@@ -107,7 +107,7 @@ class PruebaMicroarray {
         return parte;
     }
 
-    /** Convierte un dibujo hecho con {@code #} y {@code .} en una matriz de booleanos. */
+    /** Convierte un dibujo hecho con `#` y `.` en una matriz de booleanos. */
     private static boolean[][] aMatriz(String[] dibujo) {
         boolean[][] matriz = new boolean[dibujo.length][];
         for (int fila = 0; fila < dibujo.length; fila++) {
