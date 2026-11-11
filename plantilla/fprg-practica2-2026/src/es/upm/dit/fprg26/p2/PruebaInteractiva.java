@@ -3,8 +3,8 @@ package es.upm.dit.fprg26.p2;
 import module java.base;
 
 /**
- * Abre la ventana del microarray virtual con los microarrays y las muestras de ejemplo,
- * más los que usted añada en este método {@code main}.
+ * Abre la ventana del microarray virtual con los microarrays y las muestras de ejemplo, más
+ * los que usted añada en este método main.
  */
 class PruebaInteractiva {
 

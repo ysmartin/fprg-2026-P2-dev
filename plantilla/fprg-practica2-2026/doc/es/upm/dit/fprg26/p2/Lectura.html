@@ -95,9 +95,9 @@ loadScripts(document, 'script');</script>
 <div class="block">Una lectura: un fragmento de ADN de una muestra, tal como lo ha leído el secuenciador
 (en un fichero FASTQ, la primera y la segunda línea de cada registro).
 <p>
-La secuencia solo puede contener los símbolos <code>A</code>, <code>C</code>, <code>G</code>,
-<code>T</code> y <code>N</code> (en mayúsculas). La <code>N</code> indica que el secuenciador no ha
-podido determinar la base de esa posición. Las posiciones se numeran desde 0.
+La secuencia solo puede contener los símbolos A, C, G, T y N (en mayúsculas). La N indica
+que el secuenciador no ha podido determinar la base de esa posición. Las posiciones se
+numeran desde 0.
 </p>
 <p>
 Una lectura no se puede modificar una vez creada.
@@ -153,8 +153,8 @@ Una lectura no se puede modificar una vez creada.
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>(package private) static char</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#complementaria(char)" class="member-name-link">complementaria</a><wbr>(char&nbsp;base)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Devuelve la base complementaria de una base de una lectura: la que tiene enfrente en
-la otra hebra del ADN.</div>
+<div class="block">Devuelve la base complementaria de una base de una lectura: la que tiene enfrente en la
+otra hebra del ADN.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>(package private) static boolean</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#esSimboloValido(char)" class="member-name-link">esSimboloValido</a><wbr>(char&nbsp;simbolo)</code></div>
@@ -184,8 +184,8 @@ la otra hebra del ADN.</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Devuelve la lectura con el formato de las dos primeras líneas de un registro FASTQ:
-la cabecera (<code>@</code> seguida del identificador) y la secuencia.</div>
+<div class="block">Devuelve la lectura con el formato de las dos primeras líneas de un registro FASTQ: la
+cabecera (`@` seguida del identificador) y la secuencia.</div>
 </div>
 </div>
 </div>
@@ -240,8 +240,8 @@ la cabecera (<code>@</code> seguida del identificador) y la secuencia.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>id</code> - identificador de la lectura; no puede ser nulo ni estar en blanco</dd>
-<dd><code>secuencia</code> - secuencia de bases leídas; no puede ser nula ni vacía, y solo
-                 puede contener <code>A</code>, <code>C</code>, <code>G</code>, <code>T</code> y <code>N</code></dd>
+<dd><code>secuencia</code> - secuencia de bases leídas; no puede ser nula ni vacía, y solo puede
+                 contener A, C, G, T y N</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code> - si el identificador o la secuencia no son válidos</dd>
 </dl>
@@ -306,7 +306,7 @@ la cabecera (<code>@</code> seguida del identificador) y la secuencia.</div>
 <dt>Parameters:</dt>
 <dd><code>posicion</code> - posición de la base, empezando a contar en 0</dd>
 <dt>Returns:</dt>
-<dd>base de esa posición (<code>A</code>, <code>C</code>, <code>G</code>, <code>T</code> o <code>N</code>)</dd>
+<dd>base de esa posición (A, C, G, T o N)</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code> - si la posición está fuera de la lectura</dd>
 </dl>
@@ -323,8 +323,7 @@ la cabecera (<code>@</code> seguida del identificador) y la secuencia.</div>
 <dt>Parameters:</dt>
 <dd><code>simbolo</code> - carácter que se comprueba</dd>
 <dt>Returns:</dt>
-<dd><code>true</code> si es <code>A</code>, <code>C</code>, <code>G</code>, <code>T</code> o <code>N</code>
-        (en mayúsculas); <code>false</code> en otro caso</dd>
+<dd>true si es A, C, G, T o N (en mayúsculas); false en otro caso</dd>
 </dl>
 </div>
 </section>
@@ -335,15 +334,15 @@ la cabecera (<code>@</code> seguida del identificador) y la secuencia.</div>
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="modifiers">static</span>&nbsp;<span class="return-type">char</span>&nbsp;<span class="element-name">complementaria</span><wbr><span class="parameters">(char&nbsp;base)</span>
                     throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
-<div class="block">Devuelve la base complementaria de una base de una lectura: la que tiene enfrente en
-la otra hebra del ADN. La <code>A</code> se empareja con la <code>T</code>, y la <code>C</code> con la
-<code>G</code>; la complementaria de una base indeterminada (<code>N</code>) también es <code>N</code>.
+<div class="block">Devuelve la base complementaria de una base de una lectura: la que tiene enfrente en la
+otra hebra del ADN. La A se empareja con la T, y la C con la G; la complementaria de
+una base indeterminada (N) también es N.
 <p>
-Por ejemplo, <code>Lectura.complementaria('G')</code> devuelve <code>'C'</code>.
+Por ejemplo, Lectura.complementaria('G') devuelve 'C'.
 </p></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>base</code> - base de una lectura (<code>A</code>, <code>C</code>, <code>G</code>, <code>T</code> o <code>N</code>)</dd>
+<dd><code>base</code> - base de una lectura (A, C, G, T o N)</dd>
 <dt>Returns:</dt>
 <dd>base complementaria</dd>
 <dt>Throws:</dt>
@@ -357,13 +356,13 @@ Por ejemplo, <code>Lectura.complementaria('G')</code> devuelve <code>'C'</code>.
 <h3>toString</h3>
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">toString</span>()</div>
-<div class="block">Devuelve la lectura con el formato de las dos primeras líneas de un registro FASTQ:
-la cabecera (<code>@</code> seguida del identificador) y la secuencia.</div>
+<div class="block">Devuelve la lectura con el formato de las dos primeras líneas de un registro FASTQ: la
+cabecera (`@` seguida del identificador) y la secuencia.</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>
 <dt>Returns:</dt>
-<dd>representación de la lectura, por ejemplo, <code>"@L1\nGATTACA"</code></dd>
+<dd>representación de la lectura, por ejemplo, "@L1\nGATTACA"</dd>
 </dl>
 </div>
 </section>

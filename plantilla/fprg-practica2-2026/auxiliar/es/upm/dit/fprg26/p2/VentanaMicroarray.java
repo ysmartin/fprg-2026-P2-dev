@@ -27,6 +27,7 @@ class VentanaMicroarray {
     private JComboBox<String> selectorMicroarray;
     private JComboBox<String> selectorMuestra;
     private JTextField campoLecturas;
+    private JLabel etiquetaFecha;
     private PanelMicroarray panel;
     private JSplitPane division;
     private JTextArea detalle;
@@ -73,7 +74,10 @@ class VentanaMicroarray {
         JButton botonAnalizar = new JButton("Analizar");
 
         selectorMicroarray.addActionListener(_ -> mostrarChipSinAnalizar());
-        selectorMuestra.addActionListener(_ -> actualizarCampoLecturas());
+        selectorMuestra.addActionListener(_ -> {
+            actualizarCampoLecturas();
+            mostrarChipSinAnalizar();
+        });
         botonAnalizar.addActionListener(_ -> analizar());
         campoLecturas.addActionListener(_ -> analizar());
 
@@ -84,7 +88,8 @@ class VentanaMicroarray {
         colocar(controles, c, 0, 0, new JLabel("Microarray:"));
         colocar(controles, c, 1, 0, selectorMicroarray);
         colocar(controles, c, 2, 0, new JLabel("Fecha del análisis:"));
-        colocar(controles, c, 3, 0, new JLabel(LocalDate.now() + " (hoy)"));
+        etiquetaFecha = new JLabel();
+        colocar(controles, c, 3, 0, etiquetaFecha);
         colocar(controles, c, 0, 1, new JLabel("Muestra:"));
         colocar(controles, c, 1, 1, selectorMuestra);
         colocar(controles, c, 2, 1, new JLabel("Lecturas:"));
@@ -137,27 +142,30 @@ class VentanaMicroarray {
     }
 
     private void mostrarChipSinAnalizar() {
+        actualizarFecha();
         panel.mostrar(microarrays[selectorMicroarray.getSelectedIndex()], null);
         detalle.setText(avisoChipGrande() + "Elija una muestra y pulse «Analizar».");
         ajustarDivision();
     }
 
     private void analizar() {
+        actualizarFecha();
         Microarray microarray = microarrays[selectorMicroarray.getSelectedIndex()];
         panel.mostrar(microarray, null);
         try {
             Muestra muestra = muestraElegida();
             Analisis analisis = new Analisis(muestra, microarray);
-            boolean[][] iluminados = analisis.getIluminados();
-            String aviso = comprobarDimensiones(microarray, iluminados);
-            panel.mostrar(microarray, aviso == null ? iluminados : null);
-            detalle.setText(avisoChipGrande() + describir(analisis, muestra, microarray, aviso));
+            panel.mostrar(microarray, analisis.getIluminados());
+            detalle.setText(avisoChipGrande() + describir(analisis, muestra, microarray));
             detalle.setCaretPosition(0);
         } catch (RuntimeException e) {
             detalle.setText("Su código ha producido un error inesperado:\n" + e
                     + "\nen " + (e.getStackTrace().length > 0 ? e.getStackTrace()[0] : "(desconocido)"));
         } catch (Exception e) {
             detalle.setText("No se ha podido hacer el análisis:\n" + e.getMessage());
+        } catch (Error e) {
+            detalle.setText("Su proyecto todavía tiene errores de compilación (o se ha producido un error grave):\n"
+                    + e.getMessage());
         }
     }
 
@@ -166,10 +174,12 @@ class VentanaMicroarray {
         if (indice < muestras.length) {
             return muestras[indice];
         }
-        String[] textos = campoLecturas.getText().trim().toUpperCase().split("[\\s,;]+");
-        if (textos.length == 0 || textos[0].isEmpty()) {
+        // Las lecturas pueden ir separadas por espacios, comas o puntos y coma
+        String texto = campoLecturas.getText().toUpperCase().replaceAll("[\\s,;]+", " ").trim();
+        if (texto.isEmpty()) {
             throw new Exception("Escriba al menos una lectura en el campo «Lecturas».");
         }
+        String[] textos = texto.split(" ");
         Lectura[] lecturas = new Lectura[textos.length];
         for (int i = 0; i < textos.length; i++) {
             lecturas[i] = new Lectura("A mano " + (i + 1), textos[i]);
@@ -185,6 +195,11 @@ class VentanaMicroarray {
         }
     }
 
+    /** La fecha del análisis es la de hoy: se actualiza por si la ventana sigue abierta al cambiar el día. */
+    private void actualizarFecha() {
+        etiquetaFecha.setText(LocalDate.now() + " (hoy)");
+    }
+
     private String avisoChipGrande() {
         if (!panel.esCompacto()) {
             return "";
@@ -192,28 +207,8 @@ class VentanaMicroarray {
         return "(Este chip es grande: deje el ratón sobre un punto para ver su sonda.)\n\n";
     }
 
-    private static String comprobarDimensiones(Microarray microarray, boolean[][] iluminados) {
-        if (iluminados == null) {
-            return "getIluminados() devuelve null: ¿está completo el constructor de Analisis?";
-        }
-        if (iluminados.length != microarray.getFilas()) {
-            return "La matriz de puntos iluminados tiene " + iluminados.length + " filas, pero el chip tiene "
-                    + microarray.getFilas();
-        }
-        for (boolean[] fila : iluminados) {
-            if (fila == null || fila.length != microarray.getColumnas()) {
-                return "Alguna fila de la matriz de puntos iluminados no tiene " + microarray.getColumnas()
-                        + " columnas, como el chip";
-            }
-        }
-        return null;
-    }
-
-    private static String describir(Analisis analisis, Muestra muestra, Microarray microarray, String aviso) {
+    private static String describir(Analisis analisis, Muestra muestra, Microarray microarray) {
         StringBuilder texto = new StringBuilder();
-        if (aviso != null) {
-            texto.append("AVISO: ").append(aviso).append("\n\n");
-        }
         texto.append("Muestra: ").append(muestra).append('\n');
         texto.append("Microarray: ").append(microarray).append('\n');
         texto.append("Fecha del análisis: ").append(analisis.getFechaAnalisis())
@@ -221,6 +216,7 @@ class VentanaMicroarray {
         texto.append("Puntos iluminados: ").append(analisis.contarIluminados())
                 .append(" de ").append(microarray.getFilas() * microarray.getColumnas()).append("\n\n");
         texto.append("Dónde encaja cada sonda en cada lectura (según encontrarEn):\n");
+        int excepciones = 0;
         for (Lectura lectura : muestra.getLecturas()) {
             String secuencia = lectura.getSecuencia();
             int indeterminadas = secuencia.length() - secuencia.replace("N", "").length();
@@ -236,8 +232,9 @@ class VentanaMicroarray {
                         posicion = sonda.encontrarEn(lectura);
                     } catch (Exception e) {
                         alguna = true;
+                        excepciones++;
                         texto.append("(").append(sonda.getNombre()).append(": encontrarEn lanza una excepción: ")
-                                .append(e.getMessage()).append(")\n");
+                                .append(e instanceof RuntimeException ? e.toString() : e.getMessage()).append(")\n");
                         continue;
                     }
                     if (posicion >= 0) {
@@ -251,6 +248,13 @@ class VentanaMicroarray {
             if (!alguna) {
                 texto.append("(no encaja ninguna sonda)\n");
             }
+        }
+        if (excepciones > 0) {
+            return "AVISO: encontrarEn ha lanzado " + excepciones + (excepciones == 1 ? " excepción" : " excepciones")
+                    + " (las verá más abajo).\n"
+                    + "Con sondas y lecturas válidas no debería lanzar ninguna: revise su código.\n"
+                    + "Los puntos de esas sondas aparecen apagados porque hibridar(Lectura) captura las\n"
+                    + "excepciones, pero eso no significa que la sonda no encaje.\n\n" + texto;
         }
         return texto.toString();
     }

@@ -1,8 +1,8 @@
 package es.upm.dit.fprg26.p2;
 
 /**
- * Pruebas de las ampliaciones A1 (todas las apariciones) y A2 (intensidades y sondas detectadas).
- * Se añade a la carpeta {@code src} del proyecto, en el paquete {@code es.upm.dit.fprg26.p2},
+ * Pruebas de las ampliaciones A1 (todas las apariciones) y A2 (intensidades y sondas
+ * detectadas). Se añade a la carpeta src del proyecto, en el paquete es.upm.dit.fprg26.p2,
  * cuando se trabajan las ampliaciones.
  */
 class PruebaAmpliaciones {
@@ -52,7 +52,7 @@ class PruebaAmpliaciones {
             Comprobador.comprobar("sondasDetectadas (chip de prueba)", new String[] { "Exacta", "Con N", "Con Y y R" },
                     new Analisis(DatosEjemplo.muestraDePrueba(), DatosEjemplo.chipDePrueba()).sondasDetectadas());
         } catch (Exception e) {
-            Comprobador.fallo("No debería lanzarse ninguna excepción: " + e.getMessage());
+            Comprobador.fallo("No debería lanzarse ninguna excepción: " + e);
         }
     }
 }

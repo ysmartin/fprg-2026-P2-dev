@@ -76,7 +76,11 @@ Las lecturas solo pueden contener `A`, `C`, `G`, `T` y `N`, y los patrones, adem
 
 ### Las dos hebras
 
-El ADN tiene dos hebras complementarias: frente a cada `A` de una hebra hay una `T` en la otra, y frente a cada `C`, una `G` (y al revés). Cada lectura procede de una de las dos hebras, sin que se sepa de cuál. Si procede de la hebra contraria a la de la diana, no contiene la diana tal cual, sino su **complementaria inversa**: la secuencia de la otra hebra, leída en el mismo sentido que las lecturas. Se obtiene recorriendo la diana de derecha a izquierda y sustituyendo cada base por su complementaria. Por ejemplo, la complementaria inversa de `GTA` es `TAC`:
+Un fragmento de ADN tiene dos hebras complementarias: frente a cada `A` de una hebra hay una `T` en la otra, y frente a cada `C`, una `G` (y al revés). Además, las dos hebras se leen en sentidos opuestos. El secuenciador puede leer cualquiera de las dos, sin que se sepa cuál. Si lee la hebra contraria a la de la diana, la lectura no contiene la diana tal cual, sino su **complementaria inversa**. Por ejemplo, en este fragmento la diana `GTA` está en la hebra de arriba, y la hebra de abajo, leída en su sentido, da una lectura que contiene `TAC`:
+
+![Fragmento de ADN con sus dos hebras. La hebra de arriba, TGCATGTATC, contiene la diana GTA y se lee de izquierda a derecha. La hebra complementaria, ACGTACATAG, tiene CAT frente a GTA y se lee de derecha a izquierda. Leída así, es la lectura GATACATGCA, que contiene TAC, la complementaria inversa de GTA, a partir de la posición 2](img/dos-hebras.svg)
+
+Para obtener la complementaria inversa de una secuencia, se recorre de derecha a izquierda y se sustituye cada base por su complementaria:
 
 ```
 diana                        GTA
@@ -84,22 +88,22 @@ de derecha a izquierda       ATG
 complementaria de cada base  TAC
 ```
 
-Por eso, el patrón de una sonda se busca en los dos sentidos. En **sentido directo**, como se ha explicado antes. En **sentido inverso**, se compara el patrón, leído de derecha a izquierda, con las complementarias de las bases de la lectura. Por ejemplo, así se busca en sentido inverso el patrón `GTA` en la lectura `GATACATGCA`, que contiene su complementaria inversa, `TAC`, a partir de la posición 2:
+Por eso, el patrón de una sonda se busca en los dos sentidos. En **sentido directo**, como se ha explicado antes. En **sentido inverso**, no hace falta construir la complementaria inversa: basta con comparar el patrón, leído de derecha a izquierda, con las complementarias de las bases de la lectura. Por ejemplo, así se busca en sentido inverso el patrón `GTA` en la lectura anterior, `GATACATGCA`:
 
-![Búsqueda en sentido inverso del patrón GTA en la lectura GATACATGCA. Debajo de la lectura están sus complementarias (CTATGTACGT), y el patrón se compara con ellas leído de derecha a izquierda (ATG). En la posición 0, la A no encaja con la C; en la 1, la A no encaja con la T; en la 2, la A encaja con la A, la T con la T y la G con la G, así que el patrón encaja en sentido inverso a partir de la posición 2](img/ventana-inversa.svg)
+![Búsqueda en sentido inverso del patrón GTA en la lectura GATACATGCA. Debajo de la lectura están sus complementarias (CTATGTACGT), y el patrón se compara con ellas leído de derecha a izquierda (ATG). En la posición 0, la A no encaja con la C; en la 1, la A no encaja con la T; en la 2, la A encaja con la A, la T con la T y la G con la G, así que el patrón encaja en sentido inverso a partir de la posición 2, donde la lectura contiene TAC, la complementaria inversa de GTA](img/ventana-inversa.svg)
 
 Los símbolos del patrón se comparan con las complementarias igual que en sentido directo, así que los comodines funcionan en los dos sentidos: por ejemplo, `CAGYT` encaja en sentido inverso en la lectura `GATTAACTGTTAGC`.
 
 ### Organización del proyecto
 
-A diferencia de la práctica 1, el código se organiza en **clases**, dentro del paquete `es.upm.dit.fprg26.p2`. Cada clase está en su propio fichero, y cualquier clase del proyecto puede usar las demás.
+El código se organiza en **clases**, dentro del paquete `es.upm.dit.fprg26.p2`. Cada clase está en su propio fichero, y cualquier clase del proyecto puede usar las demás.
 
 | Elementos | Qué son | Qué debe hacer usted |
 |---|---|---|
 | `Lectura`, `Muestra`, `Analisis` | Una lectura, una muestra con sus lecturas y el resultado de analizar una muestra con un microarray, ya programadas | Estudiarlas (son un buen modelo de clase) |
 | `Sonda`, `Microarray` | Las clases del reconocimiento de patrones | Completar los métodos que se indican en cada apartado |
 | `PruebaSonda`, `PruebaMicroarray` | Pruebas de cada clase, con una muestra de casos | Ejecutarlas y añadir sus propios casos de prueba |
-| `PruebaInteractiva` | Programa que abre la ventana del microarray virtual | Ejecutarlo al final, y añadir sus propios microarrays y muestras |
+| `PruebaInteractiva` | Programa que abre la ventana del microarray virtual | Ejecutarlo cuando lo indique el enunciado, y añadir al final sus propios microarrays y muestras |
 | Carpeta `auxiliar` (en el mismo paquete) | Datos de ejemplo (`DatosEjemplo`), comprobaciones de las pruebas (`Comprobador`) y ventana gráfica | Usarlo (**no es necesario entender el código de la ventana, ni mucho menos modificarlo**) |
 | Carpeta `doc` | Documentación de todo el proyecto, en HTML (generada con Javadoc) | Consultarla con el navegador |
 
@@ -238,16 +242,19 @@ En Eclipse debe seguir los siguientes pasos:
    - los **métodos de acceso** (`getId`, `getSecuencia`…) devuelven los atributos o datos calculados a partir de ellos;
    - `getBase` lanza una excepción si se le pide una posición que está fuera de la lectura;
    - los métodos estáticos `esSimboloValido` y `complementaria` trabajan con un carácter suelto, no con una lectura concreta: por eso se invocan con el nombre de la clase (por ejemplo, `Lectura.complementaria('G')` devuelve `'C'`);
+   - `Muestra` no permite modificar sus lecturas desde fuera: como un array sí se puede modificar, el constructor guarda una copia del array que recibe, y `getLecturas` devuelve otra copia (lo mismo hacen `Microarray` con su matriz de sondas y `Analisis` con la de puntos iluminados);
    - el constructor de `Analisis` hace el análisis completo: obtiene los puntos iluminados con el método `hibridar(Muestra)` de `Microarray`, que programará usted.
 3. Fíjese en cómo se trabaja con fechas. En `Muestra`, la fecha de captura es un `LocalDate`, y el constructor comprueba con `isAfter` que no es posterior a la fecha actual (`LocalDate.now()`). En `Analisis`, la fecha del análisis es la actual, y `getDiasDesdeCaptura` calcula los días transcurridos con `ChronoUnit.DAYS.between`, que tiene en cuenta los meses de distinta duración y los años bisiestos. Puede consultar todos los métodos de `LocalDate` en su [documentación](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/time/LocalDate.html).
-4. Ejecute `PruebaInteractiva`. Se abrirá la ventana del microarray virtual, aunque todavía no funcionará: sus sondas aparecerán como `(null)` y no se iluminará ningún punto. Al terminar la práctica, funcionará por completo.
+
+   Antes de seguir, prediga: si una muestra se hubiera capturado el 30 de octubre y se analizara el 2 de noviembre del mismo año, ¿qué devolvería `getDiasDesdeCaptura`? ¿Por qué no basta con restar los días del mes de las dos fechas?
+4. Ejecute `PruebaInteractiva`. Se abrirá la ventana del microarray virtual, aunque todavía no podrá analizar nada: sus sondas aparecerán como `(null)`, y si pulsa _Analizar_, la ventana le indicará que `hibridar(Muestra)` todavía devuelve `null`; lo completará en el apartado 3. Volverá a ejecutarla en los apartados 3 a 5, y al final de la práctica funcionará por completo.
 
 > [!IMPORTANT]
-> **Sus propios casos de prueba.** Cada clase de prueba (`PruebaSonda`, etc.) comprueba una **muestra** de casos y escribe `✓` o `✗` en cada comprobación, con el resultado esperado y el obtenido. Aunque todas sus comprobaciones sean correctas, eso no garantiza que su código lo sea. Por eso, cada clase de prueba tiene un método `pruebasPropias`, donde debe añadir sus propios casos. Puede usar el mismo método que las pruebas proporcionadas:
+> **Sus propios casos de prueba.** Cada clase de prueba (`PruebaSonda`, etc.) comprueba una **muestra** de casos y escribe `✓` o `✗` en cada comprobación, con el resultado esperado y el obtenido. Aunque todas sus comprobaciones sean correctas, eso no garantiza que su código lo sea. Por eso, cada clase de prueba tiene un método `pruebasPropias`, donde debe añadir sus propios casos. En `PruebaSonda` puede usar los métodos auxiliares de la propia clase; por ejemplo, esta línea comprueba que el patrón `CCC` no se encuentra en la lectura `AAAA`:
 > ```java
-> Comprobador.comprobar("encontrarEn en una lectura sin la diana", -1, sonda.encontrarEn(lectura));
+> probarEncontrarEn("CCC", "AAAA", -1, " (no está)");
 > ```
-> Para comprobar que un constructor lanza una excepción, invóquelo dentro de un bloque `try`: si no la lanza, llame a `Comprobador.fallo(...)`; en el `catch`, a `Comprobador.acierto(...)` (vea `PruebaSonda`).
+> Para comprobar que un constructor o un método lanza una excepción, invóquelo dentro de un bloque `try`: si no la lanza, llame a `Comprobador.fallo(...)`; en el `catch`, a `Comprobador.acierto(...)` (vea `probarSondaNoValida` en `PruebaSonda`). Si una de las pruebas proporcionadas indica que su código lanza una «excepción inesperada» (por ejemplo, una `NullPointerException`), no es la excepción que debía lanzar, sino la señal de un error: probablemente le falta alguna comprobación.
 
 ### 2. Empezar la clase `Sonda`
 
@@ -262,7 +269,7 @@ Se proporciona hecho el método `encontrarEn`, pero con una versión inicial que
 
 1. **Desarrolle el constructor**: compruebe que el nombre no es nulo ni está en blanco, y que el patrón no es nulo ni vacío y solo contiene símbolos de patrón (use con cada carácter el método `esSimboloValido` de la propia clase `Sonda`, que se proporciona hecho). Si algún dato no es válido, lance una excepción con un mensaje que explique el motivo; si todos lo son, asigne los atributos. Tome como modelo el constructor de `Lectura`.
 2. **Desarrolle `hibridaCon(Lectura lectura)`**: este método debe devolver si el patrón aparece en algún lugar de la lectura. Reutilice `encontrarEn`, que devuelve la primera posición de la lectura en la que encaja el patrón, o `-1` si no encaja en ninguna.
-3. **Pruebe la versión inicial de `encontrarEn`**. Se proporciona con una implementación muy sencilla, `lectura.getSecuencia().indexOf(patron)`: el método [`indexOf`](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html#indexOf(java.lang.String)) de `String` busca un texto dentro de otro, pero comparando los caracteres tal cual, así que no entiende los comodines ni busca en la otra hebra. Ejecute `PruebaSonda`: las comprobaciones del grupo «encontrarEn, con patrones sin comodines» deberían aparecer con `✓`; en cambio, fallarán casi todas las demás de `encontrarEn` (por ejemplo, no encuentra `CAGYT` en `GATTACAGTTTAGC`). Es normal: lo resolverá en los apartados 4 y 5.
+3. **Pruebe la versión inicial de `encontrarEn`**. Se proporciona con una implementación muy sencilla, `lectura.getSecuencia().indexOf(patron)`: el método [`indexOf`](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html#indexOf(java.lang.String)) de `String` busca un texto dentro de otro, pero comparando los caracteres tal cual, así que no entiende los comodines ni busca en la otra hebra. Ejecute `PruebaSonda`: las comprobaciones del grupo «encontrarEn, con patrones sin comodines» deberían aparecer con `✓`; en cambio, fallarán casi todas las demás de `encontrarEn` (por ejemplo, no encuentra `CAGYT` —que contiene el comodín `Y`— en `GATTACAGTTTAGC`). Es normal: lo resolverá en los apartados 4 y 5.
 
 ### 3. Completar la clase `Microarray`
 
@@ -271,11 +278,13 @@ La clase `Microarray` representa un chip con sondas en una cuadrícula: una matr
 **Pasos:**
 
 1. **Complete `hibridar(Lectura lectura)` para que compile**. Es el error que marca Eclipse desde que importó el proyecto: `hibridaCon` puede lanzar una excepción (su cabecera incluye `throws Exception`), y quien lo invoca tiene que capturarla o declararla. `hibridar(Lectura)` no la declara, ni debe cambiar su cabecera: tiene que capturarla. Rodee la invocación de `hibridaCon` con un bloque `try`/`catch`; si se produce una excepción, la sonda no se ha podido comprobar, y su punto no se ilumina (`false`). Así, ni `hibridar(Muestra)` ni `Analisis` tendrán que ocuparse de las excepciones de `Sonda`.
-2. **Desarrolle `hibridar(Muestra muestra)`**: este método debe hacer lo mismo con todas las lecturas de la muestra. Un punto se ilumina si su sonda hibrida con **alguna** de las lecturas. Puede recorrer las lecturas con un bucle `for` mejorado (`for (Lectura lectura : muestra.getLecturas())`) y reutilizar `hibridar(Lectura)` con cada una. Cuidado: un punto que ya se ha iluminado con una lectura no debe apagarse porque no hibride con la siguiente.
-3. Ejecute `PruebaMicroarray`. Las matrices se escriben con `#` para los puntos iluminados y `.` para los apagados, una fila entre corchetes. Como su `Sonda` todavía usa la versión inicial de `encontrarEn`, solo algunas comprobaciones serán correctas; entre ellas debe estar la de la **letra A** del chip de expresión, un chip de 20x20 sondas cuyos puntos iluminados forman una palabra. Si no lo es, corrija `hibridar(Muestra)`.
-4. Ejecute `PruebaInteractiva`, elija el **chip de expresión** y analice con él la muestra M5. Es más parecido a un chip real: tiene tantas sondas que no se escriben sus nombres ni sus patrones; para ver los de una sonda, deje el ratón sobre su punto. De momento solo se ilumina una letra, la A: sus sondas no tienen comodines, y sus dianas aparecen tal cual en las lecturas. Las demás letras se iluminarán en los apartados siguientes.
 
-   ![Ventana del microarray virtual con el chip de expresión cuando solo se ilumina la letra A](img/ventana-etapa-a.png)
+   Con sondas y lecturas válidas, `hibridaCon` no debería lanzar nunca una excepción: si la lanza, hay un error en su código de `Sonda`, y el punto aparecerá apagado aunque la sonda encaje. Por eso, la ventana avisa de las excepciones que se produzcan, y `PruebaSonda` las muestra en sus comprobaciones.
+2. **Desarrolle `hibridar(Muestra muestra)`**: este método debe hacer lo mismo con todas las lecturas de la muestra. Un punto se ilumina si su sonda hibrida con **alguna** de las lecturas. Puede recorrer las lecturas con un bucle for-each (`for (Lectura lectura : muestra.getLecturas())`) y reutilizar `hibridar(Lectura)` con cada una. Cuidado: un punto que ya se ha iluminado con una lectura no debe apagarse porque no hibride con la siguiente.
+3. Ejecute `PruebaMicroarray`. Las matrices se imprimen con `#` para los puntos iluminados y `.` para los apagados, una fila entre corchetes. Como su `Sonda` todavía usa la versión inicial de `encontrarEn`, solo algunas comprobaciones serán correctas; entre ellas debe estar la de la **letra A de la cuadrícula del chip de cribado** <img src="img/letra-a.svg" height="28" alt="Letra A dibujada con los puntos del chip">, un chip de 20x20 sondas cuyos puntos iluminados forman una palabra. Si no lo es, localice el error siguiendo las dependencias: compruebe primero `hibridaCon` (en `PruebaSonda`, las comprobaciones de `hibridaCon` con el Virus A, que no tiene comodines); después, la matriz que devuelve `hibridar(Lectura)` para una lectura que conozca; y por último, cómo acumula `hibridar(Muestra)` los resultados de varias lecturas.
+4. Ejecute `PruebaInteractiva`, elija el **chip de cribado**, que busca a la vez cientos de dianas en una muestra, y analice con él la muestra M5. Es más parecido a un chip real: tiene tantas sondas que no se escriben sus nombres ni sus patrones; para ver los de una sonda, deje el ratón sobre su punto. De momento solo se ilumina la **letra A de la cuadrícula del chip** <img src="img/letra-a.svg" height="28" alt="Letra A dibujada con los puntos del chip">: sus sondas no tienen comodines, y sus dianas aparecen tal cual en las lecturas. Las demás letras se iluminarán en los apartados siguientes.
+
+   ![Ventana del microarray virtual con el chip de cribado cuando solo se ilumina la letra A](img/ventana-etapa-a.png)
 
 ### 4. Reconocer patrones con comodines
 
@@ -283,7 +292,7 @@ En este apartado, la sonda aprenderá a reconocer patrones con comodines, de mom
 
 **Pasos:**
 
-1. **Desarrolle `encaja(char simbolo, char base)`**: este método debe devolver si un símbolo del patrón encaja con una base de la lectura, según la tabla de los [patrones con comodines](#patrones-con-comodines). Primero, compruebe que el símbolo es un símbolo de patrón y la base, un símbolo de lectura (con `esSimboloValido` y `Lectura.esSimboloValido`); si alguno no lo es, lance una excepción. Después, use una sentencia `switch` con un caso para cada comodín (`'N'`, `'R'` e `'Y'`) y un caso `default` para las bases. Es un método **estático**: no depende de ninguna sonda concreta, y se invoca con el nombre de la clase (`Sonda.encaja('R', 'G')`).
+1. **Desarrolle `encaja(char simbolo, char base)`**: este método debe devolver si un símbolo del patrón encaja con una base de la lectura, según la tabla de los [patrones con comodines](#patrones-con-comodines). Primero, compruebe que el símbolo es un símbolo de patrón y la base, un símbolo de lectura (con `esSimboloValido` y `Lectura.esSimboloValido`); si alguno no lo es, lance una excepción. Después, puede usar una sentencia `switch` con un caso para cada comodín (`'N'`, `'R'` e `'Y'`) y un caso `default` para las bases. Es un método **estático**: no depende de ninguna sonda concreta, y se invoca con el nombre de la clase (`Sonda.encaja('R', 'G')`).
 2. **Desarrolle `encajaEn(Lectura lectura, int inicio)`, de momento solo en sentido directo**: este método debe devolver si el patrón encaja con la lectura colocando su primer símbolo en la posición `inicio` de la lectura.
    - Empiece con una **cláusula de guarda**, como en la práctica 1: si el patrón no cabe en la lectura a partir de esa posición (porque `inicio` es negativa o porque el patrón se saldría por el final de la lectura), lance una excepción.
    - Después, recorra el patrón con un bucle: el símbolo `i` del patrón se compara (con `encaja`) con la base `inicio + i` de la lectura, que puede obtener con `lectura.getBase(...)`.
@@ -297,14 +306,14 @@ En este apartado, la sonda aprenderá a reconocer patrones con comodines, de mom
 
    ¿Cuál es la última posición en la que tiene sentido colocar el patrón? Piense en un patrón de 3 símbolos y una lectura de 10 bases. Si el bucle se pasa, `encajaEn` lanzará su excepción.
 4. Ejecute `PruebaSonda`. Ahora deberían aparecer con `✓` todas las comprobaciones, salvo las de la otra hebra: los grupos «encajaInverso», «encajaEn, en sentido inverso» y «encontrarEn, con la diana en la otra hebra», y la de `hibridaCon` con la diana en la otra hebra.
-5. Ejecute `PruebaMicroarray`: ahora también debe ser correcta la comprobación de la **letra D**, cuyas sondas tienen comodines. Analice de nuevo la muestra M5 con el chip de expresión en `PruebaInteractiva`: se iluminan la A y la D.
+5. Ejecute `PruebaMicroarray`: ahora también debe ser correcta la comprobación de la **letra D de la cuadrícula del chip** <img src="img/letra-d.svg" height="28" alt="Letra D dibujada con los puntos del chip">, cuyas sondas tienen comodines. Analice de nuevo la muestra M5 con el chip de cribado en `PruebaInteractiva`: se iluminan la A y la D.
 
 > [!TIP]
 > Antes de modificar `encontrarEn`, dibuje a mano una lectura y un patrón, y vaya desplazando el patrón posición a posición. Le ayudará a encontrar el límite del bucle, que es donde suelen estar los errores.
 
 ### 5. Buscar en las dos hebras
 
-Las dianas de las sondas de la letra N están en la otra hebra (consulte la sección [Las dos hebras](#las-dos-hebras)). Para reconocerlas, la sonda tiene que buscar su patrón también en sentido inverso.
+Las dianas de las sondas de la **letra N de la cuadrícula del chip** <img src="img/letra-n.svg" height="28" alt="Letra N dibujada con los puntos del chip"> están en la otra hebra (consulte la sección [Las dos hebras](#las-dos-hebras)). Para reconocerlas, la sonda tiene que buscar su patrón también en sentido inverso.
 
 **Pasos:**
 
@@ -312,7 +321,10 @@ Las dianas de las sondas de la letra N están en la otra hebra (consulte la secc
 2. **Modifique `encajaEn` para que funcione en los dos sentidos**: si el patrón no encaja en sentido directo, el método debe comprobar si encaja en sentido inverso. Para ello, añada un segundo bucle después del primero, que compare cada base `inicio + i` de la lectura con el símbolo `patron.length() - 1 - i` del patrón (es decir, el patrón leído de derecha a izquierda), usando `encajaInverso`.
 
    > **Pista**: el `return false` del primer bucle ya no sirve: aunque el patrón no encaje en sentido directo, todavía puede encajar en sentido inverso, así que el método no debe terminar. Sustitúyalo por `break`, que termina el bucle, pero no el método; y antes, anote en una variable `boolean` que el patrón no encaja en sentido directo. Entre los dos bucles, si el patrón encaja en sentido directo, devuelva `true`. El segundo bucle es como era el primero: en él sí puede devolver `false` en cuanto falle un símbolo.
-3. Ejecute `PruebaSonda` y `PruebaMicroarray`, y corrija lo que sea necesario hasta que todas las comprobaciones aparezcan con `✓`. Después, añada sus propios casos de prueba: por ejemplo, patrones al principio y al final de la lectura, patrones que aparecen varias veces, lecturas con `N`, patrones más largos que la lectura y dianas en la otra hebra. Analice de nuevo la muestra M5 con el chip de expresión: ahora se ilumina la palabra completa.
+3. Ejecute `PruebaSonda` y `PruebaMicroarray`, y corrija lo que sea necesario hasta que todas las comprobaciones aparezcan con `✓`. Después, añada sus propios casos de prueba: por ejemplo, patrones al principio y al final de la lectura, patrones que aparecen varias veces, lecturas con `N`, patrones más largos que la lectura y dianas en la otra hebra.
+4. Analice de nuevo la muestra M5 con el chip de cribado: ahora se ilumina la palabra completa, <img src="img/letra-a.svg" height="28" alt="Letra A dibujada con los puntos del chip"> <img src="img/letra-d.svg" height="28" alt="Letra D dibujada con los puntos del chip"> <img src="img/letra-n.svg" height="28" alt="Letra N dibujada con los puntos del chip">. Deje el ratón sobre algunos puntos de cada letra y compare sus patrones: ¿qué tienen en común los de la A? ¿Y los de la D?
+
+   ![Ventana del microarray virtual con el chip de cribado, mostrando los datos de una sonda al dejar el ratón sobre su punto](img/ventana-grande.png)
 
 ### 6. Probar el sistema completo
 
@@ -322,13 +334,9 @@ Ejecute de nuevo `PruebaInteractiva`. Elija un microarray y una muestra (o escri
 
 **Pasos:**
 
-1. Analice cada muestra de ejemplo con el panel de patógenos y compruebe que el resultado es el esperado según la [tabla de los comodines](#patrones-con-comodines). Por ejemplo, en la muestra M3, la lectura M3-L1 contiene la diana del Virus A con una `N` en una posición sin comodín, así que esa sonda no se ilumina; en cambio, la diana de la Bacteria D tiene la `N` en la posición del comodín y sí se ilumina.
+1. Analice las muestras de pacientes, de M1 a M4, con el panel de patógenos, y compruebe que el resultado es el esperado según la [tabla de los comodines](#patrones-con-comodines). La documentación de `DatosEjemplo.muestras()` (en la carpeta `doc`) indica qué patógenos contiene cada una. Por ejemplo, en la muestra M3, la lectura M3-L1 contiene la diana del Virus A con una `N` en una posición sin comodín, así que esa sonda no se ilumina; en cambio, la diana de la Bacteria D tiene la `N` en la posición del comodín y sí se ilumina.
 2. Fíjese en las sondas de control: la de control positivo detecta una secuencia que está en todas las muestras de pacientes, y la de control negativo no debería iluminarse nunca. En un chip real sirven para comprobar que el análisis se ha hecho correctamente.
-3. Vuelva a analizar la muestra M5 con el chip de expresión. Deje el ratón sobre algunos puntos de cada letra y compare sus patrones: ¿qué tienen en común los de la A? ¿Y los de la D? Fíjese también, en el texto de debajo, en dónde encaja cada sonda en cada lectura.
-
-   ![Ventana del microarray virtual con el chip de expresión, mostrando los datos de una sonda al dejar el ratón sobre su punto](img/ventana-grande.png)
-
-4. Añada en el método `main` de `PruebaInteractiva` sus propios microarrays y muestras (encontrará un ejemplo), y compruebe que el resultado es el que espera.
+3. Añada en el método `main` de `PruebaInteractiva` sus propios microarrays y muestras (encontrará un ejemplo), y compruebe que el resultado es el que espera.
 
 ### Exportar el proyecto
 

@@ -89,10 +89,9 @@ loadScripts(document, 'script');</script>
 <div class="block">Un microarray: un chip con sondas fijadas en una cuadrícula de filas y columnas
 (una matriz de <a href="Sonda.html" title="class in es.upm.dit.fprg26.p2"><code>Sonda</code></a>).
 <p>
-Al analizar una muestra, cada punto del chip se ilumina si su sonda hibrida con
-alguna de las lecturas de la muestra. El resultado se representa con una matriz de
-<code>boolean</code> del mismo tamaño que la cuadrícula: <code>true</code> en los puntos
-iluminados.
+Al analizar una muestra, cada punto del chip se ilumina si su sonda hibrida con alguna de
+las lecturas de la muestra. El resultado se representa con una matriz de boolean del mismo
+tamaño que la cuadrícula: true en los puntos iluminados.
 </p></div>
 </div>
 </section>
@@ -274,16 +273,16 @@ sonda hibrida con <em>alguna</em> de las lecturas.</div>
 <div class="block">Analiza una única lectura: indica qué puntos del chip se iluminan con ella.
 <p>
 <a href="Sonda.html#hibridaCon(es.upm.dit.fprg26.p2.Lectura)"><code>Sonda.hibridaCon(Lectura)</code></a> puede lanzar una excepción (con una sonda y una
-lectura válidas, solo si hay algún error en el código de <code>Sonda</code>). Este método la
-captura con un bloque <code>try</code>/<code>catch</code>: si no se puede saber si una sonda
-hibrida con la lectura, su punto no se ilumina.
+lectura válidas, solo si hay algún error en el código de Sonda). Este método la captura
+con un bloque try/catch: si no se puede saber si una sonda hibrida con la lectura, su
+punto no se ilumina.
 </p></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>lectura</code> - lectura que se analiza</dd>
+<dd><code>lectura</code> - lectura que se analiza (puede asumir que nunca es null)</dd>
 <dt>Returns:</dt>
-<dd>matriz del mismo tamaño que la cuadrícula, con <code>true</code> en los puntos
-        cuya sonda hibrida con la lectura</dd>
+<dd>matriz del mismo tamaño que la cuadrícula, con true en los puntos cuya sonda
+        hibrida con la lectura</dd>
 </dl>
 </div>
 </section>
@@ -297,10 +296,10 @@ hibrida con la lectura, su punto no se ilumina.
 sonda hibrida con <em>alguna</em> de las lecturas.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>muestra</code> - muestra que se analiza</dd>
+<dd><code>muestra</code> - muestra que se analiza (puede asumir que nunca es null)</dd>
 <dt>Returns:</dt>
-<dd>matriz del mismo tamaño que la cuadrícula, con <code>true</code> en los puntos
-        cuya sonda hibrida con al menos una lectura de la muestra</dd>
+<dd>matriz del mismo tamaño que la cuadrícula, con true en los puntos cuya sonda
+        hibrida con al menos una lectura de la muestra</dd>
 </dl>
 </div>
 </section>
@@ -315,7 +314,7 @@ sonda hibrida con <em>alguna</em> de las lecturas.</div>
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>
 <dt>Returns:</dt>
-<dd>descripción del microarray, por ejemplo, <code>"Panel A (3x3)"</code></dd>
+<dd>descripción del microarray, por ejemplo, "Panel A (3x3)"</dd>
 </dl>
 </div>
 </section>

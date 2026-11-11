@@ -67,8 +67,8 @@ final class PanelMicroarray extends JPanel {
     /**
      * Cambia el microarray que se dibuja y sus puntos iluminados.
      *
-     * @param microarray microarray que se dibuja (o {@code null} para no dibujar ninguno)
-     * @param iluminados puntos iluminados (o {@code null} si aún no se ha analizado nada)
+     * @param microarray microarray que se dibuja (o null para no dibujar ninguno)
+     * @param iluminados puntos iluminados (o null si aún no se ha analizado nada)
      */
     void mostrar(Microarray microarray, boolean[][] iluminados) {
         this.microarray = microarray;
@@ -81,7 +81,7 @@ final class PanelMicroarray extends JPanel {
     /**
      * Indica si el chip que se muestra es grande y se dibuja solo con sus puntos.
      *
-     * @return {@code true} si el chip tiene más de 6 filas o más de 6 columnas
+     * @return true si el chip tiene más de 6 filas o más de 6 columnas
      */
     boolean esCompacto() {
         return microarray != null

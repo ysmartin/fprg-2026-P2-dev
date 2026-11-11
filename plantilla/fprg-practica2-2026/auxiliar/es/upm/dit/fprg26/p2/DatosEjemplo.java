@@ -5,7 +5,7 @@ import module java.base;
 /**
  * Microarrays y muestras de ejemplo para las pruebas y para la interfaz gráfica.
  * <p>
- * Las secuencias del panel de patógenos y del chip de expresión son <strong>sintéticas</strong>:
+ * Las secuencias del panel de patógenos y del chip de cribado son <strong>sintéticas</strong>:
  * se han inventado para la práctica y no corresponden a ningún organismo real. Las del chip
  * de dianas de restricción sí son reales: son las secuencias que reconocen esas enzimas,
  * varias de ellas con comodines del código IUPAC.
@@ -27,11 +27,11 @@ final class DatosEjemplo {
 
     /**
      * Devuelve un chip de prueba de 1x3 con tres sondas que se diferencian en sus comodines:
-     * {@code GATTACA} (exacta), {@code GANTACA} (con {@code N}) y {@code GAYTRCA}
-     * (con {@code Y} y {@code R}).
+     * GATTACA (exacta), GANTACA (con N) y GAYTRCA (con Y y R).
      *
      * @return chip de prueba
-     * @throws Exception si alguno de los objetos no se puede crear (con su clase {@code Sonda} incompleta)
+     * @throws Exception si alguno de los objetos no se puede crear (con su clase Sonda
+     *                   incompleta)
      */
     static Microarray chipDePrueba() throws Exception {
         return new Microarray("Chip de prueba", new Sonda[][] {
@@ -63,8 +63,8 @@ final class DatosEjemplo {
 
     /**
      * Devuelve un chip de 2x4 con las secuencias que reconocen ocho enzimas de restricción
-     * reales. Las de la segunda fila son degeneradas: por ejemplo, HincII reconoce
-     * {@code GTYRAC} ({@code GTCGAC}, {@code GTTAAC}, {@code GTCAAC} y {@code GTTGAC}).
+     * reales. Las de la segunda fila son degeneradas: por ejemplo, HincII reconoce GTYRAC
+     * (GTCGAC, GTTAAC, GTCAAC y GTTGAC).
      *
      * @return chip de dianas de restricción
      * @throws Exception si alguno de los objetos no se puede crear
@@ -78,22 +78,22 @@ final class DatosEjemplo {
         });
     }
 
-    /** Número de filas y de columnas del chip de expresión. */
-    static final int LADO_CHIP_DE_EXPRESION = 20;
+    /** Número de filas y de columnas del chip de cribado. */
+    static final int LADO_CHIP_DE_CRIBADO = 20;
 
-    /** Primera columna de la letra D en {@link #FORMA_MUESTRA_DE_EXPRESION} (la A ocupa las anteriores). */
+    /** Primera columna de la letra D en {@link #FORMA_MUESTRA_DE_CRIBADO} (la A ocupa las anteriores). */
     static final int COLUMNA_D = 7;
 
-    /** Primera columna de la letra N en {@link #FORMA_MUESTRA_DE_EXPRESION} (la D ocupa las anteriores). */
+    /** Primera columna de la letra N en {@link #FORMA_MUESTRA_DE_CRIBADO} (la D ocupa las anteriores). */
     static final int COLUMNA_N = 13;
 
     /**
-     * Puntos del chip de expresión que debe iluminar la muestra de expresión ({@code #}):
-     * forman la palabra «ADN». Cada letra pone a prueba una parte del reconocimiento de
-     * patrones (ver {@link #chipDeExpresion()}). Como la palabra no es simétrica, si se
-     * confunden las filas con las columnas, el dibujo sale traspuesto.
+     * Puntos del chip de cribado que debe iluminar la muestra de cribado (`#`): forman la
+     * palabra «ADN». Cada letra pone a prueba una parte del reconocimiento de patrones (ver
+     * {@link #chipDeCribado()}). Como la palabra no es simétrica, si se confunden las filas
+     * con las columnas, el dibujo sale traspuesto.
      */
-    static final String[] FORMA_MUESTRA_DE_EXPRESION = {
+    static final String[] FORMA_MUESTRA_DE_CRIBADO = {
         "....................",
         "....................",
         "....................",
@@ -117,53 +117,54 @@ final class DatosEjemplo {
     };
 
     /**
-     * Devuelve un chip de expresión de 20x20 con 400 sondas sintéticas ({@code G001} a
-     * {@code G400}), como los que miden qué genes están activos en un tejido. Algunas
-     * sondas son degeneradas. En la interfaz gráfica, sus nombres y patrones no se escriben
-     * en el chip: se muestran al pasar el ratón por encima de cada punto.
+     * Devuelve un chip de cribado de 20x20 con 400 sondas sintéticas (S001 a S400), como los
+     * que buscan a la vez cientos de dianas en una muestra (por ejemplo, de distintos
+     * microorganismos). Algunas sondas son degeneradas. En la interfaz gráfica, sus nombres y
+     * patrones no se escriben en el chip: se muestran al pasar el ratón por encima de cada
+     * punto.
      * <p>
-     * Con la muestra de expresión, cada letra de la palabra «ADN» se ilumina en una etapa
+     * Con la muestra de cribado, cada letra de la palabra «ADN» se ilumina en una etapa
      * del reconocimiento de patrones:
      * </p>
      * <ul>
-     *   <li>las sondas de la <strong>A</strong> no tienen comodines, y sus dianas aparecen tal
-     *       cual en las lecturas: basta con buscar el patrón con {@code indexOf};</li>
+     *   <li>las sondas de la <strong>A</strong> no tienen comodines, y sus dianas aparecen
+     *       tal cual en las lecturas: basta con buscar el patrón con indexOf;</li>
      *   <li>las de la <strong>D</strong> tienen algún comodín, y sus dianas aparecen en las
      *       lecturas en sentido directo;</li>
      *   <li>las dianas de la <strong>N</strong> están en la otra hebra: aparecen en las lecturas
      *       como su complementaria inversa.</li>
      * </ul>
      *
-     * @return chip de expresión
+     * @return chip de cribado
      * @throws Exception si alguno de los objetos no se puede crear
      */
-    static Microarray chipDeExpresion() throws Exception {
-        String[][] patrones = patronesDelChipDeExpresion();
-        Sonda[][] sondas = new Sonda[LADO_CHIP_DE_EXPRESION][LADO_CHIP_DE_EXPRESION];
-        for (int fila = 0; fila < LADO_CHIP_DE_EXPRESION; fila++) {
-            for (int columna = 0; columna < LADO_CHIP_DE_EXPRESION; columna++) {
-                String nombre = String.format("G%03d", fila * LADO_CHIP_DE_EXPRESION + columna + 1);
+    static Microarray chipDeCribado() throws Exception {
+        String[][] patrones = patronesDelChipDeCribado();
+        Sonda[][] sondas = new Sonda[LADO_CHIP_DE_CRIBADO][LADO_CHIP_DE_CRIBADO];
+        for (int fila = 0; fila < LADO_CHIP_DE_CRIBADO; fila++) {
+            for (int columna = 0; columna < LADO_CHIP_DE_CRIBADO; columna++) {
+                String nombre = String.format("S%03d", fila * LADO_CHIP_DE_CRIBADO + columna + 1);
                 sondas[fila][columna] = new Sonda(nombre, patrones[fila][columna]);
             }
         }
-        return new Microarray("Chip de expresión (sintético)", sondas);
+        return new Microarray("Chip de cribado (sintético)", sondas);
     }
 
     /**
-     * Devuelve una muestra para el chip de expresión, cuyas lecturas contienen las dianas de
-     * los puntos marcados en {@link #FORMA_MUESTRA_DE_EXPRESION} (dos dianas por lectura). Las
-     * de la letra N están en la otra hebra (ver {@link #chipDeExpresion()}).
+     * Devuelve una muestra para el chip de cribado, cuyas lecturas contienen las dianas de
+     * los puntos marcados en {@link #FORMA_MUESTRA_DE_CRIBADO} (dos dianas por lectura). Las
+     * de la letra N están en la otra hebra (ver {@link #chipDeCribado()}).
      *
-     * @return muestra para el chip de expresión
+     * @return muestra para el chip de cribado
      * @throws Exception si alguno de los objetos no se puede crear
      */
-    static Muestra muestraDeExpresion() throws Exception {
-        String[][] patrones = patronesDelChipDeExpresion();
+    static Muestra muestraDeCribado() throws Exception {
+        String[][] patrones = patronesDelChipDeCribado();
         Random azar = new Random(7);
         String[] dianas = new String[0];
-        for (int fila = 0; fila < LADO_CHIP_DE_EXPRESION; fila++) {
-            for (int columna = 0; columna < LADO_CHIP_DE_EXPRESION; columna++) {
-                if (FORMA_MUESTRA_DE_EXPRESION[fila].charAt(columna) == '#') {
+        for (int fila = 0; fila < LADO_CHIP_DE_CRIBADO; fila++) {
+            for (int columna = 0; columna < LADO_CHIP_DE_CRIBADO; columna++) {
+                if (FORMA_MUESTRA_DE_CRIBADO[fila].charAt(columna) == '#') {
                     String diana = concretar(patrones[fila][columna], azar);
                     if (columna >= COLUMNA_N) {
                         diana = complementariaInversa(diana);
@@ -179,23 +180,23 @@ final class DatosEjemplo {
             String secuencia = relleno(azar, 6) + dianas[2 * i] + relleno(azar, 5) + segunda + relleno(azar, 6);
             lecturas[i] = new Lectura(String.format("M5-L%02d", i + 1), secuencia);
         }
-        return new Muestra("M5 (tejido)", hace(1), lecturas);
+        return new Muestra("M5 (muestra ambiental)", hace(1), lecturas);
     }
 
     /**
      * Devuelve todos los microarrays de ejemplo.
      *
-     * @return chip de prueba, panel de patógenos, chip de dianas de restricción y chip de expresión
+     * @return chip de prueba, panel de patógenos, chip de dianas de restricción y chip de cribado
      * @throws Exception si alguno de los objetos no se puede crear
      */
     static Microarray[] microarrays() throws Exception {
-        return new Microarray[] { chipDePrueba(), panelDePatogenos(), chipDeDianasDeRestriccion(), chipDeExpresion() };
+        return new Microarray[] { chipDePrueba(), panelDePatogenos(), chipDeDianasDeRestriccion(), chipDeCribado() };
     }
 
     /**
-     * Devuelve la muestra de prueba para el chip de prueba, con tres lecturas:
-     * {@code GATTACA} (encaja con las tres sondas), {@code GANTACA} (su {@code N} solo encaja
-     * con la {@code N} de la sonda {@code GANTACA}) y una lectura que contiene {@code GACTGCA} (solo con {@code GAYTRCA}).
+     * Devuelve la muestra de prueba para el chip de prueba, con tres lecturas: GATTACA
+     * (encaja con las tres sondas), GANTACA (su N solo encaja con la N de la sonda GANTACA) y
+     * una lectura que contiene GACTGCA (solo con GAYTRCA).
      *
      * @return muestra de prueba
      * @throws Exception si alguno de los objetos no se puede crear
@@ -214,12 +215,12 @@ final class DatosEjemplo {
      * <ul>
      *   <li>M1: Virus A y control positivo.</li>
      *   <li>M2: las dos variantes del Virus B, la cepa 1 de la Bacteria E y control positivo.</li>
-     *   <li>M3: lecturas con bases indeterminadas ({@code N}): la diana del Virus A tiene una
-     *       {@code N} y no se detecta; la de la Bacteria D tiene la {@code N} en la posición
-     *       del comodín y sí se detecta. También Parásito G y control positivo.</li>
+     *   <li>M3: lecturas con bases indeterminadas (N): la diana del Virus A tiene una N y no
+     *       se detecta; la de la Bacteria D tiene la N en la posición del comodín y sí se
+     *       detecta. También Parásito G y control positivo.</li>
      *   <li>M4: sin patógenos; solo el control positivo.</li>
      *   <li>R1: fragmento con dianas de EcoRI, HincII, AvaI, BanI y Hpy188I.</li>
-     *   <li>M5: muestra para el chip de expresión (ver {@link #muestraDeExpresion()}).</li>
+     *   <li>M5: muestra para el chip de cribado (ver {@link #muestraDeCribado()}).</li>
      * </ul>
      *
      * @return muestras de ejemplo
@@ -252,7 +253,7 @@ final class DatosEjemplo {
                 new Lectura("R1-L1", "TTGTGAATTCGTTAACAGCGCCCGAGGTACTAGTAAAAAA"),
                 new Lectura("R1-L2", "GGCGCCTACTCAGAGTACAGTTATTAAGTCGAAACACCAA")
             }),
-            muestraDeExpresion()
+            muestraDeCribado()
         };
     }
 
@@ -266,14 +267,14 @@ final class DatosEjemplo {
         return LocalDate.now().minusDays(dias);
     }
 
-    private static String[][] patronesDelChipDeExpresion() {
+    private static String[][] patronesDelChipDeCribado() {
         Random azar = new Random(2026);
-        String[][] patrones = new String[LADO_CHIP_DE_EXPRESION][LADO_CHIP_DE_EXPRESION];
-        for (int fila = 0; fila < LADO_CHIP_DE_EXPRESION; fila++) {
-            for (int columna = 0; columna < LADO_CHIP_DE_EXPRESION; columna++) {
+        String[][] patrones = new String[LADO_CHIP_DE_CRIBADO][LADO_CHIP_DE_CRIBADO];
+        for (int fila = 0; fila < LADO_CHIP_DE_CRIBADO; fila++) {
+            for (int columna = 0; columna < LADO_CHIP_DE_CRIBADO; columna++) {
                 char[] patron = relleno(azar, 14).toCharArray();
                 boolean conComodin = azar.nextInt(3) == 0;
-                if (FORMA_MUESTRA_DE_EXPRESION[fila].charAt(columna) == '#' && columna < COLUMNA_N) {
+                if (FORMA_MUESTRA_DE_CRIBADO[fila].charAt(columna) == '#' && columna < COLUMNA_N) {
                     conComodin = columna >= COLUMNA_D;   // la A, sin comodines; la D, con alguno
                 }
                 if (conComodin) {
@@ -294,10 +295,10 @@ final class DatosEjemplo {
     }
 
     /** Devuelve la complementaria inversa de una secuencia de bases concretas. */
-    private static String complementariaInversa(String secuencia) {
+    private static String complementariaInversa(String secuencia) throws Exception {
         String inversa = "";
         for (int i = secuencia.length() - 1; i >= 0; i--) {
-            inversa += "TGCA".charAt("ACGT".indexOf(secuencia.charAt(i)));
+            inversa += Lectura.complementaria(secuencia.charAt(i));
         }
         return inversa;
     }

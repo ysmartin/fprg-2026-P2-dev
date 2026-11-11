@@ -1,13 +1,14 @@
 package es.upm.dit.fprg26.p2;
 
+import module java.base;
+
 /**
  * Un microarray: un chip con sondas fijadas en una cuadrícula de filas y columnas
  * (una matriz de {@link Sonda}).
  * <p>
- * Al analizar una muestra, cada punto del chip se ilumina si su sonda hibrida con
- * alguna de las lecturas de la muestra. El resultado se representa con una matriz de
- * {@code boolean} del mismo tamaño que la cuadrícula: {@code true} en los puntos
- * iluminados.
+ * Al analizar una muestra, cada punto del chip se ilumina si su sonda hibrida con alguna de
+ * las lecturas de la muestra. El resultado se representa con una matriz de boolean del mismo
+ * tamaño que la cuadrícula: true en los puntos iluminados.
  * </p>
  */
 class Microarray {
@@ -15,7 +16,7 @@ class Microarray {
     /** Nombre del microarray. */
     private final String nombre;
 
-    /** Sondas del chip, por filas: {@code sondas[fila][columna]}. */
+    /** Sondas del chip, por filas: sondas[fila][columna]. */
     private final Sonda[][] sondas;
 
     /**
@@ -47,7 +48,12 @@ class Microarray {
             }
         }
         this.nombre = nombre;
-        this.sondas = sondas;
+        // Se guarda una copia de cada fila: si quien creó el microarray modifica después su
+        // matriz, el microarray no cambia
+        this.sondas = new Sonda[sondas.length][];
+        for (int fila = 0; fila < sondas.length; fila++) {
+            this.sondas[fila] = Arrays.copyOf(sondas[fila], sondas[fila].length);
+        }
     }
 
     /**
@@ -97,14 +103,14 @@ class Microarray {
      * Analiza una única lectura: indica qué puntos del chip se iluminan con ella.
      * <p>
      * {@link Sonda#hibridaCon(Lectura)} puede lanzar una excepción (con una sonda y una
-     * lectura válidas, solo si hay algún error en el código de {@code Sonda}). Este método la
-     * captura con un bloque {@code try}/{@code catch}: si no se puede saber si una sonda
-     * hibrida con la lectura, su punto no se ilumina.
+     * lectura válidas, solo si hay algún error en el código de Sonda). Este método la captura
+     * con un bloque try/catch: si no se puede saber si una sonda hibrida con la lectura, su
+     * punto no se ilumina.
      * </p>
      *
-     * @param lectura lectura que se analiza
-     * @return matriz del mismo tamaño que la cuadrícula, con {@code true} en los puntos
-     *         cuya sonda hibrida con la lectura
+     * @param lectura lectura que se analiza (puede asumir que nunca es null)
+     * @return matriz del mismo tamaño que la cuadrícula, con true en los puntos cuya sonda
+     *         hibrida con la lectura
      */
     boolean[][] hibridar(Lectura lectura) {
         boolean[][] iluminados = new boolean[getFilas()][getColumnas()];
@@ -124,9 +130,9 @@ class Microarray {
      * Analiza todas las lecturas de una muestra: un punto del chip se ilumina si su
      * sonda hibrida con <em>alguna</em> de las lecturas.
      *
-     * @param muestra muestra que se analiza
-     * @return matriz del mismo tamaño que la cuadrícula, con {@code true} en los puntos
-     *         cuya sonda hibrida con al menos una lectura de la muestra
+     * @param muestra muestra que se analiza (puede asumir que nunca es null)
+     * @return matriz del mismo tamaño que la cuadrícula, con true en los puntos cuya sonda
+     *         hibrida con al menos una lectura de la muestra
      */
     boolean[][] hibridar(Muestra muestra) {
         boolean[][] iluminados = new boolean[getFilas()][getColumnas()];
@@ -148,7 +154,7 @@ class Microarray {
      * punto del chip, con cuántas lecturas hibrida su sonda (cuanto mayor es el número, más
      * intenso es el brillo del punto).
      *
-     * @param muestra muestra que se analiza
+     * @param muestra muestra que se analiza (puede asumir que nunca es null)
      * @return matriz del mismo tamaño que la cuadrícula, con el número de lecturas de la
      *         muestra que hibridan con la sonda de cada punto
      */
@@ -170,7 +176,7 @@ class Microarray {
     /**
      * Devuelve una descripción del microarray: su nombre y su tamaño.
      *
-     * @return descripción del microarray, por ejemplo, {@code "Panel A (3x3)"}
+     * @return descripción del microarray, por ejemplo, "Panel A (3x3)"
      */
     @Override
     public String toString() {

@@ -32,7 +32,7 @@ class PruebaSonda {
             Comprobador.comprobar("getPatron()", "TTGRCATCCAGT", sonda.getPatron());
             Comprobador.comprobar("getLongitud()", 12, sonda.getLongitud());
         } catch (Exception e) {
-            Comprobador.fallo("new Sonda(\"Virus B\", \"TTGRCATCCAGT\") no debería lanzar excepción: " + e.getMessage());
+            Comprobador.fallo("new Sonda(\"Virus B\", \"TTGRCATCCAGT\") no debería lanzar excepción: " + e);
         }
         probarSondaNoValida(null, "GATTACA");
         probarSondaNoValida("  ", "GATTACA");
@@ -48,6 +48,10 @@ class PruebaSonda {
         try {
             new Sonda(nombre, patron);
             Comprobador.fallo(descripcion + " debería lanzar una excepción");
+        } catch (RuntimeException e) {
+            // Una excepción de ejecución (NullPointerException, StringIndexOutOfBoundsException...)
+            // no es la excepción prevista: indica que falta alguna comprobación
+            Comprobador.fallo(descripcion + " lanza una excepción inesperada, " + e + ": ¿falta alguna comprobación?");
         } catch (Exception e) {
             Comprobador.acierto(descripcion + " lanza excepción: " + e.getMessage());
         }
@@ -80,7 +84,7 @@ class PruebaSonda {
         try {
             Comprobador.comprobar(descripcion, esperado, Sonda.encaja(simbolo, base));
         } catch (Exception e) {
-            Comprobador.fallo(descripcion + " no debería lanzar excepción: " + e.getMessage());
+            Comprobador.fallo(descripcion + " no debería lanzar excepción: " + e);
         }
     }
 
@@ -89,6 +93,10 @@ class PruebaSonda {
         try {
             Sonda.encaja(simbolo, base);
             Comprobador.fallo(descripcion + " debería lanzar una excepción");
+        } catch (RuntimeException e) {
+            // Una excepción de ejecución (NullPointerException, StringIndexOutOfBoundsException...)
+            // no es la excepción prevista: indica que falta alguna comprobación
+            Comprobador.fallo(descripcion + " lanza una excepción inesperada, " + e + ": ¿falta alguna comprobación?");
         } catch (Exception e) {
             Comprobador.acierto(descripcion + " lanza excepción: " + e.getMessage());
         }
@@ -138,6 +146,10 @@ class PruebaSonda {
         try {
             Sonda.encajaInverso('A', 'R');
             Comprobador.fallo(descripcion + " debería lanzar una excepción");
+        } catch (RuntimeException e) {
+            // Una excepción de ejecución (NullPointerException, StringIndexOutOfBoundsException...)
+            // no es la excepción prevista: indica que falta alguna comprobación
+            Comprobador.fallo(descripcion + " lanza una excepción inesperada, " + e + ": ¿falta alguna comprobación?");
         } catch (Exception e) {
             Comprobador.acierto(descripcion + " lanza excepción: " + e.getMessage());
         }
@@ -148,7 +160,7 @@ class PruebaSonda {
         try {
             Comprobador.comprobar(descripcion, esperado, Sonda.encajaInverso(simbolo, base));
         } catch (Exception e) {
-            Comprobador.fallo(descripcion + " no debería lanzar excepción: " + e.getMessage());
+            Comprobador.fallo(descripcion + " no debería lanzar excepción: " + e);
         }
     }
 
@@ -186,7 +198,7 @@ class PruebaSonda {
         try {
             Comprobador.comprobar(descripcion, esperado, new Sonda("S", patron).encajaEn(new Lectura("L", lectura), inicio));
         } catch (Exception e) {
-            Comprobador.fallo(descripcion + " no debería lanzar excepción: " + e.getMessage());
+            Comprobador.fallo(descripcion + " no debería lanzar excepción: " + e);
         }
     }
 
@@ -195,6 +207,10 @@ class PruebaSonda {
         try {
             new Sonda("S", patron).encajaEn(new Lectura("L", lectura), inicio);
             Comprobador.fallo(descripcion + " debería lanzar una excepción");
+        } catch (RuntimeException e) {
+            // Una excepción de ejecución (NullPointerException, StringIndexOutOfBoundsException...)
+            // no es la excepción prevista: indica que falta alguna comprobación
+            Comprobador.fallo(descripcion + " lanza una excepción inesperada, " + e + ": ¿falta alguna comprobación?");
         } catch (Exception e) {
             Comprobador.acierto(descripcion + " lanza excepción: " + e.getMessage());
         }
@@ -205,7 +221,7 @@ class PruebaSonda {
         try {
             Comprobador.comprobar(descripcion, esperado, new Sonda("S", patron).encontrarEn(new Lectura("L", lectura)));
         } catch (Exception e) {
-            Comprobador.fallo(descripcion + " no debería lanzar excepción: " + e.getMessage());
+            Comprobador.fallo(descripcion + " no debería lanzar excepción: " + e);
         }
     }
 
@@ -214,7 +230,7 @@ class PruebaSonda {
         try {
             Comprobador.comprobar(descripcion, esperado, new Sonda("S", patron).hibridaCon(new Lectura("L", lectura)));
         } catch (Exception e) {
-            Comprobador.fallo(descripcion + " no debería lanzar excepción: " + e.getMessage());
+            Comprobador.fallo(descripcion + " no debería lanzar excepción: " + e);
         }
     }
 

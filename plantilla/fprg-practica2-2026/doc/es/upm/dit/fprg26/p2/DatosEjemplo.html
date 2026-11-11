@@ -57,10 +57,10 @@ loadScripts(document, 'script');</script>
 <li><a href="#method-summary" tabindex="0">Method Summary</a></li>
 <li><a href="#field-detail" tabindex="0">Field Details</a>
 <ol class="toc-list">
-<li><a href="#LADO_CHIP_DE_EXPRESION" tabindex="0">LADO_CHIP_DE_EXPRESION</a></li>
+<li><a href="#LADO_CHIP_DE_CRIBADO" tabindex="0">LADO_CHIP_DE_CRIBADO</a></li>
 <li><a href="#COLUMNA_D" tabindex="0">COLUMNA_D</a></li>
 <li><a href="#COLUMNA_N" tabindex="0">COLUMNA_N</a></li>
-<li><a href="#FORMA_MUESTRA_DE_EXPRESION" tabindex="0">FORMA_MUESTRA_DE_EXPRESION</a></li>
+<li><a href="#FORMA_MUESTRA_DE_CRIBADO" tabindex="0">FORMA_MUESTRA_DE_CRIBADO</a></li>
 </ol>
 </li>
 <li><a href="#method-detail" tabindex="0">Method Details</a>
@@ -68,8 +68,8 @@ loadScripts(document, 'script');</script>
 <li><a href="#chipDePrueba()" tabindex="0">chipDePrueba()</a></li>
 <li><a href="#panelDePatogenos()" tabindex="0">panelDePatogenos()</a></li>
 <li><a href="#chipDeDianasDeRestriccion()" tabindex="0">chipDeDianasDeRestriccion()</a></li>
-<li><a href="#chipDeExpresion()" tabindex="0">chipDeExpresion()</a></li>
-<li><a href="#muestraDeExpresion()" tabindex="0">muestraDeExpresion()</a></li>
+<li><a href="#chipDeCribado()" tabindex="0">chipDeCribado()</a></li>
+<li><a href="#muestraDeCribado()" tabindex="0">muestraDeCribado()</a></li>
 <li><a href="#microarrays()" tabindex="0">microarrays()</a></li>
 <li><a href="#muestraDePrueba()" tabindex="0">muestraDePrueba()</a></li>
 <li><a href="#muestras()" tabindex="0">muestras()</a></li>
@@ -93,7 +93,7 @@ loadScripts(document, 'script');</script>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Microarrays y muestras de ejemplo para las pruebas y para la interfaz gráfica.
 <p>
-Las secuencias del panel de patógenos y del chip de expresión son <strong>sintéticas</strong>:
+Las secuencias del panel de patógenos y del chip de cribado son <strong>sintéticas</strong>:
 se han inventado para la práctica y no corresponden a ningún organismo real. Las del chip
 de dianas de restricción sí son reales: son las secuencias que reconocen esas enzimas,
 varias de ellas con comodines del código IUPAC.
@@ -122,23 +122,23 @@ saber qué datos ofrece cada método.
 <div class="col-first even-row-color"><code>(package private) static final int</code></div>
 <div class="col-second even-row-color"><code><a href="#COLUMNA_D" class="member-name-link">COLUMNA_D</a></code></div>
 <div class="col-last even-row-color">
-<div class="block">Primera columna de la letra D en <a href="#FORMA_MUESTRA_DE_EXPRESION"><code>FORMA_MUESTRA_DE_EXPRESION</code></a> (la A ocupa las anteriores).</div>
+<div class="block">Primera columna de la letra D en <a href="#FORMA_MUESTRA_DE_CRIBADO"><code>FORMA_MUESTRA_DE_CRIBADO</code></a> (la A ocupa las anteriores).</div>
 </div>
 <div class="col-first odd-row-color"><code>(package private) static final int</code></div>
 <div class="col-second odd-row-color"><code><a href="#COLUMNA_N" class="member-name-link">COLUMNA_N</a></code></div>
 <div class="col-last odd-row-color">
-<div class="block">Primera columna de la letra N en <a href="#FORMA_MUESTRA_DE_EXPRESION"><code>FORMA_MUESTRA_DE_EXPRESION</code></a> (la D ocupa las anteriores).</div>
+<div class="block">Primera columna de la letra N en <a href="#FORMA_MUESTRA_DE_CRIBADO"><code>FORMA_MUESTRA_DE_CRIBADO</code></a> (la D ocupa las anteriores).</div>
 </div>
 <div class="col-first even-row-color"><code>(package private) static final <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</code></div>
-<div class="col-second even-row-color"><code><a href="#FORMA_MUESTRA_DE_EXPRESION" class="member-name-link">FORMA_MUESTRA_DE_EXPRESION</a></code></div>
+<div class="col-second even-row-color"><code><a href="#FORMA_MUESTRA_DE_CRIBADO" class="member-name-link">FORMA_MUESTRA_DE_CRIBADO</a></code></div>
 <div class="col-last even-row-color">
-<div class="block">Puntos del chip de expresión que debe iluminar la muestra de expresión (<code>#</code>):
-forman la palabra «ADN».</div>
+<div class="block">Puntos del chip de cribado que debe iluminar la muestra de cribado (`#`): forman la
+palabra «ADN».</div>
 </div>
 <div class="col-first odd-row-color"><code>(package private) static final int</code></div>
-<div class="col-second odd-row-color"><code><a href="#LADO_CHIP_DE_EXPRESION" class="member-name-link">LADO_CHIP_DE_EXPRESION</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#LADO_CHIP_DE_CRIBADO" class="member-name-link">LADO_CHIP_DE_CRIBADO</a></code></div>
 <div class="col-last odd-row-color">
-<div class="block">Número de filas y de columnas del chip de expresión.</div>
+<div class="block">Número de filas y de columnas del chip de cribado.</div>
 </div>
 </div>
 </section>
@@ -155,23 +155,23 @@ forman la palabra «ADN».</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>(package private) static <a href="Microarray.html" title="class in es.upm.dit.fprg26.p2">Microarray</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#chipDeDianasDeRestriccion()" class="member-name-link">chipDeDianasDeRestriccion</a>()</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#chipDeCribado()" class="member-name-link">chipDeCribado</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Devuelve un chip de 2x4 con las secuencias que reconocen ocho enzimas de restricción
-reales.</div>
+<div class="block">Devuelve un chip de cribado de 20x20 con 400 sondas sintéticas (S001 a S400), como los
+que buscan a la vez cientos de dianas en una muestra (por ejemplo, de distintos
+microorganismos).</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>(package private) static <a href="Microarray.html" title="class in es.upm.dit.fprg26.p2">Microarray</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#chipDeExpresion()" class="member-name-link">chipDeExpresion</a>()</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#chipDeDianasDeRestriccion()" class="member-name-link">chipDeDianasDeRestriccion</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Devuelve un chip de expresión de 20x20 con 400 sondas sintéticas (<code>G001</code> a
-<code>G400</code>), como los que miden qué genes están activos en un tejido.</div>
+<div class="block">Devuelve un chip de 2x4 con las secuencias que reconocen ocho enzimas de restricción
+reales.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>(package private) static <a href="Microarray.html" title="class in es.upm.dit.fprg26.p2">Microarray</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#chipDePrueba()" class="member-name-link">chipDePrueba</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Devuelve un chip de prueba de 1x3 con tres sondas que se diferencian en sus comodines:
-<code>GATTACA</code> (exacta), <code>GANTACA</code> (con <code>N</code>) y <code>GAYTRCA</code>
-(con <code>Y</code> y <code>R</code>).</div>
+GATTACA (exacta), GANTACA (con N) y GAYTRCA (con Y y R).</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>(package private) static <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/time/LocalDate.html" title="class or interface in java.time" class="external-link">LocalDate</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#hace(int)" class="member-name-link">hace</a><wbr>(int&nbsp;dias)</code></div>
@@ -184,17 +184,17 @@ reales.</div>
 <div class="block">Devuelve todos los microarrays de ejemplo.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>(package private) static <a href="Muestra.html" title="class in es.upm.dit.fprg26.p2">Muestra</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#muestraDeExpresion()" class="member-name-link">muestraDeExpresion</a>()</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#muestraDeCribado()" class="member-name-link">muestraDeCribado</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Devuelve una muestra para el chip de expresión, cuyas lecturas contienen las dianas de
-los puntos marcados en <a href="#FORMA_MUESTRA_DE_EXPRESION"><code>FORMA_MUESTRA_DE_EXPRESION</code></a> (dos dianas por lectura).</div>
+<div class="block">Devuelve una muestra para el chip de cribado, cuyas lecturas contienen las dianas de
+los puntos marcados en <a href="#FORMA_MUESTRA_DE_CRIBADO"><code>FORMA_MUESTRA_DE_CRIBADO</code></a> (dos dianas por lectura).</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>(package private) static <a href="Muestra.html" title="class in es.upm.dit.fprg26.p2">Muestra</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#muestraDePrueba()" class="member-name-link">muestraDePrueba</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Devuelve la muestra de prueba para el chip de prueba, con tres lecturas:
-<code>GATTACA</code> (encaja con las tres sondas), <code>GANTACA</code> (su <code>N</code> solo encaja
-con la <code>N</code> de la sonda <code>GANTACA</code>) y una lectura que contiene <code>GACTGCA</code> (solo con <code>GAYTRCA</code>).</div>
+<div class="block">Devuelve la muestra de prueba para el chip de prueba, con tres lecturas: GATTACA
+(encaja con las tres sondas), GANTACA (su N solo encaja con la N de la sonda GANTACA) y
+una lectura que contiene GACTGCA (solo con GAYTRCA).</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>(package private) static <a href="Muestra.html" title="class in es.upm.dit.fprg26.p2">Muestra</a>[]</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#muestras()" class="member-name-link">muestras</a>()</code></div>
@@ -225,16 +225,16 @@ panel de patógenos y una para el chip de dianas de restricción.</div>
 <h2>Field Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="LADO_CHIP_DE_EXPRESION">
-<h3>LADO_CHIP_DE_EXPRESION</h3>
+<section class="detail" id="LADO_CHIP_DE_CRIBADO">
+<h3>LADO_CHIP_DE_CRIBADO</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">LADO_CHIP_DE_EXPRESION</span></div>
-<div class="block">Número de filas y de columnas del chip de expresión.</div>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">LADO_CHIP_DE_CRIBADO</span></div>
+<div class="block">Número de filas y de columnas del chip de cribado.</div>
 <dl class="notes">
 <dt>See Also:</dt>
 <dd>
 <ul class="tag-list">
-<li><a href="../../../../../constant-values.html#es.upm.dit.fprg26.p2.DatosEjemplo.LADO_CHIP_DE_EXPRESION">Constant Field Values</a></li>
+<li><a href="../../../../../constant-values.html#es.upm.dit.fprg26.p2.DatosEjemplo.LADO_CHIP_DE_CRIBADO">Constant Field Values</a></li>
 </ul>
 </dd>
 </dl>
@@ -246,7 +246,7 @@ panel de patógenos y una para el chip de dianas de restricción.</div>
 <h3>COLUMNA_D</h3>
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">COLUMNA_D</span></div>
-<div class="block">Primera columna de la letra D en <a href="#FORMA_MUESTRA_DE_EXPRESION"><code>FORMA_MUESTRA_DE_EXPRESION</code></a> (la A ocupa las anteriores).</div>
+<div class="block">Primera columna de la letra D en <a href="#FORMA_MUESTRA_DE_CRIBADO"><code>FORMA_MUESTRA_DE_CRIBADO</code></a> (la A ocupa las anteriores).</div>
 <dl class="notes">
 <dt>See Also:</dt>
 <dd>
@@ -263,7 +263,7 @@ panel de patógenos y una para el chip de dianas de restricción.</div>
 <h3>COLUMNA_N</h3>
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">COLUMNA_N</span></div>
-<div class="block">Primera columna de la letra N en <a href="#FORMA_MUESTRA_DE_EXPRESION"><code>FORMA_MUESTRA_DE_EXPRESION</code></a> (la D ocupa las anteriores).</div>
+<div class="block">Primera columna de la letra N en <a href="#FORMA_MUESTRA_DE_CRIBADO"><code>FORMA_MUESTRA_DE_CRIBADO</code></a> (la D ocupa las anteriores).</div>
 <dl class="notes">
 <dt>See Also:</dt>
 <dd>
@@ -276,14 +276,14 @@ panel de patógenos y una para el chip de dianas de restricción.</div>
 </section>
 </li>
 <li>
-<section class="detail" id="FORMA_MUESTRA_DE_EXPRESION">
-<h3>FORMA_MUESTRA_DE_EXPRESION</h3>
+<section class="detail" id="FORMA_MUESTRA_DE_CRIBADO">
+<h3>FORMA_MUESTRA_DE_CRIBADO</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name">FORMA_MUESTRA_DE_EXPRESION</span></div>
-<div class="block">Puntos del chip de expresión que debe iluminar la muestra de expresión (<code>#</code>):
-forman la palabra «ADN». Cada letra pone a prueba una parte del reconocimiento de
-patrones (ver <a href="#chipDeExpresion()"><code>chipDeExpresion()</code></a>). Como la palabra no es simétrica, si se
-confunden las filas con las columnas, el dibujo sale traspuesto.</div>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name">FORMA_MUESTRA_DE_CRIBADO</span></div>
+<div class="block">Puntos del chip de cribado que debe iluminar la muestra de cribado (`#`): forman la
+palabra «ADN». Cada letra pone a prueba una parte del reconocimiento de patrones (ver
+<a href="#chipDeCribado()"><code>chipDeCribado()</code></a>). Como la palabra no es simétrica, si se confunden las filas
+con las columnas, el dibujo sale traspuesto.</div>
 </div>
 </section>
 </li>
@@ -302,13 +302,13 @@ confunden las filas con las columnas, el dibujo sale traspuesto.</div>
 <div class="member-signature"><span class="modifiers">static</span>&nbsp;<span class="return-type"><a href="Microarray.html" title="class in es.upm.dit.fprg26.p2">Microarray</a></span>&nbsp;<span class="element-name">chipDePrueba</span>()
                         throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
 <div class="block">Devuelve un chip de prueba de 1x3 con tres sondas que se diferencian en sus comodines:
-<code>GATTACA</code> (exacta), <code>GANTACA</code> (con <code>N</code>) y <code>GAYTRCA</code>
-(con <code>Y</code> y <code>R</code>).</div>
+GATTACA (exacta), GANTACA (con N) y GAYTRCA (con Y y R).</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>chip de prueba</dd>
 <dt>Throws:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code> - si alguno de los objetos no se puede crear (con su clase <code>Sonda</code> incompleta)</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code> - si alguno de los objetos no se puede crear (con su clase Sonda
+                  incompleta)</dd>
 </dl>
 </div>
 </section>
@@ -341,8 +341,8 @@ para comprobar que el análisis se ha hecho correctamente.
 <div class="member-signature"><span class="modifiers">static</span>&nbsp;<span class="return-type"><a href="Microarray.html" title="class in es.upm.dit.fprg26.p2">Microarray</a></span>&nbsp;<span class="element-name">chipDeDianasDeRestriccion</span>()
                                      throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
 <div class="block">Devuelve un chip de 2x4 con las secuencias que reconocen ocho enzimas de restricción
-reales. Las de la segunda fila son degeneradas: por ejemplo, HincII reconoce
-<code>GTYRAC</code> (<code>GTCGAC</code>, <code>GTTAAC</code>, <code>GTCAAC</code> y <code>GTTGAC</code>).</div>
+reales. Las de la segunda fila son degeneradas: por ejemplo, HincII reconoce GTYRAC
+(GTCGAC, GTTAAC, GTCAAC y GTTGAC).</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>chip de dianas de restricción</dd>
@@ -353,22 +353,23 @@ reales. Las de la segunda fila son degeneradas: por ejemplo, HincII reconoce
 </section>
 </li>
 <li>
-<section class="detail" id="chipDeExpresion()">
-<h3>chipDeExpresion</h3>
+<section class="detail" id="chipDeCribado()">
+<h3>chipDeCribado</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">static</span>&nbsp;<span class="return-type"><a href="Microarray.html" title="class in es.upm.dit.fprg26.p2">Microarray</a></span>&nbsp;<span class="element-name">chipDeExpresion</span>()
-                           throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
-<div class="block">Devuelve un chip de expresión de 20x20 con 400 sondas sintéticas (<code>G001</code> a
-<code>G400</code>), como los que miden qué genes están activos en un tejido. Algunas
-sondas son degeneradas. En la interfaz gráfica, sus nombres y patrones no se escriben
-en el chip: se muestran al pasar el ratón por encima de cada punto.
+<div class="member-signature"><span class="modifiers">static</span>&nbsp;<span class="return-type"><a href="Microarray.html" title="class in es.upm.dit.fprg26.p2">Microarray</a></span>&nbsp;<span class="element-name">chipDeCribado</span>()
+                         throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
+<div class="block">Devuelve un chip de cribado de 20x20 con 400 sondas sintéticas (S001 a S400), como los
+que buscan a la vez cientos de dianas en una muestra (por ejemplo, de distintos
+microorganismos). Algunas sondas son degeneradas. En la interfaz gráfica, sus nombres y
+patrones no se escriben en el chip: se muestran al pasar el ratón por encima de cada
+punto.
 <p>
-Con la muestra de expresión, cada letra de la palabra «ADN» se ilumina en una etapa
+Con la muestra de cribado, cada letra de la palabra «ADN» se ilumina en una etapa
 del reconocimiento de patrones:
 </p>
 <ul>
-  <li>las sondas de la <strong>A</strong> no tienen comodines, y sus dianas aparecen tal
-      cual en las lecturas: basta con buscar el patrón con <code>indexOf</code>;</li>
+  <li>las sondas de la <strong>A</strong> no tienen comodines, y sus dianas aparecen
+      tal cual en las lecturas: basta con buscar el patrón con indexOf;</li>
   <li>las de la <strong>D</strong> tienen algún comodín, y sus dianas aparecen en las
       lecturas en sentido directo;</li>
   <li>las dianas de la <strong>N</strong> están en la otra hebra: aparecen en las lecturas
@@ -376,7 +377,7 @@ del reconocimiento de patrones:
 </ul></div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>chip de expresión</dd>
+<dd>chip de cribado</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code> - si alguno de los objetos no se puede crear</dd>
 </dl>
@@ -384,17 +385,17 @@ del reconocimiento de patrones:
 </section>
 </li>
 <li>
-<section class="detail" id="muestraDeExpresion()">
-<h3>muestraDeExpresion</h3>
+<section class="detail" id="muestraDeCribado()">
+<h3>muestraDeCribado</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">static</span>&nbsp;<span class="return-type"><a href="Muestra.html" title="class in es.upm.dit.fprg26.p2">Muestra</a></span>&nbsp;<span class="element-name">muestraDeExpresion</span>()
-                           throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
-<div class="block">Devuelve una muestra para el chip de expresión, cuyas lecturas contienen las dianas de
-los puntos marcados en <a href="#FORMA_MUESTRA_DE_EXPRESION"><code>FORMA_MUESTRA_DE_EXPRESION</code></a> (dos dianas por lectura). Las
-de la letra N están en la otra hebra (ver <a href="#chipDeExpresion()"><code>chipDeExpresion()</code></a>).</div>
+<div class="member-signature"><span class="modifiers">static</span>&nbsp;<span class="return-type"><a href="Muestra.html" title="class in es.upm.dit.fprg26.p2">Muestra</a></span>&nbsp;<span class="element-name">muestraDeCribado</span>()
+                         throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
+<div class="block">Devuelve una muestra para el chip de cribado, cuyas lecturas contienen las dianas de
+los puntos marcados en <a href="#FORMA_MUESTRA_DE_CRIBADO"><code>FORMA_MUESTRA_DE_CRIBADO</code></a> (dos dianas por lectura). Las
+de la letra N están en la otra hebra (ver <a href="#chipDeCribado()"><code>chipDeCribado()</code></a>).</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>muestra para el chip de expresión</dd>
+<dd>muestra para el chip de cribado</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code> - si alguno de los objetos no se puede crear</dd>
 </dl>
@@ -410,7 +411,7 @@ de la letra N están en la otra hebra (ver <a href="#chipDeExpresion()"><code>ch
 <div class="block">Devuelve todos los microarrays de ejemplo.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>chip de prueba, panel de patógenos, chip de dianas de restricción y chip de expresión</dd>
+<dd>chip de prueba, panel de patógenos, chip de dianas de restricción y chip de cribado</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code> - si alguno de los objetos no se puede crear</dd>
 </dl>
@@ -423,9 +424,9 @@ de la letra N están en la otra hebra (ver <a href="#chipDeExpresion()"><code>ch
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="modifiers">static</span>&nbsp;<span class="return-type"><a href="Muestra.html" title="class in es.upm.dit.fprg26.p2">Muestra</a></span>&nbsp;<span class="element-name">muestraDePrueba</span>()
                         throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
-<div class="block">Devuelve la muestra de prueba para el chip de prueba, con tres lecturas:
-<code>GATTACA</code> (encaja con las tres sondas), <code>GANTACA</code> (su <code>N</code> solo encaja
-con la <code>N</code> de la sonda <code>GANTACA</code>) y una lectura que contiene <code>GACTGCA</code> (solo con <code>GAYTRCA</code>).</div>
+<div class="block">Devuelve la muestra de prueba para el chip de prueba, con tres lecturas: GATTACA
+(encaja con las tres sondas), GANTACA (su N solo encaja con la N de la sonda GANTACA) y
+una lectura que contiene GACTGCA (solo con GAYTRCA).</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>muestra de prueba</dd>
@@ -446,12 +447,12 @@ panel de patógenos y una para el chip de dianas de restricción.
 <ul>
   <li>M1: Virus A y control positivo.</li>
   <li>M2: las dos variantes del Virus B, la cepa 1 de la Bacteria E y control positivo.</li>
-  <li>M3: lecturas con bases indeterminadas (<code>N</code>): la diana del Virus A tiene una
-      <code>N</code> y no se detecta; la de la Bacteria D tiene la <code>N</code> en la posición
-      del comodín y sí se detecta. También Parásito G y control positivo.</li>
+  <li>M3: lecturas con bases indeterminadas (N): la diana del Virus A tiene una N y no
+      se detecta; la de la Bacteria D tiene la N en la posición del comodín y sí se
+      detecta. También Parásito G y control positivo.</li>
   <li>M4: sin patógenos; solo el control positivo.</li>
   <li>R1: fragmento con dianas de EcoRI, HincII, AvaI, BanI y Hpy188I.</li>
-  <li>M5: muestra para el chip de expresión (ver <a href="#muestraDeExpresion()"><code>muestraDeExpresion()</code></a>).</li>
+  <li>M5: muestra para el chip de cribado (ver <a href="#muestraDeCribado()"><code>muestraDeCribado()</code></a>).</li>
 </ul></div>
 <dl class="notes">
 <dt>Returns:</dt>
