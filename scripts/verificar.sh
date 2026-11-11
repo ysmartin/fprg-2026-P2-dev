@@ -12,7 +12,9 @@
 #     (scripts/generar-doc.sh),
 #   - la solución supera también las comprobaciones del profesorado (docs/pruebas-profesorado),
 #   - la solución con las ampliaciones (docs/material-adicional) compila y supera sus pruebas
-#     y las de la versión base.
+#     y las de la versión base,
+#   - la animación del algoritmo (animacion/) compila sin avisos con la solución y se genera,
+#     lo que comprueba que sigue reproduciendo la solución paso a paso.
 #
 # Uso: [ECJ_JAR=/ruta/ecj-3.44.0.jar] scripts/verificar.sh   (usa javac/java/javadoc del PATH o de JAVA_HOME)
 set -euo pipefail
@@ -124,6 +126,28 @@ cp "$RAIZ"/docs/material-adicional/solucion/*.java "$RAIZ/docs/material-adiciona
     "$AMPLIADA/src/es/upm/dit/fprg26/p2/"
 cp "$RAIZ"/docs/pruebas-profesorado/*.java "$AMPLIADA/src/es/upm/dit/fprg26/p2/"
 comprobar "solucion con ampliaciones" si "$AMPLIADA" "PruebaAmpliaciones PruebaProfesorado"
+
+echo "== animación (animacion/)"
+# shellcheck disable=SC2046
+if ! (cd "$RAIZ" && "${BIN}javac" -Xlint:all -Werror -encoding UTF-8 -d "$TMP/clases-animacion" \
+        $(find animacion/src solucion/fprg-practica2-2026/src solucion/fprg-practica2-2026/auxiliar -name '*.java')); then
+    echo "   ✗ no compila sin avisos con javac"; fallos=$((fallos + 1))
+else
+    if [ -n "${ECJ_JAR:-}" ]; then
+        ecj=$("${BIN}java" -jar "$ECJ_JAR" -25 -encoding UTF-8 -properties "$RAIZ/animacion/.settings/org.eclipse.jdt.core.prefs" \
+            -d "$TMP/ecj-animacion" "$RAIZ/animacion/src" "$RAIZ/solucion/fprg-practica2-2026/src" \
+            "$RAIZ/solucion/fprg-practica2-2026/auxiliar" 2>&1 | grep -v JAVA_TOOL || true)
+        if [ -n "$ecj" ]; then
+            echo "   ✗ el compilador de Eclipse da avisos o errores:"; echo "$ecj" | tail -5; fallos=$((fallos + 1))
+        fi
+    fi
+    if salida=$("${BIN}java" -Dstdout.encoding=UTF-8 -Dstderr.encoding=UTF-8 -cp "$TMP/clases-animacion" \
+            es.upm.dit.fprg26.p2.AnimacionHibridacion "$TMP/animacion.gif" 2>&1); then
+        echo "   se genera y reproduce la solución: $(echo "$salida" | grep -o '[0-9]* fotogramas.*')"
+    else
+        echo "   ✗ no se puede generar:"; echo "$salida" | grep -v JAVA_TOOL | tail -5; fallos=$((fallos + 1))
+    fi
+fi
 
 echo "== doc"
 for proyecto in plantilla solucion; do

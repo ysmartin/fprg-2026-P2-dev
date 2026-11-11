@@ -12,10 +12,11 @@ Este documento **no es para el alumnado**. Recoge las decisiones de diseño de l
 | `docs/NOTAS_PROFESORADO.md` | Este documento | Solo desarrollo |
 | `docs/pruebas-profesorado/` | Comprobaciones que no se entregan: que las clases proporcionadas guardan y devuelven copias de sus arrays. `verificar.sh` las ejecuta con la solución | Solo desarrollo |
 | `docs/MATERIAL_ADICIONAL.md`, `docs/material-adicional/` | Ampliaciones A1 y A2: enunciado, solución (clases ampliadas) y pruebas | Solo profesorado |
+| `animacion/` | Proyecto Eclipse que genera una animación del algoritmo, como un depurador: las vueltas de los bucles y las llamadas, de `hibridar(Muestra)` a `encaja`, con la ventana deslizante en los dos sentidos (`animacion/hibridacion.gif`; ver su `README.md`). Usa la solución y comprueba que la reproduce | Solo profesorado |
 | `scripts/derivar-plantilla.py` | Deriva la plantilla a partir de la solución (vacía los métodos que completa el alumnado) | Solo desarrollo |
 | `scripts/generar-doc.sh` | Regenera la documentación HTML de la plantilla | Solo desarrollo |
 | `scripts/generar-figuras.py` | Genera las figuras SVG del enunciado: la ventana deslizante sin comodines, con comodines y en sentido inverso (`img/ventana-*.svg`, todas sobre la lectura `GATACATGCA`); el fragmento de ADN con sus dos hebras (`img/dos-hebras.svg`), cuya hebra complementaria es esa misma lectura; y las miniaturas de las letras de la palabra «ADN» del chip de cribado (`img/letra-*.svg`), que lee de `DatosEjemplo` | Solo desarrollo |
-| `scripts/verificar.sh` | Comprueba que la plantilla y `doc/` están al día, compila (javac y, con `ECJ_JAR`, ECJ), ejecuta las pruebas de la solución, de la plantilla y de la solución con ampliaciones, y revisa el Javadoc | Solo desarrollo |
+| `scripts/verificar.sh` | Comprueba que la plantilla y `doc/` están al día, compila (javac y, con `ECJ_JAR`, ECJ), ejecuta las pruebas de la solución, de la plantilla y de la solución con ampliaciones, revisa el Javadoc y genera la animación | Solo desarrollo |
 
 Para publicar, basta con copiar `README.md`, `logos/`, `img/` y `plantilla/fprg-practica2-2026/` al repositorio del alumnado (con la carpeta del proyecto en la raíz, como en la P1), y `README.md`, `logos/`, `img/` y `solucion/fprg-practica2-2026/` al de la solución (los dos proyectos llevan su carpeta `doc`, porque el enunciado indica abrirla). Los proyectos se llaman `Practica2` (plantilla) y `Practica2-solucion` (solución).
 
