@@ -454,7 +454,7 @@ complementarias de <code>AGCTG</code> (<code>TCGAC</code>).
 </p></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>lectura</code> - lectura en la que se busca el patrón</dd>
+<dd><code>lectura</code> - lectura en la que se busca el patrón (puede asumir que nunca es <code>null</code>)</dd>
 <dd><code>inicio</code> - posición de la lectura en la que empieza la comparación</dd>
 <dt>Returns:</dt>
 <dd><code>true</code> si el patrón encaja con la lectura a partir de esa posición, en
@@ -482,7 +482,7 @@ devuelve la primera).
 </p></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>lectura</code> - lectura en la que se busca el patrón</dd>
+<dd><code>lectura</code> - lectura en la que se busca el patrón (puede asumir que nunca es <code>null</code>)</dd>
 <dt>Returns:</dt>
 <dd>primera posición de la lectura en la que encaja el patrón, o -1 si no
         encaja en ninguna</dd>
@@ -503,7 +503,7 @@ devuelve la primera).
 lectura en alguna posición, en cualquiera de los dos sentidos.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>lectura</code> - lectura que se analiza</dd>
+<dd><code>lectura</code> - lectura que se analiza (puede asumir que nunca es <code>null</code>)</dd>
 <dt>Returns:</dt>
 <dd><code>true</code> si el patrón aparece en la lectura; <code>false</code> en otro caso</dd>
 <dt>Throws:</dt>

@@ -160,7 +160,7 @@ class Sonda {
      * complementarias de {@code AGCTG} ({@code TCGAC}).
      * </p>
      *
-     * @param lectura lectura en la que se busca el patrón
+     * @param lectura lectura en la que se busca el patrón (puede asumir que nunca es {@code null})
      * @param inicio posición de la lectura en la que empieza la comparación
      * @return {@code true} si el patrón encaja con la lectura a partir de esa posición, en
      *         sentido directo o inverso; {@code false} en otro caso
@@ -182,7 +182,7 @@ class Sonda {
      * devuelve la primera).
      * </p>
      *
-     * @param lectura lectura en la que se busca el patrón
+     * @param lectura lectura en la que se busca el patrón (puede asumir que nunca es {@code null})
      * @return primera posición de la lectura en la que encaja el patrón, o -1 si no
      *         encaja en ninguna
      * @throws Exception si se produce algún error al comparar el patrón con la lectura (no
@@ -198,7 +198,7 @@ class Sonda {
      * Indica si la sonda hibrida con una lectura, es decir, si su patrón encaja con la
      * lectura en alguna posición, en cualquiera de los dos sentidos.
      *
-     * @param lectura lectura que se analiza
+     * @param lectura lectura que se analiza (puede asumir que nunca es {@code null})
      * @return {@code true} si el patrón aparece en la lectura; {@code false} en otro caso
      * @throws Exception si se produce algún error al buscar el patrón en la lectura
      */
