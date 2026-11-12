@@ -71,15 +71,15 @@ final class AnimacionLienzo {
             "DejaVu Sans Mono");
 
     // Zonas del lienzo: x, y, ancho, alto
-    // Como en una tabla de doble entrada, la muestra está encima de la ventana deslizante y el
-    // microarray, a su izquierda; la leyenda ocupa la esquina. La franja superior (hasta y = 112)
-    // queda libre.
-    private static final Rectangle ZONA_LEYENDA = new Rectangle(24, 124, 356, 124);
-    private static final Rectangle ZONA_MUESTRA = new Rectangle(392, 124, 468, 124);
-    private static final Rectangle ZONA_CHIP = new Rectangle(24, 260, 266, 390);   // el panel solo ocupa su alto
-    private static final Rectangle ZONA_VENTANA = new Rectangle(302, 260, 558, 390);
-    private static final Rectangle ZONA_PILA = new Rectangle(876, 124, 380, 588);
-    private static final Rectangle ZONA_MENSAJE = new Rectangle(24, 662, 836, 50);
+    // Arriba, la pila de llamadas, en horizontal. Debajo, como en una tabla de doble entrada, la
+    // muestra está encima de la ventana deslizante y el microarray, a su izquierda; la leyenda
+    // ocupa la esquina, y la explicación de cada paso, la columna derecha.
+    private static final Rectangle ZONA_PILA = new Rectangle(24, 16, 1232, 140);
+    private static final Rectangle ZONA_LEYENDA = new Rectangle(24, 168, 356, 120);
+    private static final Rectangle ZONA_MUESTRA = new Rectangle(392, 168, 468, 120);
+    private static final Rectangle ZONA_CHIP = new Rectangle(24, 300, 266, 404);   // el panel solo ocupa su alto
+    private static final Rectangle ZONA_VENTANA = new Rectangle(302, 300, 558, 404);
+    private static final Rectangle ZONA_MENSAJE = new Rectangle(876, 168, 380, 536);
 
     // Casillas de las lecturas (en la muestra y en la ventana deslizante), alineadas por columnas
     private static final int PASO = 40;            // distancia entre casillas
@@ -87,17 +87,17 @@ final class AnimacionLienzo {
     private static final int X_CASILLAS = 446;     // x de la posición 0
 
     // Filas de la muestra
-    private static final int Y_LECTURAS = 160;
+    private static final int Y_LECTURAS = 202;
     private static final int PASO_LECTURAS = 44;
 
     // Filas de la ventana deslizante
-    private static final int Y_INICIOS = 310;      // valores de inicio en el bucle de encontrarEn
-    private static final int Y_POSICIONES = 332;   // línea base de los números de posición
-    private static final int Y_LECTURA = 340;
-    private static final int Y_DIRECTO = 386;
-    private static final int Y_COMPLEMENTARIAS = 450;
-    private static final int Y_INVERSO = 496;
-    private static final int Y_NOTAS = 574;
+    private static final int Y_INICIOS = 348;      // valores de inicio en el bucle de encontrarEn
+    private static final int Y_POSICIONES = 370;   // línea base de los números de posición
+    private static final int Y_LECTURA = 378;
+    private static final int Y_DIRECTO = 424;
+    private static final int Y_COMPLEMENTARIAS = 488;
+    private static final int Y_INVERSO = 534;
+    private static final int Y_NOTAS = 618;
 
     // Tarjetas de las sondas en el microarray
     private static final int LADO_CHIP = 30;
@@ -162,7 +162,7 @@ final class AnimacionLienzo {
             dibujarLeyenda(g);
             dibujarVentana(g, fotograma);
             dibujarPila(g, fotograma);
-            dibujarMensaje(g, fotograma.mensaje());
+            dibujarMensaje(g, fotograma);
         } finally {
             g.dispose();
         }
@@ -277,11 +277,11 @@ final class AnimacionLienzo {
 
     private void dibujarLeyenda(Graphics2D g) {
         panel(g, ZONA_LEYENDA, "Leyenda", null);
-        int lado = 26;
-        int paso = 30;
+        int lado = 24;
+        int paso = 28;
         Font fuente = fuente(SANS, Font.PLAIN, 13);
         int x = ZONA_LEYENDA.x + 16;
-        int y = ZONA_LEYENDA.y + 34;
+        int y = ZONA_LEYENDA.y + 32;
         base(g, x, y, lado, 'G', CASILLA, CASILLA_BORDE, TEXTO);
         texto(g, "base de una lectura", x + lado + 8, y + lado / 2 + 5, fuente, TEXTO);
         base(g, x, y + paso, lado, 'C', AZUL_CLARO, AZUL_BORDE, AZUL);
@@ -307,9 +307,6 @@ final class AnimacionLienzo {
                 : ventana.patron() == null ? "lectura `" + ventana.idLectura() + "`"
                 : "sonda `" + ventana.nombreSonda() + "` · lectura `" + ventana.idLectura() + "`";
         panel(g, ZONA_VENTANA, "Ventana deslizante", detalle);
-        if (fotograma.avanceRapido() != null) {
-            etiquetaAvanceRapido(g, fotograma.avanceRapido());
-        }
         if (ventana.lectura() == null) {
             texto(g, "(ninguna lectura en análisis)", ZONA_VENTANA.x + 16, Y_LECTURA + LADO / 2 + 5,
                     fuente(SANS, Font.ITALIC, 15), TENUE);
@@ -467,8 +464,8 @@ final class AnimacionLienzo {
     private void etiquetaAvanceRapido(Graphics2D g, String aviso) {
         Font fuente = fuente(SANS, Font.BOLD, 13);
         int ancho = ancho(g, aviso, fuente) + 44;
-        int x = ZONA_VENTANA.x + ZONA_VENTANA.width - 16 - ancho;
-        int y = ZONA_VENTANA.y + ZONA_VENTANA.height - 38;
+        int x = ZONA_MENSAJE.x + 20;
+        int y = ZONA_MENSAJE.y + ZONA_MENSAJE.height - 44;
         RoundRectangle2D etiqueta = new RoundRectangle2D.Double(x, y, ancho, 26, 26, 26);
         g.setColor(AMBAR_CLARO);
         g.fill(etiqueta);
@@ -494,84 +491,173 @@ final class AnimacionLienzo {
     // ------------------------------------------------------------------------------------
 
     private void dibujarPila(Graphics2D g, AnimacionFotograma fotograma) {
-        panel(g, ZONA_PILA, "Pila de llamadas", "y variables locales");
+        panel(g, ZONA_PILA, "Pila de llamadas", "de la más externa a la que se está ejecutando (a la derecha), "
+                + "con sus parámetros y sus variables locales");
         List<Llamada> pila = fotograma.pila();
         if (pila.isEmpty()) {
             texto(g, "(ninguna llamada en curso)", ZONA_PILA.x + 16, ZONA_PILA.y + 70, fuente(SANS, Font.ITALIC, 15), TENUE);
             return;
         }
-        Font fuenteDevuelve = fuente(MONO, Font.BOLD, 14);
-        int altoMetodo = 28;
-        int xMax = ZONA_PILA.x + ZONA_PILA.width - 14;
-        int y = ZONA_PILA.y + 46;
-        int centroAnterior = -1;
+        // Si no caben todas las llamadas, se reduce la letra y, si aun así no caben, se ocultan las
+        // variables de las llamadas más externas
+        int disponible = ZONA_PILA.width - 32;
+        int x = ZONA_PILA.x + 16;
+        int y = ZONA_PILA.y + 36;
+        int alto = ZONA_PILA.y + ZONA_PILA.height - 10 - y;
+        int tamano = 13;
+        int ocultas = 0;
+        while (anchoPila(g, pila, tamano, ocultas, alto) > disponible || altoPila(pila, tamano, ocultas) > alto) {
+            if (tamano == 13) {
+                tamano = 12;
+            } else if (ocultas < pila.size() - 1) {
+                ocultas++;
+            } else {
+                break;
+            }
+        }
         for (int nivel = 0; nivel < pila.size(); nivel++) {
             Llamada llamada = pila.get(nivel);
             boolean actual = nivel == pila.size() - 1;
-            int x = ZONA_PILA.x + 18 + nivel * 12;
-            int anchoLlamada = llamada(g, llamada, x, 0, actual, false);
-            // Lo que devuelve, en la misma línea si cabe; si no, al principio de la siguiente
-            String devuelve = llamada.devuelve();
-            boolean devuelveEnLinea = devuelve != null
-                    && x + anchoLlamada + 10 + anchoDevuelve(g, devuelve, fuenteDevuelve) <= xMax;
-            String devuelveAparte = devuelve != null && !devuelveEnLinea ? devuelve : null;
-            // Las variables y lo que devuelve van a la derecha del conector de la llamada siguiente
-            int altoVariables = variables(g, llamada.variables(), devuelveAparte, x + 12, y + altoMetodo, xMax, false);
-            if (actual) {
-                g.setColor(AZUL_CLARO);
-                g.fill(new RoundRectangle2D.Double(ZONA_PILA.x + 8, y + 1, ZONA_PILA.width - 16,
-                        altoMetodo + altoVariables - 2, 8, 8));
+            int ancho = caja(g, llamada, x, y, alto, actual, tamano, nivel >= ocultas, false);
+            caja(g, llamada, x, y, alto, actual, tamano, nivel >= ocultas, true);
+            x += ancho;
+            if (!actual) {
+                // Flecha hacia la llamada siguiente (la que esta ha invocado)
+                flecha(g, x + 4, y + 15, 12, TENUE);
+                x += SEPARACION_PILA;
             }
-            int centro = y + altoMetodo / 2;
-            if (nivel > 0) {
-                // Conector con la llamada que la ha invocado
-                g.setColor(TENUE);
-                g.setStroke(new BasicStroke(1.5f));
-                g.draw(new Line2D.Double(x - 9, centroAnterior + 8, x - 9, centro));
-                g.draw(new Line2D.Double(x - 9, centro, x - 3, centro));
-            }
-            llamada(g, llamada, x, centro + 5, actual, true);
-            if (devuelveEnLinea) {
-                devuelve(g, devuelve, x + anchoLlamada + 10, centro, fuenteDevuelve);
-            }
-            variables(g, llamada.variables(), devuelveAparte, x + 12, y + altoMetodo, xMax, true);
-            centroAnterior = centro;
-            y += altoMetodo + altoVariables;
         }
     }
 
+    /** Separación entre dos llamadas de la pila. */
+    private static final int SEPARACION_PILA = 18;
+
+    private int anchoPila(Graphics2D g, List<Llamada> pila, int tamano, int ocultas, int alto) {
+        int total = 0;
+        for (int nivel = 0; nivel < pila.size(); nivel++) {
+            total += caja(g, pila.get(nivel), 0, 0, alto, nivel == pila.size() - 1, tamano, nivel >= ocultas, false);
+        }
+        return total + (pila.size() - 1) * SEPARACION_PILA;
+    }
+
+    /** Alto de la llamada más alta de la pila. */
+    private static int altoPila(List<Llamada> pila, int tamano, int ocultas) {
+        int maximo = 0;
+        for (int nivel = ocultas; nivel < pila.size(); nivel++) {
+            Llamada llamada = pila.get(nivel);
+            int alto = 2 * MARGEN_CAJA + tamano + 6;
+            for (int i = 0; i < llamada.argumentos().size(); i++) {
+                alto += tamano + 2;
+            }
+            for (Variable v : llamada.variables()) {
+                alto += v.matriz() != null ? tamano + 5 : tamano + 2;
+            }
+            maximo = Math.max(maximo, alto);
+        }
+        return maximo;
+    }
+
+    /** Margen interior de cada llamada de la pila. */
+    private static final int MARGEN_CAJA = 7;
+
     /**
-     * Dibuja (o solo mide) una llamada, con los tipos de sus parámetros en gris: por ejemplo,
-     * s1.encajaEn(Lectura l1, int 0).
+     * Dibuja (o solo mide) una llamada de la pila: la llamada, como se escribiría en Java, y
+     * debajo sus parámetros y sus variables locales, con su tipo en gris (como en la vista de
+     * variables del depurador de Eclipse), y lo que devuelve, si está terminando.
      *
+     * @param conVariables si se muestran los parámetros y las variables (en las llamadas más
+     *                     externas se ocultan si no caben)
      * @return ancho que ocupa
      */
-    private static int llamada(Graphics2D g, Llamada llamada, int x0, int y, boolean actual, boolean dibujar) {
-        Font fuente = fuente(MONO, actual ? Font.BOLD : Font.PLAIN, 14);
-        Font fuenteTipo = fuente(MONO, Font.PLAIN, 14);
-        Color color = actual ? TEXTO : SECUNDARIO;
-        List<String> trozos = new ArrayList<>();
-        List<Boolean> sonTipos = new ArrayList<>();
-        trozos.add((llamada.receptor() == null ? "" : llamada.receptor() + ".") + llamada.metodo() + "(");
-        sonTipos.add(false);
-        for (int i = 0; i < llamada.argumentos().size(); i++) {
-            Argumento argumento = llamada.argumentos().get(i);
-            trozos.add(argumento.tipo() + " ");
-            sonTipos.add(true);
-            trozos.add(argumento.valor() + (i < llamada.argumentos().size() - 1 ? ", " : ""));
-            sonTipos.add(false);
-        }
-        trozos.add(")");
-        sonTipos.add(false);
-        int x = x0;
-        for (int i = 0; i < trozos.size(); i++) {
-            Font f = sonTipos.get(i) ? fuenteTipo : fuente;
-            if (dibujar) {
-                texto(g, trozos.get(i), x, y, f, sonTipos.get(i) ? TIPO : color);
+    private int caja(Graphics2D g, Llamada llamada, int x, int y, int alto, boolean actual, int tamano,
+            boolean conVariables, boolean dibujar) {
+        Font fuenteLlamada = fuente(MONO, actual ? Font.BOLD : Font.PLAIN, tamano);
+        Font fuenteTipo = fuente(MONO, Font.PLAIN, tamano - 1);
+        Font fuenteValor = fuente(MONO, Font.BOLD, tamano - 1);
+        int margen = MARGEN_CAJA;
+        int altoLinea = tamano + 2;
+        int altoMatriz = tamano + 5;
+        // Líneas: parámetros y variables
+        List<Variable> lineas = new ArrayList<>();
+        if (conVariables) {
+            for (Argumento argumento : llamada.argumentos()) {
+                lineas.add(new Variable(argumento.tipo(), argumento.nombre(), argumento.valor(), null, -1, -1, false));
             }
-            x += ancho(g, trozos.get(i), f);
+            lineas.addAll(llamada.variables());
         }
-        return x - x0;
+        // Lo que devuelve la llamada va debajo de sus variables o, si no cabe, en su misma línea
+        int altoContenido = 2 * margen + tamano + 6;
+        for (Variable v : lineas) {
+            altoContenido += v.matriz() != null ? altoMatriz : altoLinea;
+        }
+        boolean devuelveDebajo = llamada.devuelve() != null && altoContenido + altoLinea <= alto;
+        boolean devuelveEnLinea = llamada.devuelve() != null && !devuelveDebajo;
+        int anchoLlamada = ancho(g, llamada.texto(), fuenteLlamada);
+        int ancho = anchoLlamada + (devuelveEnLinea ? 8 + anchoDevuelve(g, llamada.devuelve(), fuenteValor) : 0);
+        for (Variable v : lineas) {
+            ancho = Math.max(ancho, anchoVariable(g, v, fuenteTipo, fuenteValor, altoMatriz));
+        }
+        if (devuelveDebajo) {
+            ancho = Math.max(ancho, anchoDevuelve(g, llamada.devuelve(), fuenteValor));
+        }
+        ancho += 2 * margen;
+        if (!dibujar) {
+            return ancho;
+        }
+        RoundRectangle2D fondo = new RoundRectangle2D.Double(x, y, ancho, alto, 10, 10);
+        g.setColor(actual ? AZUL_CLARO : PANEL);
+        g.fill(fondo);
+        g.setColor(actual ? AZUL : BORDE);
+        g.setStroke(new BasicStroke(actual ? 2f : 1.2f));
+        g.draw(fondo);
+        int yl = y + margen;
+        texto(g, llamada.texto(), x + margen, yl + tamano - 1, fuenteLlamada, actual ? TEXTO : SECUNDARIO);
+        if (devuelveEnLinea) {
+            devuelve(g, llamada.devuelve(), x + margen + anchoLlamada + 8, yl + tamano / 2 - 1, fuenteValor);
+        }
+        yl += tamano + 6;
+        for (Variable v : lineas) {
+            int altoV = v.matriz() != null ? altoMatriz : altoLinea;
+            variable(g, v, x + margen, yl, altoV, fuenteTipo, fuenteValor);
+            yl += altoV;
+        }
+        if (devuelveDebajo) {
+            devuelve(g, llamada.devuelve(), x + margen, yl + altoLinea / 2, fuenteValor);
+        }
+        return ancho;
+    }
+
+    private static int anchoVariable(Graphics2D g, Variable v, Font fuenteTipo, Font fuenteValor, int altoMatriz) {
+        String declaracion = v.tipo() + " " + v.nombre() + (v.matriz() != null ? " " : " = ");
+        int anchoValor = v.matriz() != null ? anchoMiniMatriz(v.matriz(), altoMatriz - 4) : ancho(g, v.valor(), fuenteValor);
+        return ancho(g, declaracion, fuenteTipo) + anchoValor;
+    }
+
+    /** Dibuja una variable: su tipo en gris, su nombre y su valor (o la matriz, como cuadrícula). */
+    private static void variable(Graphics2D g, Variable v, int x, int y, int alto, Font fuenteTipo, Font fuenteValor) {
+        int centro = y + alto / 2;
+        if (v.cambiada()) {
+            // Como en el depurador de Eclipse: las variables que cambian se resaltan
+            int ancho = anchoVariable(g, v, fuenteTipo, fuenteValor, alto);
+            RoundRectangle2D resalte = new RoundRectangle2D.Double(x - 3, y, ancho + 6, alto, 6, 6);
+            g.setColor(AMBAR_CLARO);
+            g.fill(resalte);
+            g.setColor(AMBAR_BORDE);
+            g.setStroke(new BasicStroke(1f));
+            g.draw(resalte);
+        }
+        int base = centro + fuenteTipo.getSize() / 2 - 1;
+        String tipo = v.tipo() + " ";
+        texto(g, tipo, x, base, fuenteTipo, TIPO);
+        int xv = x + ancho(g, tipo, fuenteTipo);
+        String nombre = v.nombre() + (v.matriz() != null ? " " : " = ");
+        texto(g, nombre, xv, base, fuenteTipo, SECUNDARIO);
+        xv += ancho(g, nombre, fuenteTipo);
+        if (v.matriz() != null) {
+            miniMatriz(g, v, xv, centro, alto - 4);
+        } else {
+            texto(g, v.valor(), xv, base, fuenteValor, TEXTO);
+        }
     }
 
     private static Color colorDevuelve(String devuelve) {
@@ -589,67 +675,7 @@ final class AnimacionLienzo {
     /** Dibuja una flecha y el valor que devuelve una llamada. */
     private static void devuelve(Graphics2D g, String devuelve, int x, int centro, Font fuente) {
         flecha(g, x, centro, 16, colorDevuelve(devuelve));
-        texto(g, devuelve, x + 22, centro + 5, fuente, colorDevuelve(devuelve));
-    }
-
-    /**
-     * Dibuja (o solo mide) las variables de una llamada, con su tipo en gris, en una o más
-     * líneas; delante, si se indica, lo que devuelve la llamada.
-     *
-     * @return alto que ocupan
-     */
-    private int variables(Graphics2D g, List<Variable> variables, String devuelve, int x0, int y0, int xMax,
-            boolean dibujar) {
-        if (variables.isEmpty() && devuelve == null) {
-            return 0;
-        }
-        Font tipo = fuente(MONO, Font.PLAIN, 13);
-        Font nombre = fuente(MONO, Font.PLAIN, 13);
-        Font valor = fuente(MONO, Font.BOLD, 13);
-        int altoLinea = 26;
-        int x = x0;
-        int y = y0;
-        if (devuelve != null) {
-            Font fuenteDevuelve = fuente(MONO, Font.BOLD, 14);
-            if (dibujar) {
-                devuelve(g, devuelve, x, y + altoLinea / 2 - 2, fuenteDevuelve);
-            }
-            x += anchoDevuelve(g, devuelve, fuenteDevuelve) + 16;
-        }
-        for (Variable v : variables) {
-            String declaracion = v.tipo() + " ";
-            String etiqueta = v.matriz() != null ? v.nombre() + " " : v.nombre() + " = ";
-            int anchoValor = v.matriz() != null ? anchoMiniMatriz(v.matriz(), altoLinea - 6) : ancho(g, v.valor(), valor);
-            int anchoVariable = ancho(g, declaracion, tipo) + ancho(g, etiqueta, nombre) + anchoValor;
-            if (x > x0 && x + anchoVariable > xMax) {
-                x = x0;
-                y += altoLinea;
-            }
-            if (dibujar) {
-                int centro = y + altoLinea / 2 - 2;
-                if (v.cambiada()) {
-                    // Como en el depurador de Eclipse: las variables que cambian se resaltan
-                    RoundRectangle2D resalte = new RoundRectangle2D.Double(x - 4, y, anchoVariable + 8, altoLinea - 4, 8, 8);
-                    g.setColor(AMBAR_CLARO);
-                    g.fill(resalte);
-                    g.setColor(AMBAR_BORDE);
-                    g.setStroke(new BasicStroke(1f));
-                    g.draw(resalte);
-                }
-                int xv = x;
-                texto(g, declaracion, xv, centro + 5, tipo, TIPO);
-                xv += ancho(g, declaracion, tipo);
-                texto(g, etiqueta, xv, centro + 5, nombre, SECUNDARIO);
-                xv += ancho(g, etiqueta, nombre);
-                if (v.matriz() != null) {
-                    miniMatriz(g, v, xv, centro, altoLinea - 6);
-                } else {
-                    texto(g, v.valor(), xv, centro + 5, valor, TEXTO);
-                }
-            }
-            x += anchoVariable + 16;
-        }
-        return y + altoLinea - y0 + 2;
+        texto(g, devuelve, x + 22, centro + fuente.getSize() / 2 - 1, fuente, colorDevuelve(devuelve));
     }
 
     private static final int HUECO_MATRIZ = 2;
@@ -695,30 +721,22 @@ final class AnimacionLienzo {
     // Mensaje
     // ------------------------------------------------------------------------------------
 
-    private void dibujarMensaje(Graphics2D g, String mensaje) {
-        RoundRectangle2D fondo = new RoundRectangle2D.Double(ZONA_MENSAJE.x, ZONA_MENSAJE.y, ZONA_MENSAJE.width,
-                ZONA_MENSAJE.height, 12, 12);
-        g.setColor(PANEL);
-        g.fill(fondo);
-        g.setColor(BORDE);
-        g.setStroke(new BasicStroke(1.5f));
-        g.draw(fondo);
+    private void dibujarMensaje(Graphics2D g, AnimacionFotograma fotograma) {
+        panel(g, ZONA_MENSAJE, "Qué ocurre", null);
         g.setColor(AZUL);
-        g.fill(new RoundRectangle2D.Double(ZONA_MENSAJE.x, ZONA_MENSAJE.y, 6, ZONA_MENSAJE.height, 6, 6));
+        g.fill(new RoundRectangle2D.Double(ZONA_MENSAJE.x, ZONA_MENSAJE.y + 40, 5, ZONA_MENSAJE.height - 56, 5, 5));
+        if (fotograma.avanceRapido() != null) {
+            etiquetaAvanceRapido(g, fotograma.avanceRapido());
+        }
+        String mensaje = fotograma.mensaje();
         if (mensaje == null) {
             return;
         }
-        Font fuente = fuente(SANS, Font.PLAIN, 17);
-        List<String> lineas = partir(g, mensaje, fuente, ZONA_MENSAJE.width - 44);
-        if (lineas.size() > 1) {
-            fuente = fuente(SANS, Font.PLAIN, 15);
-            lineas = partir(g, mensaje, fuente, ZONA_MENSAJE.width - 44);
-        }
-        int altoLinea = lineas.size() > 1 ? 19 : 0;
-        int y = ZONA_MENSAJE.y + ZONA_MENSAJE.height / 2 + 6 - altoLinea * (lineas.size() - 1) / 2;
-        for (String linea : lineas) {
-            textoMixto(g, linea, ZONA_MENSAJE.x + 22, y, fuente, TEXTO, true);
-            y += altoLinea;
+        Font fuente = fuente(SANS, Font.PLAIN, 19);
+        int y = ZONA_MENSAJE.y + 72;
+        for (String linea : partir(g, mensaje, fuente, ZONA_MENSAJE.width - 40)) {
+            textoMixto(g, linea, ZONA_MENSAJE.x + 20, y, fuente, TEXTO, true);
+            y += 29;
         }
     }
 

@@ -64,12 +64,13 @@ record AnimacionFotograma(List<Llamada> pila, int filaSonda, int columnaSonda, b
     }
 
     /**
-     * Un argumento de una llamada.
+     * Un argumento de una llamada, con el parámetro que lo recibe.
      *
      * @param tipo tipo del parámetro (por ejemplo, "Lectura" o "int")
+     * @param nombre nombre del parámetro (por ejemplo, "lectura" o "inicio")
      * @param valor valor del argumento, tal como se escribe (por ejemplo, "l1" o "2")
      */
-    record Argumento(String tipo, String valor) {
+    record Argumento(String tipo, String nombre, String valor) {
     }
 
     /**

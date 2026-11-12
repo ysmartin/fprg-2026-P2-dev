@@ -193,7 +193,7 @@ final class AnimacionTraza {
 
     /** Reproduce Microarray.hibridar(Muestra). */
     private boolean[][] hibridar(Muestra muestra) throws Exception {
-        String llamada = entrar(microarray.getNombre(), "hibridar", argumento("Muestra", muestra.getId()));
+        String llamada = entrar(microarray.getNombre(), "hibridar", argumento("Muestra", "muestra", muestra.getId()));
         boolean[][] iluminados = new boolean[microarray.getFilas()][microarray.getColumnas()];
         variable("boolean[][]", "iluminados", iluminados);
         fotograma(GENERAL, codigo(llamada) + " crea la matriz " + codigo("iluminados") + ", del tamaño del chip ("
@@ -236,7 +236,7 @@ final class AnimacionTraza {
     /** Reproduce Microarray.hibridar(Lectura). */
     private boolean[][] hibridar(Lectura lectura) throws Exception {
         String id = lectura.getId();
-        String llamada = entrar(microarray.getNombre(), "hibridar", argumento("Lectura", id));
+        String llamada = entrar(microarray.getNombre(), "hibridar", argumento("Lectura", "lectura", id));
         boolean[][] iluminados = new boolean[microarray.getFilas()][microarray.getColumnas()];
         variable("boolean[][]", "iluminados", iluminados);
         fotograma(GENERAL, codigo(llamada) + " crea su propia matriz " + codigo("iluminados")
@@ -287,7 +287,7 @@ final class AnimacionTraza {
 
     /** Reproduce Sonda.hibridaCon(Lectura). */
     private boolean hibridaCon(Sonda sonda, Lectura lectura) throws Exception {
-        String llamada = entrar(sonda.getNombre(), "hibridaCon", argumento("Lectura", lectura.getId()));
+        String llamada = entrar(sonda.getNombre(), "hibridaCon", argumento("Lectura", "lectura", lectura.getId()));
         fotograma(POSICION, codigo("fila = " + filaSonda) + ", " + codigo("columna = " + columnaSonda)
                 + ": ¿hibrida la sonda " + codigo(sonda.getNombre()) + ", de patrón " + sonda.getPatron() + ", con la lectura "
                 + codigo(lectura.getId()) + "? " + codigo("hibridaCon") + " busca el patrón con " + codigo("encontrarEn"));
@@ -301,7 +301,7 @@ final class AnimacionTraza {
 
     /** Reproduce Sonda.encontrarEn(Lectura). */
     private int encontrarEn(Sonda sonda, Lectura lectura) throws Exception {
-        String llamada = entrar(sonda.getNombre(), "encontrarEn", argumento("Lectura", lectura.getId()));
+        String llamada = entrar(sonda.getNombre(), "encontrarEn", argumento("Lectura", "lectura", lectura.getId()));
         int ultima = lectura.getLongitud() - sonda.getLongitud();
         ultimoInicio = ultima;
         fotograma(SUBPASO, codigo("encontrarEn") + " desliza el patrón por la lectura: prueba con " + codigo("inicio")
@@ -336,8 +336,8 @@ final class AnimacionTraza {
     /** Reproduce Sonda.encajaEn(Lectura, int). */
     private boolean encajaEn(Sonda sonda, Lectura lectura, int inicio) throws Exception {
         String patron = sonda.getPatron();
-        String llamada = entrar(sonda.getNombre(), "encajaEn", argumento("Lectura", lectura.getId()),
-                argumento("int", inicio));
+        String llamada = entrar(sonda.getNombre(), "encajaEn", argumento("Lectura", "lectura", lectura.getId()),
+                argumento("int", "inicio", inicio));
         if (inicio < 0 || inicio + patron.length() > lectura.getLongitud()) {
             throw new Exception("El patrón no cabe en la lectura a partir de la posición " + inicio);
         }
@@ -407,7 +407,7 @@ final class AnimacionTraza {
         directo[i] = Casilla.COMPARANDO;
         fotograma(SUBPASO, "Sentido directo, " + codigo("i = " + i) + ": el símbolo " + i + " del patrón (" + simbolo
                 + ") se compara con la base " + inicio + " + " + i + " = " + (inicio + i) + " de la lectura (" + base + ")");
-        String llamada = entrar(null, "encaja", argumento("char", simbolo), argumento("char", base));
+        String llamada = entrar(null, "encaja", argumento("char", "simbolo", simbolo), argumento("char", "base", base));
         boolean resultado = Sonda.encaja(simbolo, base);
         devolver(resultado);
         directo[i] = resultado ? Casilla.ENCAJA : Casilla.NO_ENCAJA;
@@ -426,9 +426,9 @@ final class AnimacionTraza {
         fotograma(SUBPASO, "Sentido inverso, " + codigo("i = " + i) + ": el símbolo " + n + " − 1 − " + i + " = " + (n - 1 - i)
                 + " del patrón (" + simbolo + ") se compara con la complementaria de la base " + (inicio + i)
                 + " de la lectura (" + base + ")");
-        String llamada = entrar(null, "encajaInverso", argumento("char", simbolo), argumento("char", base));
+        String llamada = entrar(null, "encajaInverso", argumento("char", "simbolo", simbolo), argumento("char", "base", base));
         char complementaria = Lectura.complementaria(base);
-        entrar(null, "encaja", argumento("char", simbolo), argumento("char", complementaria));
+        entrar(null, "encaja", argumento("char", "simbolo", simbolo), argumento("char", "base", complementaria));
         boolean resultado = Sonda.encaja(simbolo, complementaria);
         devolver(resultado);
         pila.get(pila.size() - 2).devuelve = texto(resultado);
@@ -562,8 +562,8 @@ final class AnimacionTraza {
         return llamada.texto;
     }
 
-    private static Argumento argumento(String tipo, Object valor) {
-        return new Argumento(tipo, texto(valor));
+    private static Argumento argumento(String tipo, String nombre, Object valor) {
+        return new Argumento(tipo, nombre, texto(valor));
     }
 
     private void salir() {
